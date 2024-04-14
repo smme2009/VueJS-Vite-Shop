@@ -4,8 +4,14 @@ const router = createRouter({
     history: createWebHistory(),
     routes: [
         {
-            path: '/',
+            path: '',
             component: () => import('@/App.vue'),
+            children: [
+                {
+                    path: 'account',
+                    component: () => import('@/layout/Default.vue'),
+                },
+            ],
         },
     ],
 });
