@@ -9,13 +9,13 @@ const router = createRouter({
             children: [
                 {
                     path: 'account',
-                    component: () => import('@/layout/Default.vue'),
+                    component: () => import('@/components/layout/Default.vue'),
                     children: [
                         {
                             path: 'login',
                             name: 'login',
                             title: 'login',
-                            component: () => import('@/view/login/Login.vue'),
+                            component: () => import('@/components/account/login/Index.vue'),
                         },
                     ],
                 },

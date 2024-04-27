@@ -15,5 +15,5 @@
 </style>
 
 <script setup>
-import LoginForm from '@/components/login/Form.vue';
+import LoginForm from '@/components/account/login/Form.vue';
 </script>
