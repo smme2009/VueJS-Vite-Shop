@@ -19,6 +19,10 @@ const router = createRouter({
                         },
                     ],
                 },
+                {
+                    path: 'mgmt',
+                    component: () => import('@/components/layout/Admin.vue'),
+                },
             ],
         },
     ],
