@@ -35,7 +35,7 @@
 }
 </style>
 
-<script lang="ts" setup>
+<script setup>
 import { reactive } from 'vue';
 import ajax from '@/tool/Ajax.js';
 
