@@ -9,7 +9,7 @@ const router = createRouter({
             children: [
                 {
                     path: 'account',
-                    component: () => import('@/components/layout/Default.vue'),
+                    component: () => import('@/components/layout/default/Index.vue'),
                     children: [
                         {
                             path: 'login',
@@ -21,7 +21,7 @@ const router = createRouter({
                 },
                 {
                     path: 'mgmt',
-                    component: () => import('@/components/layout/Admin.vue'),
+                    component: () => import('@/components/layout/admin/Index.vue'),
                 },
             ],
         },
