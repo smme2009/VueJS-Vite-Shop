@@ -1,7 +1,7 @@
 <template>
     <el-page-header :icon="ArrowLeft" title="返回" @back="toBackPage()">
         <template #content>
-            <span>{{ title }}</span>
+            <span>商店後台管理系統</span>
         </template>
         <template #extra>
             <span @click="logout()">登出</span>
@@ -16,14 +16,10 @@
 </style>
 
 <script setup>
-import { useRouter, useRoute } from "vue-router";
+import { useRouter } from "vue-router";
 import { ArrowLeft } from "@element-plus/icons-vue";
 
 const router = useRouter();
-const route = useRoute();
-
-// 標題
-const title = route.meta.title;
 
 /**
  * 返回上一頁

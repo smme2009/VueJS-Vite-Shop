@@ -38,4 +38,12 @@ const router = createRouter({
     ],
 });
 
+// 跳轉前動作
+router.beforeEach((to, from, next) => {
+    // 設定系統標題
+    document.title = to.meta.title;
+
+    next();
+});
+
 export default router;
