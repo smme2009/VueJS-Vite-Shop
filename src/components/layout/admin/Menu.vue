@@ -1,5 +1,5 @@
 <template>
-    <el-menu @click="toPage">
+    <el-menu>
         <el-menu-item index="1" @click="toPage('/mgmt/home')">
             <el-icon>
                 <House />
