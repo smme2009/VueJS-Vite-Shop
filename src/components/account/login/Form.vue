@@ -65,8 +65,10 @@ const login = () => {
         url: "/login",
         data: form,
         then: (response) => {
+            const JwtToken = response.data.jwtToken;
+
             // 儲存JWT Tokwn
-            localStorage.jwtToken = response.data.jwtToken;
+            localStorage.setItem("jwtToken", JwtToken);
 
             // 跳轉首頁
             router.push("/mgmt/home");

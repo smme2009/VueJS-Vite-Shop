@@ -3,8 +3,17 @@
         <template #content>
             <span>{{ title }}</span>
         </template>
+        <template #extra>
+            <span @click="logout()">登出</span>
+        </template>
     </el-page-header>
 </template>
+
+<style lang="scss" scoped>
+.el-page-header {
+    width: 100%;
+}
+</style>
 
 <script setup>
 import { useRouter, useRoute } from "vue-router";
@@ -23,5 +32,16 @@ const title = route.meta.title;
  */
 const toBackPage = () => {
     router.back();
+};
+
+/**
+ * 登出
+ *
+ * @return {void}
+ */
+const logout = () => {
+    localStorage.removeItem("jwtToken");
+
+    router.push("/account/login");
 };
 </script>

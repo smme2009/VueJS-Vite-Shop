@@ -10,7 +10,7 @@ import axios from 'axios';
 function ajax(param) {
     const apiUrl = import.meta.env.VITE_API_URL;
     const fullUrl = apiUrl + param.url;
-    const jwtToken = localStorage.jwtToken;
+    const jwtToken = localStorage.getItem('jwtToken');
 
     axios({
         method: param.method,
