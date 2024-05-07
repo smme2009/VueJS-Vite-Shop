@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from '@/router/index.js';
 
 /**
  * 發送Ajax
@@ -49,6 +50,14 @@ function ajax(param) {
 function handleError(code, data) {
     switch (code) {
         case 400:
+            alert(data.message);
+            break;
+        case 401:
+            alert('請重新登入');
+
+            // 跳轉回登入頁面
+            router.push('/account/login');
+            break;
         case 404:
             alert(data.message);
             break;
