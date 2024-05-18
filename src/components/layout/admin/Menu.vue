@@ -6,6 +6,12 @@
             </el-icon>
             <template #title>首頁</template>
         </el-menu-item>
+        <el-menu-item index="2" @click="toPage('/mgmt/product')">
+            <el-icon>
+                <Goods />
+            </el-icon>
+            <template #title>商品管理</template>
+        </el-menu-item>
     </el-menu>
 </template>
 

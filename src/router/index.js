@@ -32,6 +32,18 @@ const router = createRouter({
                             },
                             component: () => import('@/components/home/Index.vue'),
                         },
+                        {
+                            path: 'product',
+                            children: [
+                                {
+                                    path: '',
+                                    meta: {
+                                        title: '商品管理',
+                                    },
+                                    component: () => import('@/components/product/list/Index.vue'),
+                                },
+                            ],
+                        },
                     ],
                 },
             ],
