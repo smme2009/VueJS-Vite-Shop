@@ -13,13 +13,24 @@ function ajax(param) {
     const fullUrl = apiUrl + param.url;
     const jwtToken = localStorage.getItem('jwtToken');
 
+    // 統一參數
+    let data = {};
+    let params = {};
+
+    if (param.method === 'get') {
+        params = param.data;
+    } else {
+        data = param.data;
+    }
+
     axios({
         method: param.method,
         url: fullUrl,
         headers: {
             Authorization: 'Bearer ' + jwtToken,
         },
-        data: param.data,
+        data: data,
+        params: params,
     })
         .then((response) => {
             const data = response.data;
