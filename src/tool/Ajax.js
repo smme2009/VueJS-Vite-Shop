@@ -6,7 +6,7 @@ import router from '@/router/index.js';
  * 
  * @param {object} param 參數
  * 
- * @return {void}
+ * @returns {void}
  */
 function ajax(param) {
     const apiUrl = import.meta.env.VITE_API_URL;
@@ -56,7 +56,7 @@ function ajax(param) {
  * @param {int} code HTTP Code
  * @param {array} data 回傳資料
  * 
- * @return {void}
+ * @returns {void}
  */
 function handleError(code, data) {
     switch (code) {

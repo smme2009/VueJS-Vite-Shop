@@ -29,7 +29,7 @@ watch(route, setBreadcrumb);
 /**
  * 設定麵包屑
  *
- * @return {void}
+ * @returns {void}
  */
 function setBreadcrumb() {
     // 取得路由資料

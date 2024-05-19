@@ -57,7 +57,7 @@ const form = reactive({
 /**
  * 登入
  *
- * @return {void}
+ * @returns {void}
  */
 const login = () => {
     ajax({

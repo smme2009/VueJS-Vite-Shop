@@ -24,7 +24,7 @@ const router = useRouter();
 /**
  * 返回上一頁
  *
- * @return {void}
+ * @returns {void}
  */
 const toBackPage = () => {
     router.back();
@@ -33,7 +33,7 @@ const toBackPage = () => {
 /**
  * 登出
  *
- * @return {void}
+ * @returns {void}
  */
 const logout = () => {
     localStorage.removeItem("jwtToken");

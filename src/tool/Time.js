@@ -8,7 +8,7 @@ const format = 'YYYY-MM-DD HH:mm:ss';
  * 
  * @param {int|null} timestamp 時間戳
  * 
- * @return {string} 日期時間
+ * @returns {string} 日期時間
  */
 export function getDateTime(timestamp) {
     let datetime = '';

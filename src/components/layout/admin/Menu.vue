@@ -32,7 +32,7 @@ const router = useRouter();
  *
  * @param {string} path 路徑
  *
- * @return {void}
+ * @returns {void}
  */
 const toPage = (path) => {
     router.push(path);
