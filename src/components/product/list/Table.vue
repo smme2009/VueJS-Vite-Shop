@@ -18,7 +18,12 @@
                 <el-table-column prop="endTime" label="下架時間" />
                 <el-table-column label="狀態">
                     <template #default="scope">
-                        <el-switch v-model="scope.row.status" />
+                        <el-switch
+                            v-model="scope.row.status"
+                            @change="
+                                editProductStatus(scope.row.productId, $event)
+                            "
+                        />
                     </template>
                 </el-table-column>
                 <el-table-column label="管理">
@@ -41,6 +46,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import { getDateTime } from "@/tool/Time.js";
+import { ElMessage } from "element-plus";
 import ajax from "@/tool/Ajax.js";
 
 const prop = defineProps(["page", "searchData"]);
@@ -56,6 +62,41 @@ getProductData();
 watch(prop, () => {
     getProductData();
 });
+
+/**
+ * 編輯商品狀態
+ *
+ * @param {int} productId 商品ID
+ * @param {bool} status 商品狀態
+ *
+ * @returns {void}
+ */
+const editProductStatus = (productId, status) => {
+    ajax({
+        method: "put",
+        url: "/product/" + productId + "/status",
+        data: {
+            status: status,
+        },
+        then: (response) => {
+            ElMessage({
+                type: "success",
+                showClose: true,
+                message: response.message[0],
+            });
+        },
+        catch: (response) => {
+            ElMessage({
+                type: "error",
+                showClose: true,
+                message: response.message[0],
+            });
+
+            // 編輯失敗後重新刷新列表
+            getProductData();
+        },
+    });
+};
 
 /**
  * 取得商品資料
@@ -98,6 +139,7 @@ function getProductData() {
  */
 function setProduct(data) {
     const product = {
+        productId: data.productId,
         name: data.name,
         photoUrl: data.photoUrl,
         price: data.price,
