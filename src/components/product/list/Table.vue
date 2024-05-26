@@ -54,7 +54,7 @@ import { ref, watch } from "vue";
 import { getDateTime } from "@/tool/Time.js";
 import * as toolAlert from "@/tool/Alert.js";
 import * as toolMessage from "@/tool/Message.js";
-import ajax from "@/tool/Ajax.js";
+import toolAjax from "@/tool/Ajax.js";
 
 const prop = defineProps(["page", "searchData"]);
 const emit = defineEmits(["setDataTotal"]);
@@ -79,7 +79,7 @@ watch(prop, () => {
  * @returns {void}
  */
 const editProductStatus = (productId, status) => {
-    ajax({
+    toolAjax({
         method: "put",
         url: "/product/" + productId + "/status",
         data: {
@@ -106,7 +106,7 @@ const editProductStatus = (productId, status) => {
  */
 const deleteProduct = (productId) => {
     toolMessage.confirm("確定要刪除商品嗎?", () => {
-        ajax({
+        toolAjax({
             method: "delete",
             url: "/product/" + productId,
             then: (response) => {
@@ -128,7 +128,7 @@ const deleteProduct = (productId) => {
  * @returns {void}
  */
 function getProductData() {
-    ajax({
+    toolAjax({
         method: "get",
         url: "/product",
         data: {

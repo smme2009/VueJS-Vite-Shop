@@ -45,7 +45,7 @@
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 
-import ajax from "@/tool/Ajax.js";
+import toolAjax from "@/tool/Ajax.js";
 
 const router = useRouter();
 
@@ -60,7 +60,7 @@ const form = reactive({
  * @returns {void}
  */
 const login = () => {
-    ajax({
+    toolAjax({
         method: "post",
         url: "/login",
         data: form,
