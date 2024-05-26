@@ -27,16 +27,22 @@
                     </template>
                 </el-table-column>
                 <el-table-column label="管理">
-                    <el-button type="primary" circle>
-                        <el-icon>
-                            <Edit />
-                        </el-icon>
-                    </el-button>
-                    <el-button type="danger" circle>
-                        <el-icon>
-                            <Delete />
-                        </el-icon>
-                    </el-button>
+                    <template #default="scope">
+                        <el-button type="primary" circle>
+                            <el-icon>
+                                <Edit />
+                            </el-icon>
+                        </el-button>
+                        <el-button
+                            @click="deleteProduct(scope.row.productId)"
+                            type="danger"
+                            circle
+                        >
+                            <el-icon>
+                                <Delete />
+                            </el-icon>
+                        </el-button>
+                    </template>
                 </el-table-column>
             </el-table>
         </div>
@@ -47,6 +53,8 @@
 import { ref, watch } from "vue";
 import { getDateTime } from "@/tool/Time.js";
 import { ElMessage } from "element-plus";
+import * as toolAlert from "@/tool/Alert.js";
+import * as toolMessage from "@/tool/Message.js";
 import ajax from "@/tool/Ajax.js";
 
 const prop = defineProps(["page", "searchData"]);
@@ -95,6 +103,31 @@ const editProductStatus = (productId, status) => {
             // 編輯失敗後重新刷新列表
             getProductData();
         },
+    });
+};
+
+/**
+ * 刪除商品
+ *
+ * @param {int} productId 商品ID
+ *
+ * @returns {void}
+ */
+const deleteProduct = (productId) => {
+    toolMessage.confirm("確定要刪除商品嗎?", () => {
+        ajax({
+            method: "delete",
+            url: "/product/" + productId,
+            then: (response) => {
+                toolAlert.success(response.message[0]);
+
+                // 刪除成功後重新刷新列表
+                getProductData();
+            },
+            catch: (response) => {
+                toolAlert.error(response.message[0]);
+            },
+        });
     });
 };
 
