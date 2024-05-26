@@ -52,7 +52,6 @@
 <script setup>
 import { ref, watch } from "vue";
 import { getDateTime } from "@/tool/Time.js";
-import { ElMessage } from "element-plus";
 import * as toolAlert from "@/tool/Alert.js";
 import * as toolMessage from "@/tool/Message.js";
 import ajax from "@/tool/Ajax.js";
@@ -87,18 +86,10 @@ const editProductStatus = (productId, status) => {
             status: status,
         },
         then: (response) => {
-            ElMessage({
-                type: "success",
-                showClose: true,
-                message: response.message[0],
-            });
+            toolAlert.success(response.message[0]);
         },
         catch: (response) => {
-            ElMessage({
-                type: "error",
-                showClose: true,
-                message: response.message[0],
-            });
+            toolAlert.error(response.message[0]);
 
             // 編輯失敗後重新刷新列表
             getProductData();
