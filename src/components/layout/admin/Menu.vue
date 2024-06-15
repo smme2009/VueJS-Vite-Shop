@@ -1,5 +1,5 @@
 <template>
-    <el-menu>
+    <el-menu class="h-full w-full">
         <el-menu-item index="1" @click="toPage('/mgmt/home')">
             <el-icon>
                 <House />
@@ -14,13 +14,6 @@
         </el-menu-item>
     </el-menu>
 </template>
-
-<style lang="scss" scoped>
-.el-menu {
-    height: 100%;
-    width: 100%;
-}
-</style>
 
 <script setup>
 import { useRouter } from "vue-router";

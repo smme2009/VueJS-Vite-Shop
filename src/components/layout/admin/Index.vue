@@ -1,48 +1,19 @@
 <template>
-    <el-container>
-        <el-header id="header">
+    <el-container class="h-full">
+        <el-header class="flex items-center bg-blue-500">
             <Header />
         </el-header>
-        <el-container>
-            <el-aside id="aside">
+        <el-container class="h-full">
+            <el-aside class="!w-52">
                 <Menu />
             </el-aside>
-            <el-main id="main">
-                <el-container>
-                    <el-header>
-                        <Breadcrumb />
-                    </el-header>
-                    <el-main>
-                        <router-view />
-                    </el-main>
-                </el-container>
+            <el-main>
+                <Breadcrumb class="mb-5" />
+                <router-view />
             </el-main>
         </el-container>
     </el-container>
 </template>
-
-<style lang="scss" scoped>
-.el-header {
-    display: flex;
-    align-items: center;
-}
-
-#header {
-    background-color: #409eff;
-}
-
-#main > .el-container {
-    margin: -20px;
-}
-
-#main > .el-container > .el-header {
-    border-bottom: 1px solid #dcdfe6;
-}
-
-#aside {
-    width: 200px;
-}
-</style>
 
 <script setup>
 import Menu from "@/components/layout/admin/Menu.vue";

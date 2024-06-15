@@ -1,6 +1,6 @@
 <template>
     <el-form>
-        <el-card>
+        <el-card class="w-96">
             <template #header>
                 <div class="card-header">
                     <span>登入</span>
@@ -17,29 +17,15 @@
                 />
             </el-form-item>
             <template #footer>
-                <el-row>
-                    <el-col :span="6" :offset="18">
-                        <el-form-item>
-                            <el-button type="primary" @click="login()">
-                                登入
-                            </el-button>
-                        </el-form-item>
-                    </el-col>
-                </el-row>
+                <div class="w-full flex justify-end">
+                    <el-button type="primary" @click="login()">
+                        登入
+                    </el-button>
+                </div>
             </template>
         </el-card>
     </el-form>
 </template>
-
-<style lang="scss" scoped>
-.el-card {
-    width: 400px;
-}
-
-.el-input {
-    width: 100%;
-}
-</style>
 
 <script setup>
 import { reactive } from "vue";

@@ -1,5 +1,10 @@
 <template>
-    <el-page-header :icon="ArrowLeft" title="返回" @back="toBackPage()">
+    <el-page-header
+        class="w-full"
+        :icon="ArrowLeft"
+        title="返回"
+        @back="toBackPage()"
+    >
         <template #content>
             <span>商店後台管理系統</span>
         </template>
@@ -8,12 +13,6 @@
         </template>
     </el-page-header>
 </template>
-
-<style lang="scss" scoped>
-.el-page-header {
-    width: 100%;
-}
-</style>
 
 <script setup>
 import { useRouter } from "vue-router";
