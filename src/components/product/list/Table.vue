@@ -60,6 +60,7 @@ import { ref, watch } from "vue";
 import { getDateTime } from "@/tool/Time.js";
 import * as toolAlert from "@/tool/Alert.js";
 import * as toolMessage from "@/tool/Message.js";
+import * as toolStr from "@/tool/Str.js";
 import * as apiProduct from "@/api/Product.js";
 
 const prop = defineProps(["page", "searchData"]);
@@ -162,7 +163,7 @@ function setProduct(data) {
         productId: data.productId,
         name: data.name,
         photoUrl: data.photoUrl,
-        price: data.price,
+        price: toolStr.formatNumber(data.price),
         quantity: data.quantity,
         startTime: getDateTime(data.startTime),
         endTime: getDateTime(data.endTime),
