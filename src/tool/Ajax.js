@@ -6,10 +6,11 @@ import axios from 'axios';
  * @param {string} method 方法
  * @param {string} uri 路徑
  * @param {object} data 資料
+ * @param {object} header Header
  * 
  * @returns {AxiosResponse}
  */
-async function ajax(method, uri, data = {}) {
+async function ajax(method, uri, data = {}, header = {}) {
     const apiUrl = import.meta.env.VITE_API_URL;
     const fullUrl = apiUrl + uri;
     const jwtToken = localStorage.getItem('jwtToken');
@@ -20,6 +21,7 @@ async function ajax(method, uri, data = {}) {
         url: fullUrl,
         headers: {
             Authorization: 'Bearer ' + jwtToken,
+            ...header,
         },
     };
 
