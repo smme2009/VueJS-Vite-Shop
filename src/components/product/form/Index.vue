@@ -3,7 +3,7 @@
         <el-card class="w-11/12 !rounded-lg">
             <template #header>
                 <div class="card-header">
-                    <span>新增商品</span>
+                    <span>{{ formTitle }}</span>
                 </div>
             </template>
             <el-form :model="form" label-width="auto">
@@ -81,10 +81,12 @@
 
 <script setup>
 import { ref, reactive } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import * as apiProduct from "@/api/Product.js";
 import * as toolAlert from "@/tool/Alert.js";
+import * as toolTime from "@/tool/Time.js";
 
+const route = useRoute();
 const router = useRouter();
 
 const form = reactive({
@@ -98,8 +100,18 @@ const form = reactive({
     status: false,
 });
 
+const formTitle = ref("");
 const photoUrl = ref("");
 const timeFormat = ref("YYYY-MM-DD HH:mm:ss");
+
+const productId = route.params.productId;
+
+formTitle.value = route.meta.title;
+
+// 若為編輯則取得商品資料
+if (productId) {
+    getProduct();
+}
 
 /**
  * 上傳照片
@@ -127,7 +139,14 @@ const uploadPhoto = async (data) => {
  * @returns {void}
  */
 const saveProduct = async () => {
-    const response = await apiProduct.addProduct(form);
+    let response = {};
+
+    // 根據新增或編輯使用不同的API
+    if (productId) {
+        response = await apiProduct.editProduct(productId, form);
+    } else {
+        response = await apiProduct.addProduct(form);
+    }
 
     if (response.status) {
         toolAlert.success(response.message);
@@ -146,4 +165,32 @@ const saveProduct = async () => {
 const toListPage = () => {
     router.push("/mgmt/product");
 };
+
+/**
+ * 取得商品資料
+ *
+ * @return {void}
+ */
+async function getProduct() {
+    const response = await apiProduct.getProduct(productId);
+
+    if (response.status) {
+        const product = response.data.product;
+
+        form.name = product.name;
+        form.photoFileId = product.photoFileId;
+        form.price = product.price;
+        form.quantity = product.quantity;
+        form.startTime = toolTime.getDateTime(product.startTime);
+        form.endTime = toolTime.getDateTime(product.endTime);
+        form.description = product.description;
+        form.status = product.status;
+
+        photoUrl.value = product.photoUrl;
+    } else {
+        toolAlert.error(response.message);
+
+        toListPage();
+    }
+}
 </script>

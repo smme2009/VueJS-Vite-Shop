@@ -94,3 +94,34 @@ export async function addProduct(productData) {
 
     return response;
 }
+
+/**
+ * 取得商品資料
+ * 
+ * @param {int} productId 商品ID
+ * 
+ * @returns {object}
+ */
+export async function getProduct(productId) {
+    const uri = `/product/${productId}`;
+
+    const response = await toolAjax('get', uri);
+
+    return response;
+}
+
+/**
+ * 編輯商品
+ * 
+ * @param {int} productId 商品ID
+ * @param {object} productData 商品資料
+ * 
+ * @returns {object}
+ */
+export async function editProduct(productId, productData) {
+    const uri = `/product/${productId}`;
+
+    const response = await toolAjax('put', uri, productData);
+
+    return response;
+}

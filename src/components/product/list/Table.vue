@@ -34,7 +34,11 @@
                 </el-table-column>
                 <el-table-column label="管理">
                     <template #default="scope">
-                        <el-button type="primary" circle>
+                        <el-button
+                            @click="toEditPage(scope.row.productId)"
+                            type="primary"
+                            circle
+                        >
                             <el-icon>
                                 <Edit />
                             </el-icon>
@@ -57,11 +61,14 @@
 
 <script setup>
 import { ref, watch } from "vue";
+import { useRouter } from "vue-router";
 import { getDateTime } from "@/tool/Time.js";
 import * as toolAlert from "@/tool/Alert.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as toolStr from "@/tool/Str.js";
 import * as apiProduct from "@/api/Product.js";
+
+const router = useRouter();
 
 const prop = defineProps(["page", "searchData"]);
 const emit = defineEmits(["setDataTotal"]);
@@ -171,5 +178,16 @@ function setProduct(data) {
     };
 
     return product;
+}
+
+/**
+ * 進入編輯頁面
+ *
+ * @param {int} productId 商品ID
+ *
+ * @return {void}
+ */
+function toEditPage(productId) {
+    router.push(`/mgmt/product/edit/${productId}`);
 }
 </script>
