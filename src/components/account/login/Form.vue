@@ -30,8 +30,8 @@
 <script setup>
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-
-import toolAjax from "@/tool/Ajax.js";
+import * as apiAccount from "@/api/Account.js";
+import * as toolAlert from "@/tool/Alert.js";
 
 const router = useRouter();
 
@@ -45,20 +45,17 @@ const form = reactive({
  *
  * @returns {void}
  */
-const login = () => {
-    toolAjax({
-        method: "post",
-        url: "/login",
-        data: form,
-        then: (response) => {
-            const JwtToken = response.data.jwtToken;
+const login = async () => {
+    const response = await apiAccount.login(form.account, form.password);
 
-            // 儲存JWT Tokwn
-            localStorage.setItem("jwtToken", JwtToken);
+    if (response.status) {
+        // 儲存JWT Token
+        const jwtToken = response.data.jwtToken;
+        localStorage.setItem("jwtToken", jwtToken);
 
-            // 跳轉首頁
-            router.push("/mgmt/home");
-        },
-    });
+        router.push("/mgmt/home");
+    } else {
+        toolAlert.error(response.message);
+    }
 };
 </script>

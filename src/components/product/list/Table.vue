@@ -54,7 +54,7 @@ import { ref, watch } from "vue";
 import { getDateTime } from "@/tool/Time.js";
 import * as toolAlert from "@/tool/Alert.js";
 import * as toolMessage from "@/tool/Message.js";
-import toolAjax from "@/tool/Ajax.js";
+import * as apiProduct from "@/api/Product.js";
 
 const prop = defineProps(["page", "searchData"]);
 const emit = defineEmits(["setDataTotal"]);
@@ -78,23 +78,17 @@ watch(prop, () => {
  *
  * @returns {void}
  */
-const editProductStatus = (productId, status) => {
-    toolAjax({
-        method: "put",
-        url: "/product/" + productId + "/status",
-        data: {
-            status: status,
-        },
-        then: (response) => {
-            toolAlert.success(response.message[0]);
-        },
-        catch: (response) => {
-            toolAlert.error(response.message[0]);
+const editProductStatus = async (productId, status) => {
+    const response = await apiProduct.editProductStatus(productId, status);
 
-            // 編輯失敗後重新刷新列表
-            getProductData();
-        },
-    });
+    if (response.status) {
+        toolAlert.success(response.message);
+    } else {
+        toolAlert.error(response.message);
+
+        // 編輯失敗後重新刷新列表
+        getProductData();
+    }
 };
 
 /**
@@ -104,21 +98,18 @@ const editProductStatus = (productId, status) => {
  *
  * @returns {void}
  */
-const deleteProduct = (productId) => {
-    toolMessage.confirm("確定要刪除商品嗎?", () => {
-        toolAjax({
-            method: "delete",
-            url: "/product/" + productId,
-            then: (response) => {
-                toolAlert.success(response.message[0]);
+const deleteProduct = async (productId) => {
+    toolMessage.confirm("確定要刪除商品嗎?", async () => {
+        const response = await apiProduct.deleteProduct(productId);
 
-                // 刪除成功後重新刷新列表
-                getProductData();
-            },
-            catch: (response) => {
-                toolAlert.error(response.message[0]);
-            },
-        });
+        if (response.status) {
+            toolAlert.success(response.message);
+
+            // 刪除成功後重新刷新列表
+            getProductData();
+        } else {
+            toolAlert.error(response.message);
+        }
     });
 };
 
@@ -127,31 +118,30 @@ const deleteProduct = (productId) => {
  *
  * @returns {void}
  */
-function getProductData() {
-    toolAjax({
-        method: "get",
-        url: "/product",
-        data: {
-            page: prop.page,
-            keyword: prop.searchData.keyword,
-        },
-        then: (response) => {
-            const productPage = response.data.productPage;
+async function getProductData() {
+    const page = prop.page;
+    const keyword = prop.searchData.keyword;
 
-            // 設定資料表資料
-            let productList = [];
-            productPage.data.forEach((item) => {
-                const product = setProduct(item);
+    const response = await apiProduct.getProductPage(page, keyword);
 
-                productList.push(product);
-            });
+    if (response.status) {
+        const productPage = response.data.productPage;
 
-            tableData.value = productList;
+        // 設定列表資料
+        const productList = [];
+        productPage.data.forEach((item) => {
+            const product = setProduct(item);
 
-            // 設定資料總數
-            emit("setDataTotal", productPage.total);
-        },
-    });
+            productList.push(product);
+        });
+
+        tableData.value = productList;
+
+        // 設定資料總數
+        emit("setDataTotal", productPage.total);
+    } else {
+        toolAlert.error(response.message);
+    }
 }
 
 /**

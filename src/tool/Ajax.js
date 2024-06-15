@@ -1,81 +1,58 @@
 import axios from 'axios';
-import router from '@/router/index.js';
 
 /**
  * 發送Ajax
  * 
- * @param {object} param 參數
+ * @param {string} method 方法
+ * @param {string} uri 路徑
+ * @param {object} data 資料
  * 
- * @returns {void}
+ * @returns {AxiosResponse}
  */
-function ajax(param) {
+async function ajax(method, uri, data = {}) {
     const apiUrl = import.meta.env.VITE_API_URL;
-    const fullUrl = apiUrl + param.url;
+    const fullUrl = apiUrl + uri;
     const jwtToken = localStorage.getItem('jwtToken');
 
-    // 統一參數
-    let data = {};
-    let params = {};
-
-    if (param.method === 'get') {
-        params = param.data;
-    } else {
-        data = param.data;
-    }
-
-    axios({
-        method: param.method,
+    // 基本設定
+    const setting = {
+        method: method,
         url: fullUrl,
         headers: {
             Authorization: 'Bearer ' + jwtToken,
         },
-        data: data,
-        params: params,
-    })
-        .then((response) => {
-            const data = response.data;
+    };
 
-            param.then(data);
-        })
-        .catch((error) => {
-            const code = error.response.status;
-            const data = error.response.data;
-
-            // 選填參數，無填寫執行預設的錯誤處理
-            if (param.catch instanceof Function) {
-                param.catch(data);
-            } else {
-                handleError(code, data);
-            }
-        });
-}
-
-/**
- * API錯誤處理
- * 
- * @param {int} code HTTP Code
- * @param {array} data 回傳資料
- * 
- * @returns {void}
- */
-function handleError(code, data) {
-    switch (code) {
-        case 400:
-            alert(data.message);
-            break;
-        case 401:
-            alert('請重新登入');
-
-            // 跳轉回登入頁面
-            router.push('/account/login');
-            break;
-        case 404:
-            alert(data.message);
-            break;
-        default:
-            alert('系統錯誤');
-            break;
+    // 設定API參數
+    if (method === 'get') {
+        setting.params = data;
+    } else {
+        setting.data = data;
     }
+
+    let response = {};
+
+    await axios(setting)
+        .then((r) => {
+            response = {
+                status: true,
+                message: r.data.message,
+                data: r.data.data,
+            };
+        }).catch((e) => {
+            // 無權限時強制跳轉登入頁
+            if (e.response.status === 401) {
+                window.location.href = '/account/login';
+            }
+
+            response = {
+                status: false,
+                message: e.response.data.message,
+                data: e.response.data.data,
+            };
+        });
+
+    return response;
 }
 
 export default ajax;
