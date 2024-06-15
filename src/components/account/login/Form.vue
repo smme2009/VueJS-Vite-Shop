@@ -1,6 +1,6 @@
 <template>
     <el-form>
-        <el-card class="w-96">
+        <el-card class="w-96 !rounded-lg">
             <template #header>
                 <div class="card-header">
                     <span>登入</span>

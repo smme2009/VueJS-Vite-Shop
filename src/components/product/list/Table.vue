@@ -1,7 +1,13 @@
 <template>
     <div class="flex justify-center mt-2.5">
         <div class="w-11/12">
-            <el-table :data="tableData" stripe border empty-text="查無資料">
+            <el-table
+                class="rounded-lg"
+                :data="tableData"
+                stripe
+                border
+                empty-text="查無資料"
+            >
                 <el-table-column prop="name" label="商品名稱" />
                 <el-table-column label="商品圖片">
                     <template #default="scope">
