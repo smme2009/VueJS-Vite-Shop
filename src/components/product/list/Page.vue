@@ -3,7 +3,7 @@
         <el-pagination
             background
             layout="prev, pager, next"
-            default-page-size="15"
+            :default-page-size="15"
             :total="dataTotal"
             hide-on-single-page="true"
             @current-change="setPage"
