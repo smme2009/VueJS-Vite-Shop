@@ -55,3 +55,42 @@ export async function editProductStatus(productId, status) {
 
     return response;
 }
+
+/**
+ * 上傳商品圖片
+ * 
+ * @param file 商品
+ * 
+ * @return {object}
+ */
+export async function uploadProductPhoto(file) {
+    const uri = '/product/photo';
+
+    // 設定Form
+    const form = new FormData;
+    form.append('photo', file);
+
+    // 設定Header
+    const header = {
+        "Content-Type": "multipart/form-data"
+    };
+
+    const response = await toolAjax('post', uri, form, header);
+
+    return response;
+}
+
+/**
+ * 新增商品
+ * 
+ * @param {object} productData 商品資料
+ * 
+ * @returns {object}
+ */
+export async function addProduct(productData) {
+    const uri = '/product';
+
+    const response = await toolAjax('post', uri, productData);
+
+    return response;
+}

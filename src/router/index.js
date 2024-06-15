@@ -42,6 +42,13 @@ const router = createRouter({
                                     },
                                     component: () => import('@/components/product/list/Index.vue'),
                                 },
+                                {
+                                    path: 'add',
+                                    meta: {
+                                        title: '新增商品',
+                                    },
+                                    component: () => import('@/components/product/form/Index.vue'),
+                                },
                             ],
                         },
                     ],
