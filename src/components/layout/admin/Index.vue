@@ -3,7 +3,7 @@
         <el-header class="flex items-center bg-blue-500">
             <Header />
         </el-header>
-        <el-container class="h-full">
+        <el-container class="h-full overflow-auto">
             <el-aside class="!w-52">
                 <Menu />
             </el-aside>
