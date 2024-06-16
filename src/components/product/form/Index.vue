@@ -29,6 +29,26 @@
                         </template>
                     </el-upload>
                 </el-form-item>
+                <el-form-item label="商品類型">
+                    <el-select
+                        class="!w-1/4"
+                        v-model="form.productTypeId"
+                        filterable
+                        remote
+                        reserve-keyword
+                        placeholder="請選擇商品類型"
+                        loading-text="讀取中..."
+                        no-data-text="無資料"
+                        :loading="productTypeLoading"
+                        :remote-method="getProductType"
+                    >
+                        <el-option
+                            v-for="item in productType"
+                            :label="item.name"
+                            :value="item.productTypeId"
+                        />
+                    </el-select>
+                </el-form-item>
                 <el-form-item label="商品價格">
                     <el-input-number v-model="form.price" min="0" />
                 </el-form-item>
@@ -83,6 +103,7 @@
 import { ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as apiProduct from "@/api/Product.js";
+import * as apiProductType from "@/api/ProductType.js";
 import * as toolAlert from "@/tool/Alert.js";
 import * as toolTime from "@/tool/Time.js";
 
@@ -98,11 +119,14 @@ const form = reactive({
     endTime: "",
     description: "",
     status: false,
+    productTypeId: null,
 });
 
 const formTitle = ref("");
 const photoUrl = ref("");
 const timeFormat = ref("YYYY-MM-DD HH:mm:ss");
+const productType = ref([]);
+const productTypeLoading = ref(false);
 
 const productId = route.params.productId;
 
@@ -168,6 +192,14 @@ async function getProduct() {
     if (response.status) {
         const product = response.data.product;
 
+        // 根據資料加入預設的商品類型選項
+        const data = {
+            productTypeId: product.productTypeId,
+            name: product.productTypeName,
+        };
+
+        productType.value.push(data);
+
         form.name = product.name;
         form.photoFileId = product.photoFileId;
         form.price = product.price;
@@ -176,6 +208,7 @@ async function getProduct() {
         form.endTime = toolTime.getDateTime(product.endTime);
         form.description = product.description;
         form.status = product.status;
+        form.productTypeId = product.productTypeId;
 
         photoUrl.value = product.photoUrl;
     } else {
@@ -192,5 +225,37 @@ async function getProduct() {
  */
 const toListPage = () => {
     router.push("/mgmt/product");
+};
+
+/**
+ * 取得商品類型資料
+ *
+ * @param {string} keyword 關鍵字
+ *
+ * @return {void}
+ */
+const getProductType = async (keyword) => {
+    productTypeLoading.value = true;
+
+    const response = await apiProductType.getProductTypePage(1, keyword);
+
+    if (response.status) {
+        const productTypePage = response.data.productTypePage;
+
+        // 設定列表資料
+        productType.value = [];
+        productTypePage.data.forEach((item) => {
+            const data = {
+                productTypeId: item.productTypeId,
+                name: item.name,
+            };
+
+            productType.value.push(data);
+        });
+    } else {
+        toolAlert.error(response.message);
+    }
+
+    productTypeLoading.value = false;
 };
 </script>

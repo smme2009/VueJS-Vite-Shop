@@ -40,6 +40,7 @@
                             />
                         </template>
                     </el-table-column>
+                    <el-table-column prop="productTypeName" label="商品類型" />
                     <el-table-column prop="price" label="價格" />
                     <el-table-column prop="quantity" label="數量" />
                     <el-table-column prop="startTime" label="上架時間" />
@@ -236,6 +237,7 @@ function setProduct(data) {
         startTime: toolTime.getDateTime(data.startTime),
         endTime: toolTime.getDateTime(data.endTime),
         status: data.status,
+        productTypeName: data.productTypeName,
     };
 
     return product;
