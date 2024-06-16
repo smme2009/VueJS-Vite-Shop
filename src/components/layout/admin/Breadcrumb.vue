@@ -2,7 +2,7 @@
     <div class="h-10 flex justify-center">
         <div class="w-11/12 flex items-center rounded-lg bg-slate-100">
             <el-breadcrumb class="ml-2" :separator-icon="ArrowRight">
-                <el-breadcrumb-item to="home">首頁</el-breadcrumb-item>
+                <el-breadcrumb-item to="/mgmt/home">首頁</el-breadcrumb-item>
                 <el-breadcrumb-item
                     v-for="item in breadcrumb"
                     :to="{ path: item.path }"
