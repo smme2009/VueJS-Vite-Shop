@@ -12,6 +12,12 @@
             </el-icon>
             <template #title>商品管理</template>
         </el-menu-item>
+        <el-menu-item index="3" @click="toPage('/mgmt/product/type')">
+            <el-icon>
+                <Grid />
+            </el-icon>
+            <template #title>商品類型管理</template>
+        </el-menu-item>
     </el-menu>
 </template>
 
