@@ -151,19 +151,10 @@ const saveProduct = async () => {
     if (response.status) {
         toolAlert.success(response.message);
 
-        router.push("/mgmt/product");
+        toListPage();
     } else {
         toolAlert.error(response.message);
     }
-};
-
-/**
- * 進入列表頁面
- *
- * @returns {void}
- */
-const toListPage = () => {
-    router.push("/mgmt/product");
 };
 
 /**
@@ -193,4 +184,13 @@ async function getProduct() {
         toListPage();
     }
 }
+
+/**
+ * 進入列表頁面
+ *
+ * @returns {void}
+ */
+const toListPage = () => {
+    router.push("/mgmt/product");
+};
 </script>
