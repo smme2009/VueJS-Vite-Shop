@@ -12,9 +12,7 @@ const format = 'YYYY-MM-DD HH:mm:ss';
  */
 export function getDateTime(timestamp) {
     let datetime = '';
-    if (timestamp === null) {
-        datetime = '--';
-    } else {
+    if (timestamp != null) {
         datetime = moment(timestamp * 1000)
             .tz(timeZone)
             .format(format);
