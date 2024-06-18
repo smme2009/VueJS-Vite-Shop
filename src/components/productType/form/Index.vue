@@ -35,7 +35,7 @@
 import { ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as apiProductType from "@/api/ProductType.js";
-import * as toolAlert from "@/tool/Alert.js";
+import * as toolNotify from "@/tool/Notify.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -72,11 +72,11 @@ const saveProductType = async () => {
     }
 
     if (response.status) {
-        toolAlert.success(response.message);
+        toolNotify.success("通知", response.message);
 
         toListPage();
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message, false);
     }
 };
 
@@ -94,7 +94,7 @@ async function getProductType() {
         form.name = productType.name;
         form.status = productType.status;
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message);
 
         toListPage();
     }

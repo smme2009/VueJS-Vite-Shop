@@ -100,7 +100,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import * as toolAlert from "@/tool/Alert.js";
+import * as toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
 import * as toolStr from "@/tool/Str.js";
@@ -142,9 +142,9 @@ const editProductStatus = async (productId, status) => {
     const response = await apiProduct.editProductStatus(productId, status);
 
     if (response.status) {
-        toolAlert.success(response.message);
+        toolNotify.success("通知", response.message);
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message, false);
 
         // 編輯失敗後重新刷新列表
         getProductData();
@@ -163,12 +163,12 @@ const deleteProduct = async (productId) => {
         const response = await apiProduct.deleteProduct(productId);
 
         if (response.status) {
-            toolAlert.success(response.message);
+            toolNotify.success("通知", response.message);
 
             // 刪除成功後重新刷新列表
             getProductData();
         } else {
-            toolAlert.error(response.message);
+            toolNotify.error("通知", response.message);
         }
     });
 };
@@ -216,7 +216,7 @@ async function getProductData() {
         // 設定資料總數
         dataTotal.value = productPage.total;
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message);
     }
 }
 

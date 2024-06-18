@@ -31,7 +31,7 @@
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
 import * as apiAccount from "@/api/Account.js";
-import * as toolAlert from "@/tool/Alert.js";
+import * as toolNotify from "@/tool/Notify.js";
 
 const router = useRouter();
 
@@ -55,7 +55,7 @@ const login = async () => {
 
         router.push("/mgmt/home");
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message, false);
     }
 };
 </script>

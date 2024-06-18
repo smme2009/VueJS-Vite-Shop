@@ -104,7 +104,7 @@ import { ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as apiProduct from "@/api/Product.js";
 import * as apiProductType from "@/api/ProductType.js";
-import * as toolAlert from "@/tool/Alert.js";
+import * as toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
 
 const route = useRoute();
@@ -173,11 +173,11 @@ const saveProduct = async () => {
     }
 
     if (response.status) {
-        toolAlert.success(response.message);
+        toolNotify.success("通知", response.message);
 
         toListPage();
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message, false);
     }
 };
 
@@ -212,7 +212,7 @@ async function getProduct() {
 
         photoUrl.value = product.photoUrl;
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message);
 
         toListPage();
     }
@@ -253,7 +253,7 @@ const getProductType = async (keyword) => {
             productType.value.push(data);
         });
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message);
     }
 
     productTypeLoading.value = false;

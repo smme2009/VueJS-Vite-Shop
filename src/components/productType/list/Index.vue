@@ -88,7 +88,7 @@
 <script setup>
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
-import * as toolAlert from "@/tool/Alert.js";
+import * as toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as apiProductType from "@/api/ProductType.js";
 
@@ -131,9 +131,9 @@ const editProductTypeStatus = async (productTypeId, status) => {
     );
 
     if (response.status) {
-        toolAlert.success(response.message);
+        toolNotify.success("通知", response.message);
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message, false);
 
         // 編輯失敗後重新刷新列表
         getProductTypeData();
@@ -152,12 +152,12 @@ const deleteProductType = async (productTypeId) => {
         const response = await apiProductType.deleteProductType(productTypeId);
 
         if (response.status) {
-            toolAlert.success(response.message);
+            toolNotify.success("通知", response.message);
 
             // 刪除成功後重新刷新列表
             getProductTypeData();
         } else {
-            toolAlert.error(response.message);
+            toolNotify.error("通知", response.message);
         }
     });
 };
@@ -205,7 +205,7 @@ async function getProductTypeData() {
         // 設定資料總數
         dataTotal.value = productTypePage.total;
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message);
     }
 }
 
