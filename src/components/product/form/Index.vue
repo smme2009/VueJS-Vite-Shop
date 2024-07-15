@@ -153,7 +153,7 @@ const uploadPhoto = async (data) => {
         photoUrl.value = fileInfo.url;
         form.photoFileId = fileInfo.fileId;
     } else {
-        console.log(response.message);
+        toolNotify.error("通知", response.message, false);
     }
 };
 
