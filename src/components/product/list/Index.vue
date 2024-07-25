@@ -70,6 +70,15 @@
                                 </el-icon>
                             </el-button>
                             <el-button
+                                @click="toStockPage(scope.row.productId)"
+                                type="warning"
+                                circle
+                            >
+                                <el-icon>
+                                    <List />
+                                </el-icon>
+                            </el-button>
+                            <el-button
                                 @click="deleteProduct(scope.row.productId)"
                                 type="danger"
                                 circle
@@ -191,6 +200,17 @@ const toAddPage = () => {
  */
 const toEditPage = (productId) => {
     router.push(`/mgmt/product/edit/${productId}`);
+};
+
+/**
+ * 進入庫存單管理頁面
+ *
+ * @param {int} productId 商品ID
+ *
+ * @return {void}
+ */
+const toStockPage = (productId) => {
+    router.push(`/mgmt/product/stock/${productId}`);
 };
 
 /**
