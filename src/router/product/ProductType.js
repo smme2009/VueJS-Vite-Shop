@@ -6,10 +6,12 @@ const router = {
     children: [
         {
             path: '',
+            name: 'mgmtProductType',
             component: () => import('@/components/product/productType/list/Index.vue'),
         },
         {
             path: 'add',
+            name: 'mgmtProductTypeAdd',
             meta: {
                 title: '新增商品類型',
             },
@@ -17,6 +19,7 @@ const router = {
         },
         {
             path: 'edit/:productTypeId',
+            name: 'mgmtProductTypeEdit',
             meta: {
                 title: '編輯商品類型',
             },

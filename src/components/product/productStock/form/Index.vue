@@ -88,7 +88,14 @@ const saveProductStock = async () => {
  * @returns {void}
  */
 const toListPage = () => {
-    router.push(`/mgmt/product/stock/${productId}`);
+    const param = {
+        productId: productId,
+    };
+
+    router.push({
+        name: "mgmtProductStock",
+        params: param,
+    });
 };
 
 /**

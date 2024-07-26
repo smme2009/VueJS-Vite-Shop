@@ -224,7 +224,7 @@ async function getProduct() {
  * @returns {void}
  */
 const toListPage = () => {
-    router.push("/mgmt/product");
+    router.push({ name: "mgmtProduct" });
 };
 
 /**

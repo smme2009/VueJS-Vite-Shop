@@ -53,7 +53,7 @@ const login = async () => {
         const jwtToken = response.data.jwtToken;
         localStorage.setItem("jwtToken", jwtToken);
 
-        router.push("/mgmt/home");
+        router.push({ name: "mgmtHome" });
     } else {
         toolNotify.error("通知", response.message, false);
     }

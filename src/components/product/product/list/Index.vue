@@ -188,7 +188,7 @@ const deleteProduct = async (productId) => {
  * @returns {void}
  */
 const toAddPage = () => {
-    router.push("/mgmt/product/add");
+    router.push({ name: "mgmtProductAdd" });
 };
 
 /**
@@ -199,7 +199,14 @@ const toAddPage = () => {
  * @return {void}
  */
 const toEditPage = (productId) => {
-    router.push(`/mgmt/product/edit/${productId}`);
+    const param = {
+        productId: productId,
+    };
+
+    router.push({
+        name: "mgmtProductEdit",
+        params: param,
+    });
 };
 
 /**
@@ -210,7 +217,14 @@ const toEditPage = (productId) => {
  * @return {void}
  */
 const toStockPage = (productId) => {
-    router.push(`/mgmt/product/stock/${productId}`);
+    const param = {
+        productId: productId,
+    };
+
+    router.push({
+        name: "mgmtProductStock",
+        params: param,
+    });
 };
 
 /**

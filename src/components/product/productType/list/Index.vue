@@ -168,7 +168,7 @@ const deleteProductType = async (productTypeId) => {
  * @returns {void}
  */
 const toAddPage = () => {
-    router.push("/mgmt/product/type/add");
+    router.push({ name: "mgmtProductTypeAdd" });
 };
 
 /**
@@ -179,7 +179,14 @@ const toAddPage = () => {
  * @return {void}
  */
 const toEditPage = (productTypeId) => {
-    router.push(`/mgmt/product/type/edit/${productTypeId}`);
+    const param = {
+        productTypeId: productTypeId,
+    };
+
+    router.push({
+        name: "mgmtProductTypeEdit",
+        params: param,
+    });
 };
 
 /**

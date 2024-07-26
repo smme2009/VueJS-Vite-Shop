@@ -100,7 +100,14 @@ const searchProductStock = (page = 1) => {
  * @returns {void}
  */
 const toAddPage = () => {
-    router.push(`/mgmt/product/stock/${productId}/add`);
+    const param = {
+        productId: productId,
+    };
+
+    router.push({
+        name: "mgmtProductStockAdd",
+        param: param,
+    });
 };
 
 /**
@@ -109,7 +116,7 @@ const toAddPage = () => {
  * @returns {void}
  */
 const toProductPage = () => {
-    router.push(`/mgmt/product`);
+    router.push({ name: "mgmtProduct" });
 };
 
 /**

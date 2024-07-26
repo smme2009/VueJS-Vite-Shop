@@ -6,10 +6,12 @@ const router = {
     children: [
         {
             path: '',
+            name: 'mgmtProduct',
             component: () => import('@/components/product/product/list/Index.vue'),
         },
         {
             path: 'add',
+            name: 'mgmtProductAdd',
             meta: {
                 title: '新增商品',
             },
@@ -17,6 +19,7 @@ const router = {
         },
         {
             path: 'edit/:productId',
+            name: 'mgmtProductEdit',
             meta: {
                 title: '編輯商品',
             },
@@ -30,10 +33,12 @@ const router = {
             children: [
                 {
                     path: '',
+                    name: 'mgmtProductStock',
                     component: () => import('@/components/product/productStock/list/Index.vue'),
                 },
                 {
                     path: 'add',
+                    name: 'mgmtProductStockAdd',
                     meta: {
                         title: '新增庫存單',
                     },

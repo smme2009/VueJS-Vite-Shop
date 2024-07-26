@@ -106,6 +106,6 @@ async function getProductType() {
  * @returns {void}
  */
 const toListPage = () => {
-    router.push("/mgmt/product/type");
+    router.push({ name: "mgmtProductType" });
 };
 </script>
