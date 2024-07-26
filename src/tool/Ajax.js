@@ -44,7 +44,7 @@ async function ajax(method, uri, data = {}, header = {}) {
         }).catch((e) => {
             // 無權限時強制跳轉登入頁
             if (e.response.status === 401) {
-                window.location.href = '/account/login';
+                window.location.href = '/mgmt/login';
             }
 
             response = {

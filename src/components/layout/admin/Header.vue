@@ -37,6 +37,6 @@ const toBackPage = () => {
 const logout = () => {
     localStorage.removeItem("jwtToken");
 
-    router.push("/account/login");
+    router.push("/mgmt/login");
 };
 </script>
