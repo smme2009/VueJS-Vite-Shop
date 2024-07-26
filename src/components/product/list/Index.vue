@@ -113,7 +113,7 @@ import * as toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
 import * as toolStr from "@/tool/Str.js";
-import * as apiProduct from "@/api/Product.js";
+import * as apiProduct from "@/api/product/Product.js";
 
 const router = useRouter();
 

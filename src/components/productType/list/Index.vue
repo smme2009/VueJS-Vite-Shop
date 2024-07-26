@@ -90,7 +90,7 @@ import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
 import * as toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
-import * as apiProductType from "@/api/ProductType.js";
+import * as apiProductType from "@/api/product/ProductType.js";
 
 const router = useRouter();
 

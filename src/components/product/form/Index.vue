@@ -102,8 +102,8 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import * as apiProduct from "@/api/Product.js";
-import * as apiProductType from "@/api/ProductType.js";
+import * as apiProduct from "@/api/product/Product.js";
+import * as apiProductType from "@/api/product/ProductType.js";
 import * as toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
 

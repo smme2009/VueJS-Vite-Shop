@@ -30,7 +30,7 @@
 <script setup>
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import * as apiAccount from "@/api/Account.js";
+import * as apiAccount from "@/api/user/Login.js";
 import * as toolNotify from "@/tool/Notify.js";
 
 const router = useRouter();
