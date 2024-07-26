@@ -3,7 +3,7 @@ const router = {
     meta: {
         title: '登入',
     },
-    component: () => import('@/components/account/login/Index.vue'),
+    component: () => import('@/components/user/login/Index.vue'),
 };
 
 export default router;

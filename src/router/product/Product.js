@@ -6,21 +6,21 @@ const router = {
     children: [
         {
             path: '',
-            component: () => import('@/components/product/list/Index.vue'),
+            component: () => import('@/components/product/product/list/Index.vue'),
         },
         {
             path: 'add',
             meta: {
                 title: '新增商品',
             },
-            component: () => import('@/components/product/form/Index.vue'),
+            component: () => import('@/components/product/product/form/Index.vue'),
         },
         {
             path: 'edit/:productId',
             meta: {
                 title: '編輯商品',
             },
-            component: () => import('@/components/product/form/Index.vue'),
+            component: () => import('@/components/product/product/form/Index.vue'),
         },
         {
             path: 'stock/:productId',
@@ -30,14 +30,14 @@ const router = {
             children: [
                 {
                     path: '',
-                    component: () => import('@/components/productStock/list/Index.vue'),
+                    component: () => import('@/components/product/productStock/list/Index.vue'),
                 },
                 {
                     path: 'add',
                     meta: {
                         title: '新增庫存單',
                     },
-                    component: () => import('@/components/productStock/form/Index.vue'),
+                    component: () => import('@/components/product/productStock/form/Index.vue'),
                 },
             ]
         },
