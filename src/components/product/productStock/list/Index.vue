@@ -44,22 +44,15 @@
             </div>
         </div>
         <!-- 分頁 -->
-        <div class="w-11/12 flex justify-center mt-5">
-            <el-pagination
-                background
-                layout="prev,pager,next"
-                :default-page-size="15"
-                :total="dataTotal"
-                hide-on-single-page="true"
-                @current-change="searchProductStock"
-            />
-        </div>
+        <page />
     </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import page from "@/components/public/page/Index.vue";
+import { ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import { useStore } from "vuex";
 import * as toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
 import * as apiProduct from "@/api/product/Product.js";
@@ -67,10 +60,9 @@ import * as apiProductStock from "@/api/product/ProductStock.js";
 
 const route = useRoute();
 const router = useRouter();
+const store = useStore();
 
 const tableData = ref([]);
-const nowPage = ref(1);
-const dataTotal = ref(0);
 const product = ref({});
 
 const productId = route.params.productId;
@@ -81,18 +73,8 @@ getProduct();
 // 初始化時取得商品庫存單資料
 getProductStockData();
 
-/**
- * 搜尋商品
- *
- * @param {int} page 頁碼
- *
- * @returns {void}
- */
-const searchProductStock = (page = 1) => {
-    nowPage.value = page;
-
-    getProductStockData();
-};
+// 監聽當前頁碼
+watch(() => store.state.page.nowPage, getProductStockData);
 
 /**
  * 進入新增頁面
@@ -147,7 +129,7 @@ const setRowClass = (row) => {
 async function getProductStockData() {
     const response = await apiProductStock.getProductStockPage(
         productId,
-        nowPage.value
+        store.state.page.nowPage
     );
 
     if (response.status) {
@@ -160,7 +142,7 @@ async function getProductStockData() {
         });
 
         // 設定資料總數
-        dataTotal.value = productStockPage.total;
+        store.commit("page/setDataTotal", productStockPage.total);
     } else {
         toolNotify.error("通知", response.message);
     }

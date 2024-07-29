@@ -93,22 +93,15 @@
             </div>
         </div>
         <!-- 分頁 -->
-        <div class="w-11/12 flex justify-center mt-5">
-            <el-pagination
-                background
-                layout="prev,pager,next"
-                :default-page-size="15"
-                :total="dataTotal"
-                hide-on-single-page="true"
-                @current-change="searchProduct"
-            />
-        </div>
+        <page />
     </div>
 </template>
 
 <script setup>
+import page from "@/components/public/page/Index.vue";
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import * as toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
@@ -116,28 +109,16 @@ import * as toolStr from "@/tool/Str.js";
 import * as apiProduct from "@/api/product/Product.js";
 
 const router = useRouter();
+const store = useStore();
 
 const tableData = ref([]);
-const nowPage = ref(1);
-const dataTotal = ref(0);
-
 const keyword = defineModel("");
 
 // 初始化時取得首頁商品資料
 getProductData();
 
-/**
- * 搜尋商品
- *
- * @param {int} page 頁碼
- *
- * @returns {void}
- */
-const searchProduct = (page = 1) => {
-    nowPage.value = page;
-
-    getProductData();
-};
+// 監聽當前頁碼
+watch(() => store.state.page.nowPage, getProductData);
 
 /**
  * 編輯商品狀態
@@ -234,7 +215,7 @@ const toStockPage = (productId) => {
  */
 async function getProductData() {
     const response = await apiProduct.getProductPage(
-        nowPage.value,
+        store.state.page.nowPage,
         keyword.value
     );
 
@@ -248,7 +229,7 @@ async function getProductData() {
         });
 
         // 設定資料總數
-        dataTotal.value = productPage.total;
+        store.commit("page/setDataTotal", productPage.total);
     } else {
         toolNotify.error("通知", response.message);
     }
