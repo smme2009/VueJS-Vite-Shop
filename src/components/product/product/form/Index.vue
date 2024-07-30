@@ -21,7 +21,9 @@
                         :show-file-list="false"
                         :http-request="uploadPhoto"
                     >
-                        <el-button type="primary">上傳檔案</el-button>
+                        <el-button type="primary" icon="Upload">
+                            上傳檔案
+                        </el-button>
                         <template #tip>
                             <div class="el-upload__tip">
                                 需為圖片格式，且檔案大小不得超過10MB
@@ -87,11 +89,9 @@
             </el-form>
             <template #footer>
                 <div class="w-full flex justify-end">
+                    <el-button @click="toListPage"> 取消 </el-button>
                     <el-button type="primary" @click="saveProduct">
                         儲存
-                    </el-button>
-                    <el-button type="danger" @click="toListPage">
-                        取消
                     </el-button>
                 </div>
             </template>

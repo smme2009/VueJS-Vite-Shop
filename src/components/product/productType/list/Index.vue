@@ -9,12 +9,16 @@
                         v-model="keyword"
                         placeholder="請輸入商品類型名稱"
                     />
-                    <el-button type="warning" @click="searchProductType">
+                    <el-button
+                        type="warning"
+                        @click="searchProductType"
+                        icon="Search"
+                    >
                         搜尋
                     </el-button>
                 </div>
                 <div>
-                    <el-button type="success" @click="toAddPage">
+                    <el-button type="success" @click="toAddPage" icon="Plus">
                         新增商品類型
                     </el-button>
                 </div>
@@ -46,26 +50,24 @@
                     </el-table-column>
                     <el-table-column label="管理">
                         <template #default="scope">
-                            <el-button
+                            <el-link
+                                class="mr-2"
                                 @click="toEditPage(scope.row.productTypeId)"
                                 type="primary"
-                                circle
+                                icon="Edit"
                             >
-                                <el-icon>
-                                    <Edit />
-                                </el-icon>
-                            </el-button>
-                            <el-button
+                                編輯
+                            </el-link>
+                            <el-link
+                                class="mr-2"
                                 @click="
                                     deleteProductType(scope.row.productTypeId)
                                 "
                                 type="danger"
-                                circle
+                                icon="Delete"
                             >
-                                <el-icon>
-                                    <Delete />
-                                </el-icon>
-                            </el-button>
+                                刪除
+                            </el-link>
                         </template>
                     </el-table-column>
                 </el-table>

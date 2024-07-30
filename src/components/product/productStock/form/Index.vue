@@ -33,11 +33,9 @@
             </el-form>
             <template #footer>
                 <div class="w-full flex justify-end">
+                    <el-button @click="toListPage"> 取消 </el-button>
                     <el-button type="primary" @click="saveProductStock">
                         儲存
-                    </el-button>
-                    <el-button type="danger" @click="toListPage">
-                        取消
                     </el-button>
                 </div>
             </template>

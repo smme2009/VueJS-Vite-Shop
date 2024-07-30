@@ -15,11 +15,11 @@
         <div class="flex justify-center mt-5">
             <div class="w-11/12 flex justify-end">
                 <div>
-                    <el-button type="info" @click="toProductPage">
+                    <el-button @click="toProductPage" icon="Back">
                         返回商品管理
                     </el-button>
-                    <el-button type="success" @click="toAddPage">
-                        新增商品庫存單
+                    <el-button type="success" @click="toAddPage" icon="Plus">
+                        新增庫存單
                     </el-button>
                 </div>
             </div>
