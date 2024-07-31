@@ -9,12 +9,16 @@
                         v-model="keyword"
                         placeholder="請輸入商品名稱"
                     />
-                    <el-button type="warning" @click="searchProduct">
+                    <el-button
+                        type="warning"
+                        @click="searchProduct"
+                        icon="Search"
+                    >
                         搜尋
                     </el-button>
                 </div>
                 <div>
-                    <el-button type="success" @click="toAddPage">
+                    <el-button type="success" @click="toAddPage" icon="Plus">
                         新增商品
                     </el-button>
                 </div>
@@ -60,74 +64,81 @@
                     </el-table-column>
                     <el-table-column label="管理">
                         <template #default="scope">
-                            <el-button
+                            <el-link
+                                class="mr-2"
                                 @click="toEditPage(scope.row.productId)"
                                 type="primary"
-                                circle
+                                icon="Edit"
                             >
-                                <el-icon>
-                                    <Edit />
-                                </el-icon>
-                            </el-button>
-                            <el-button
+                                編輯
+                            </el-link>
+                            <el-link
+                                class="mr-2"
+                                @click="toStockPage(scope.row.productId)"
+                                type="warning"
+                                icon="List"
+                            >
+                                庫存單管理
+                            </el-link>
+                            <el-link
+                                class="mr-2"
                                 @click="deleteProduct(scope.row.productId)"
                                 type="danger"
-                                circle
+                                icon="Delete"
                             >
-                                <el-icon>
-                                    <Delete />
-                                </el-icon>
-                            </el-button>
+                                刪除
+                            </el-link>
                         </template>
                     </el-table-column>
                 </el-table>
             </div>
         </div>
         <!-- 分頁 -->
-        <div class="w-11/12 flex justify-center mt-5">
-            <el-pagination
-                background
-                layout="prev,pager,next"
-                :default-page-size="15"
-                :total="dataTotal"
-                hide-on-single-page="true"
-                @current-change="searchProduct"
-            />
-        </div>
+        <page />
     </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import page from "@/components/public/page/Index.vue";
+import { ref, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import * as toolAlert from "@/tool/Alert.js";
+import { useStore } from "vuex";
+import * as toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
 import * as toolStr from "@/tool/Str.js";
-import * as apiProduct from "@/api/Product.js";
+import * as apiProduct from "@/api/product/Product.js";
 
 const router = useRouter();
+const store = useStore();
 
 const tableData = ref([]);
-const nowPage = ref(1);
-const dataTotal = ref(0);
-
 const keyword = defineModel("");
 
-// 初始化時取得首頁商品資料
-getProductData();
+onMounted(() => {
+    // 重設分頁資料
+    store.commit("page/setNowPage", 1);
+
+    // 初始化產品資料
+    getProductData();
+
+    // 監聽當前頁碼
+    watch(() => store.state.page.nowPage, getProductData);
+});
 
 /**
  * 搜尋商品
  *
- * @param {int} page 頁碼
- *
  * @returns {void}
  */
-const searchProduct = (page = 1) => {
-    nowPage.value = page;
-
-    getProductData();
+const searchProduct = () => {
+    if (store.state.page.nowPage === 1) {
+        // 直接取得資料
+        getProductData();
+    } else {
+        // 透過換頁取得資料
+        store.commit("page/setNowPage", 1);
+    }
 };
 
 /**
@@ -142,9 +153,9 @@ const editProductStatus = async (productId, status) => {
     const response = await apiProduct.editProductStatus(productId, status);
 
     if (response.status) {
-        toolAlert.success(response.message);
+        toolNotify.success("通知", response.message);
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message, false);
 
         // 編輯失敗後重新刷新列表
         getProductData();
@@ -163,12 +174,12 @@ const deleteProduct = async (productId) => {
         const response = await apiProduct.deleteProduct(productId);
 
         if (response.status) {
-            toolAlert.success(response.message);
+            toolNotify.success("通知", response.message);
 
             // 刪除成功後重新刷新列表
             getProductData();
         } else {
-            toolAlert.error(response.message);
+            toolNotify.error("通知", response.message);
         }
     });
 };
@@ -179,7 +190,7 @@ const deleteProduct = async (productId) => {
  * @returns {void}
  */
 const toAddPage = () => {
-    router.push("/mgmt/product/add");
+    router.push({ name: "mgmtProductAdd" });
 };
 
 /**
@@ -190,7 +201,32 @@ const toAddPage = () => {
  * @return {void}
  */
 const toEditPage = (productId) => {
-    router.push(`/mgmt/product/edit/${productId}`);
+    const param = {
+        productId: productId,
+    };
+
+    router.push({
+        name: "mgmtProductEdit",
+        params: param,
+    });
+};
+
+/**
+ * 進入庫存單管理頁面
+ *
+ * @param {int} productId 商品ID
+ *
+ * @return {void}
+ */
+const toStockPage = (productId) => {
+    const param = {
+        productId: productId,
+    };
+
+    router.push({
+        name: "mgmtProductStock",
+        params: param,
+    });
 };
 
 /**
@@ -198,9 +234,9 @@ const toEditPage = (productId) => {
  *
  * @returns {void}
  */
-async function getProductData() {
+const getProductData = async () => {
     const response = await apiProduct.getProductPage(
-        nowPage.value,
+        store.state.page.nowPage,
         keyword.value
     );
 
@@ -214,11 +250,11 @@ async function getProductData() {
         });
 
         // 設定資料總數
-        dataTotal.value = productPage.total;
+        store.commit("page/setDataTotal", productPage.total);
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message);
     }
-}
+};
 
 /**
  * 設定商品資料
@@ -227,7 +263,7 @@ async function getProductData() {
  *
  * @returns {object} 商品資料
  */
-function setProduct(data) {
+const setProduct = (data) => {
     const product = {
         productId: data.productId,
         name: data.name,
@@ -241,5 +277,5 @@ function setProduct(data) {
     };
 
     return product;
-}
+};
 </script>

@@ -9,12 +9,16 @@
                         v-model="keyword"
                         placeholder="請輸入商品類型名稱"
                     />
-                    <el-button type="warning" @click="searchProductType">
+                    <el-button
+                        type="warning"
+                        @click="searchProductType"
+                        icon="Search"
+                    >
                         搜尋
                     </el-button>
                 </div>
                 <div>
-                    <el-button type="success" @click="toAddPage">
+                    <el-button type="success" @click="toAddPage" icon="Plus">
                         新增商品類型
                     </el-button>
                 </div>
@@ -46,74 +50,73 @@
                     </el-table-column>
                     <el-table-column label="管理">
                         <template #default="scope">
-                            <el-button
+                            <el-link
+                                class="mr-2"
                                 @click="toEditPage(scope.row.productTypeId)"
                                 type="primary"
-                                circle
+                                icon="Edit"
                             >
-                                <el-icon>
-                                    <Edit />
-                                </el-icon>
-                            </el-button>
-                            <el-button
+                                編輯
+                            </el-link>
+                            <el-link
+                                class="mr-2"
                                 @click="
                                     deleteProductType(scope.row.productTypeId)
                                 "
                                 type="danger"
-                                circle
+                                icon="Delete"
                             >
-                                <el-icon>
-                                    <Delete />
-                                </el-icon>
-                            </el-button>
+                                刪除
+                            </el-link>
                         </template>
                     </el-table-column>
                 </el-table>
             </div>
         </div>
         <!-- 分頁 -->
-        <div class="w-11/12 flex justify-center mt-5">
-            <el-pagination
-                background
-                layout="prev,pager,next"
-                :default-page-size="15"
-                :total="dataTotal"
-                hide-on-single-page="true"
-                @current-change="searchProductType"
-            />
-        </div>
+        <page />
     </div>
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import page from "@/components/public/page/Index.vue";
+import { ref, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import * as toolAlert from "@/tool/Alert.js";
+import { useStore } from "vuex";
+import * as toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
-import * as apiProductType from "@/api/ProductType.js";
+import * as apiProductType from "@/api/product/ProductType.js";
 
 const router = useRouter();
+const store = useStore();
 
 const tableData = ref([]);
-const nowPage = ref(1);
-const dataTotal = ref(0);
-
 const keyword = defineModel("");
 
-// 初始化時取得首頁商品類型資料
-getProductTypeData();
+onMounted(() => {
+    // 重設分頁資料
+    store.commit("page/setNowPage", 1);
+
+    // 初始化時取得首頁商品類型資料
+    getProductTypeData();
+
+    // 監聽當前頁碼
+    watch(() => store.state.page.nowPage, getProductTypeData);
+});
 
 /**
  * 搜尋商品類型
  *
- * @param {int} page 頁碼
- *
  * @returns {void}
  */
-const searchProductType = (page = 1) => {
-    nowPage.value = page;
-
-    getProductTypeData();
+const searchProductType = () => {
+    if (store.state.page.nowPage === 1) {
+        // 直接取得資料
+        getProductTypeData();
+    } else {
+        // 透過換頁取得資料
+        store.commit("page/setNowPage", 1);
+    }
 };
 
 /**
@@ -131,9 +134,9 @@ const editProductTypeStatus = async (productTypeId, status) => {
     );
 
     if (response.status) {
-        toolAlert.success(response.message);
+        toolNotify.success("通知", response.message);
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message, false);
 
         // 編輯失敗後重新刷新列表
         getProductTypeData();
@@ -152,12 +155,12 @@ const deleteProductType = async (productTypeId) => {
         const response = await apiProductType.deleteProductType(productTypeId);
 
         if (response.status) {
-            toolAlert.success(response.message);
+            toolNotify.success("通知", response.message);
 
             // 刪除成功後重新刷新列表
             getProductTypeData();
         } else {
-            toolAlert.error(response.message);
+            toolNotify.error("通知", response.message);
         }
     });
 };
@@ -168,7 +171,7 @@ const deleteProductType = async (productTypeId) => {
  * @returns {void}
  */
 const toAddPage = () => {
-    router.push("/mgmt/product/type/add");
+    router.push({ name: "mgmtProductTypeAdd" });
 };
 
 /**
@@ -179,7 +182,14 @@ const toAddPage = () => {
  * @return {void}
  */
 const toEditPage = (productTypeId) => {
-    router.push(`/mgmt/product/type/edit/${productTypeId}`);
+    const param = {
+        productTypeId: productTypeId,
+    };
+
+    router.push({
+        name: "mgmtProductTypeEdit",
+        params: param,
+    });
 };
 
 /**
@@ -187,9 +197,9 @@ const toEditPage = (productTypeId) => {
  *
  * @returns {void}
  */
-async function getProductTypeData() {
+const getProductTypeData = async () => {
     const response = await apiProductType.getProductTypePage(
-        nowPage.value,
+        store.state.page.nowPage,
         keyword.value
     );
 
@@ -203,11 +213,11 @@ async function getProductTypeData() {
         });
 
         // 設定資料總數
-        dataTotal.value = productTypePage.total;
+        store.commit("page/setDataTotal", productTypePage.total);
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message);
     }
-}
+};
 
 /**
  * 設定商品類型資料
@@ -216,7 +226,7 @@ async function getProductTypeData() {
  *
  * @returns {object} 商品類型資料
  */
-function setProductType(data) {
+const setProductType = (data) => {
     const productType = {
         productTypeId: data.productTypeId,
         name: data.name,
@@ -224,5 +234,5 @@ function setProductType(data) {
     };
 
     return productType;
-}
+};
 </script>

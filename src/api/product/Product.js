@@ -8,7 +8,7 @@ import toolAjax from '@/tool/Ajax.js';
  * 
  * @returns {object} 
  */
-export async function getProductPage(page, keyword) {
+export const getProductPage = async (page, keyword) => {
     const uri = '/product';
 
     const data = {
@@ -28,7 +28,7 @@ export async function getProductPage(page, keyword) {
  * 
  * @returns {object}
  */
-export async function deleteProduct(productId) {
+export const deleteProduct = async (productId) => {
     const uri = `/product/${productId}`;
 
     const response = await toolAjax('delete', uri);
@@ -44,7 +44,7 @@ export async function deleteProduct(productId) {
  * 
  * @returns {object}
  */
-export async function editProductStatus(productId, status) {
+export const editProductStatus = async (productId, status) => {
     const uri = `/product/${productId}/status`;
 
     const data = {
@@ -63,7 +63,7 @@ export async function editProductStatus(productId, status) {
  * 
  * @return {object}
  */
-export async function uploadProductPhoto(file) {
+export const uploadProductPhoto = async (file) => {
     const uri = '/product/photo';
 
     // 設定Form
@@ -87,7 +87,7 @@ export async function uploadProductPhoto(file) {
  * 
  * @returns {object}
  */
-export async function addProduct(productData) {
+export const addProduct = async (productData) => {
     const uri = '/product';
 
     const response = await toolAjax('post', uri, productData);
@@ -102,7 +102,7 @@ export async function addProduct(productData) {
  * 
  * @returns {object}
  */
-export async function getProduct(productId) {
+export const getProduct = async (productId) => {
     const uri = `/product/${productId}`;
 
     const response = await toolAjax('get', uri);
@@ -118,7 +118,7 @@ export async function getProduct(productId) {
  * 
  * @returns {object}
  */
-export async function editProduct(productId, productData) {
+export const editProduct = async (productId, productData) => {
     const uri = `/product/${productId}`;
 
     const response = await toolAjax('put', uri, productData);

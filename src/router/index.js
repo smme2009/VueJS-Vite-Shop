@@ -1,5 +1,10 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
+import login from '@/router/user/Login.js';
+import home from '@/router/home/Home.js';
+import product from '@/router/product/Product.js';
+import productType from '@/router/product/ProductType.js';
+
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -8,82 +13,18 @@ const router = createRouter({
             component: () => import('@/App.vue'),
             children: [
                 {
-                    path: 'account',
-                    component: () => import('@/components/layout/default/Index.vue'),
-                    children: [
-                        {
-                            path: 'login',
-                            meta: {
-                                title: '登入',
-                            },
-                            component: () => import('@/components/account/login/Index.vue'),
-                        },
-                    ],
-                },
-                {
                     path: 'mgmt',
-                    component: () => import('@/components/layout/admin/Index.vue'),
                     children: [
+                        login,
                         {
-                            path: 'home',
-                            meta: {
-                                title: '首頁',
-                                isHome: true,
-                            },
-                            component: () => import('@/components/home/Index.vue'),
-                        },
-                        {
-                            path: 'product',
-                            meta: {
-                                title: '商品管理',
-                            },
+                            path: '',
+                            component: () => import('@/components/layout/admin/Index.vue'),
                             children: [
-                                {
-                                    path: '',
-                                    component: () => import('@/components/product/list/Index.vue'),
-                                },
-                                {
-                                    path: 'add',
-                                    meta: {
-                                        title: '新增商品',
-                                    },
-                                    component: () => import('@/components/product/form/Index.vue'),
-                                },
-                                {
-                                    path: 'edit/:productId',
-                                    meta: {
-                                        title: '編輯商品',
-                                    },
-                                    component: () => import('@/components/product/form/Index.vue'),
-                                },
+                                home,
+                                product,
+                                productType,
                             ],
-                        },
-                        {
-                            path: 'product/type',
-                            meta: {
-                                title: '商品類型管理',
-                            },
-                            children: [
-                                {
-                                    path: '',
-                                    component: () => import('@/components/productType/list/Index.vue'),
-                                },
-                                {
-                                    path: 'add',
-                                    meta: {
-                                        title: '新增商品類型',
-                                    },
-                                    component: () => import('@/components/productType/form/Index.vue'),
-                                },
-                                {
-                                    path: 'edit/:productTypeId',
-                                    meta: {
-                                        title: '編輯商品類型',
-                                    },
-                                    component: () => import('@/components/productType/form/Index.vue'),
-                                },
-                            ]
-                        },
+                        }
                     ],
                 },
             ],

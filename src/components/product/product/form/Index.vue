@@ -21,7 +21,9 @@
                         :show-file-list="false"
                         :http-request="uploadPhoto"
                     >
-                        <el-button type="primary">上傳檔案</el-button>
+                        <el-button type="primary" icon="Upload">
+                            上傳檔案
+                        </el-button>
                         <template #tip>
                             <div class="el-upload__tip">
                                 需為圖片格式，且檔案大小不得超過10MB
@@ -87,11 +89,9 @@
             </el-form>
             <template #footer>
                 <div class="w-full flex justify-end">
+                    <el-button @click="toListPage"> 取消 </el-button>
                     <el-button type="primary" @click="saveProduct">
                         儲存
-                    </el-button>
-                    <el-button type="danger" @click="toListPage">
-                        取消
                     </el-button>
                 </div>
             </template>
@@ -100,11 +100,11 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import * as apiProduct from "@/api/Product.js";
-import * as apiProductType from "@/api/ProductType.js";
-import * as toolAlert from "@/tool/Alert.js";
+import * as apiProduct from "@/api/product/Product.js";
+import * as apiProductType from "@/api/product/ProductType.js";
+import * as toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
 
 const route = useRoute();
@@ -122,7 +122,7 @@ const form = reactive({
     productTypeId: null,
 });
 
-const formTitle = ref("");
+const formTitle = ref(route.meta.title);
 const photoUrl = ref("");
 const timeFormat = ref("YYYY-MM-DD HH:mm:ss");
 const productType = ref([]);
@@ -130,12 +130,12 @@ const productTypeLoading = ref(false);
 
 const productId = route.params.productId;
 
-formTitle.value = route.meta.title;
-
-// 若為編輯則取得商品資料
-if (productId) {
-    getProduct();
-}
+onMounted(() => {
+    // 若為編輯則取得商品資料
+    if (productId) {
+        getProduct();
+    }
+});
 
 /**
  * 上傳照片
@@ -153,7 +153,7 @@ const uploadPhoto = async (data) => {
         photoUrl.value = fileInfo.url;
         form.photoFileId = fileInfo.fileId;
     } else {
-        console.log(response.message);
+        toolNotify.error("通知", response.message, false);
     }
 };
 
@@ -173,11 +173,11 @@ const saveProduct = async () => {
     }
 
     if (response.status) {
-        toolAlert.success(response.message);
+        toolNotify.success("通知", response.message);
 
         toListPage();
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message, false);
     }
 };
 
@@ -186,7 +186,7 @@ const saveProduct = async () => {
  *
  * @return {void}
  */
-async function getProduct() {
+const getProduct = async () => {
     const response = await apiProduct.getProduct(productId);
 
     if (response.status) {
@@ -212,11 +212,11 @@ async function getProduct() {
 
         photoUrl.value = product.photoUrl;
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message);
 
         toListPage();
     }
-}
+};
 
 /**
  * 進入列表頁面
@@ -224,7 +224,7 @@ async function getProduct() {
  * @returns {void}
  */
 const toListPage = () => {
-    router.push("/mgmt/product");
+    router.push({ name: "mgmtProduct" });
 };
 
 /**
@@ -253,7 +253,7 @@ const getProductType = async (keyword) => {
             productType.value.push(data);
         });
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message);
     }
 
     productTypeLoading.value = false;

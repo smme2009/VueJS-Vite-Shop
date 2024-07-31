@@ -19,11 +19,9 @@
             </el-form>
             <template #footer>
                 <div class="w-full flex justify-end">
+                    <el-button @click="toListPage"> 取消 </el-button>
                     <el-button type="primary" @click="saveProductType">
                         儲存
-                    </el-button>
-                    <el-button type="danger" @click="toListPage">
-                        取消
                     </el-button>
                 </div>
             </template>
@@ -32,10 +30,10 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import * as apiProductType from "@/api/ProductType.js";
-import * as toolAlert from "@/tool/Alert.js";
+import * as apiProductType from "@/api/product/ProductType.js";
+import * as toolNotify from "@/tool/Notify.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -45,16 +43,16 @@ const form = reactive({
     status: false,
 });
 
-const formTitle = ref("");
+const formTitle = ref(route.meta.title);
 
 const productTypeId = route.params.productTypeId;
 
-formTitle.value = route.meta.title;
-
-// 若為編輯則取得商品類型資料
-if (productTypeId) {
-    getProductType();
-}
+onMounted(() => {
+    // 若為編輯則取得商品類型資料
+    if (productTypeId) {
+        getProductType();
+    }
+});
 
 /**
  * 儲存商品類型
@@ -72,11 +70,11 @@ const saveProductType = async () => {
     }
 
     if (response.status) {
-        toolAlert.success(response.message);
+        toolNotify.success("通知", response.message);
 
         toListPage();
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message, false);
     }
 };
 
@@ -85,7 +83,7 @@ const saveProductType = async () => {
  *
  * @return {void}
  */
-async function getProductType() {
+const getProductType = async () => {
     const response = await apiProductType.getProductType(productTypeId);
 
     if (response.status) {
@@ -94,11 +92,11 @@ async function getProductType() {
         form.name = productType.name;
         form.status = productType.status;
     } else {
-        toolAlert.error(response.message);
+        toolNotify.error("通知", response.message);
 
         toListPage();
     }
-}
+};
 
 /**
  * 進入列表頁面
@@ -106,6 +104,6 @@ async function getProductType() {
  * @returns {void}
  */
 const toListPage = () => {
-    router.push("/mgmt/product/type");
+    router.push({ name: "mgmtProductType" });
 };
 </script>

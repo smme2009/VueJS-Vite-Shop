@@ -2,12 +2,8 @@
     <div class="h-10 flex justify-center">
         <div class="w-11/12 flex items-center rounded-lg bg-slate-100">
             <el-breadcrumb class="ml-2" :separator-icon="ArrowRight">
-                <el-breadcrumb-item to="/mgmt/home">首頁</el-breadcrumb-item>
-                <el-breadcrumb-item
-                    v-for="item in breadcrumb"
-                    :to="{ path: item.path }"
-                >
-                    {{ item.title }}
+                <el-breadcrumb-item v-for="title in breadcrumb">
+                    {{ title }}
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -15,31 +11,33 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { ArrowRight } from "@element-plus/icons-vue";
 
 const route = useRoute();
 
 // 麵包屑資料
-let breadcrumb = ref([]);
+const breadcrumb = ref([]);
 
-// 初始化麵包屑
-setBreadcrumb();
+onMounted(() => {
+    // 初始化麵包屑
+    setBreadcrumb();
 
-// 監聽路由狀況並動態調整麵包屑
-watch(route, setBreadcrumb);
+    // 監聽路由狀況並動態調整麵包屑
+    watch(route, setBreadcrumb);
+});
 
 /**
  * 設定麵包屑
  *
  * @returns {void}
  */
-function setBreadcrumb() {
+const setBreadcrumb = () => {
     // 取得路由資料
     const matched = route.matched;
 
-    breadcrumb.value = [];
+    breadcrumb.value = ["首頁"];
 
     // 從路由取得麵包屑
     matched.forEach((item) => {
@@ -52,11 +50,8 @@ function setBreadcrumb() {
         const hasTitle = typeof title !== "undefined";
 
         if (isNotHome && hasTitle) {
-            breadcrumb.value.push({
-                title: title,
-                path: item.path,
-            });
+            breadcrumb.value.push(title);
         }
     });
-}
+};
 </script>
