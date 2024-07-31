@@ -8,7 +8,7 @@ import toolAjax from '@/tool/Ajax.js';
  * 
  * @returns {string} 
  */
-export async function login(account, password) {
+export const login = async (account, password) => {
     const uri = '/login';
 
     const data = {

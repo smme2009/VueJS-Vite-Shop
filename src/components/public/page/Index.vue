@@ -3,6 +3,7 @@
         <el-pagination
             background
             layout="prev,pager,next"
+            :current-page="store.state.page.nowPage"
             :default-page-size="pageSize"
             :total="store.state.page.dataTotal"
             @current-change="setNowPage"

@@ -100,7 +100,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as apiProduct from "@/api/product/Product.js";
 import * as apiProductType from "@/api/product/ProductType.js";
@@ -122,7 +122,7 @@ const form = reactive({
     productTypeId: null,
 });
 
-const formTitle = ref("");
+const formTitle = ref(route.meta.title);
 const photoUrl = ref("");
 const timeFormat = ref("YYYY-MM-DD HH:mm:ss");
 const productType = ref([]);
@@ -130,12 +130,12 @@ const productTypeLoading = ref(false);
 
 const productId = route.params.productId;
 
-formTitle.value = route.meta.title;
-
-// 若為編輯則取得商品資料
-if (productId) {
-    getProduct();
-}
+onMounted(() => {
+    // 若為編輯則取得商品資料
+    if (productId) {
+        getProduct();
+    }
+});
 
 /**
  * 上傳照片
@@ -186,7 +186,7 @@ const saveProduct = async () => {
  *
  * @return {void}
  */
-async function getProduct() {
+const getProduct = async () => {
     const response = await apiProduct.getProduct(productId);
 
     if (response.status) {
@@ -216,7 +216,7 @@ async function getProduct() {
 
         toListPage();
     }
-}
+};
 
 /**
  * 進入列表頁面

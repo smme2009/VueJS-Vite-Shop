@@ -11,7 +11,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { ArrowRight } from "@element-plus/icons-vue";
 
@@ -20,18 +20,20 @@ const route = useRoute();
 // 麵包屑資料
 const breadcrumb = ref([]);
 
-// 初始化麵包屑
-setBreadcrumb();
+onMounted(() => {
+    // 初始化麵包屑
+    setBreadcrumb();
 
-// 監聽路由狀況並動態調整麵包屑
-watch(route, setBreadcrumb);
+    // 監聽路由狀況並動態調整麵包屑
+    watch(route, setBreadcrumb);
+});
 
 /**
  * 設定麵包屑
  *
  * @returns {void}
  */
-function setBreadcrumb() {
+const setBreadcrumb = () => {
     // 取得路由資料
     const matched = route.matched;
 
@@ -51,5 +53,5 @@ function setBreadcrumb() {
             breadcrumb.value.push(title);
         }
     });
-}
+};
 </script>

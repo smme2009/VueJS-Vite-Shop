@@ -8,7 +8,7 @@ import toolAjax from '@/tool/Ajax.js';
  * 
  * @returns {object} 
  */
-export async function getProductTypePage(page, keyword) {
+export const getProductTypePage = async (page, keyword) => {
     const uri = '/product/type';
 
     const data = {
@@ -28,7 +28,7 @@ export async function getProductTypePage(page, keyword) {
  * 
  * @returns {object}
  */
-export async function deleteProductType(productTypeId) {
+export const deleteProductType = async (productTypeId) => {
     const uri = `/product/type/${productTypeId}`;
 
     const response = await toolAjax('delete', uri);
@@ -44,7 +44,7 @@ export async function deleteProductType(productTypeId) {
  * 
  * @returns {object}
  */
-export async function editProductTypeStatus(productTypeId, status) {
+export const editProductTypeStatus = async (productTypeId, status) => {
     const uri = `/product/type/${productTypeId}/status`;
 
     const data = {
@@ -63,7 +63,7 @@ export async function editProductTypeStatus(productTypeId, status) {
  * 
  * @returns {object}
  */
-export async function addProductType(productTypeData) {
+export const addProductType = async (productTypeData) => {
     const uri = '/product/type';
 
     const response = await toolAjax('post', uri, productTypeData);
@@ -78,7 +78,7 @@ export async function addProductType(productTypeData) {
  * 
  * @returns {object}
  */
-export async function getProductType(productTypeId) {
+export const getProductType = async (productTypeId) => {
     const uri = `/product/type/${productTypeId}`;
 
     const response = await toolAjax('get', uri);
@@ -94,7 +94,7 @@ export async function getProductType(productTypeId) {
  * 
  * @returns {object}
  */
-export async function editProductType(productTypeId, productTypeData) {
+export const editProductType = async (productTypeId, productTypeData) => {
     const uri = `/product/type/${productTypeId}`;
 
     const response = await toolAjax('put', uri, productTypeData);

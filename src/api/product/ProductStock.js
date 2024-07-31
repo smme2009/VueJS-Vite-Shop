@@ -8,7 +8,7 @@ import toolAjax from '@/tool/Ajax.js';
  * 
  * @returns {object} 
  */
-export async function getProductStockPage(productId, page) {
+export const getProductStockPage = async (productId, page) => {
     const uri = `/product/${productId}/stock`;
 
     const data = {
@@ -28,7 +28,7 @@ export async function getProductStockPage(productId, page) {
  * 
  * @returns {object}
  */
-export async function addProductStock(productId, productStockData) {
+export const addProductStock = async (productId, productStockData) => {
     const uri = `/product/${productId}/stock`;
 
     const response = await toolAjax('post', uri, productStockData);

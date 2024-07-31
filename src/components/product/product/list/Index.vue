@@ -100,7 +100,7 @@
 
 <script setup>
 import page from "@/components/public/page/Index.vue";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import * as toolNotify from "@/tool/Notify.js";
@@ -115,11 +115,31 @@ const store = useStore();
 const tableData = ref([]);
 const keyword = defineModel("");
 
-// 初始化時取得首頁商品資料
-getProductData();
+onMounted(() => {
+    // 重設分頁資料
+    store.commit("page/setNowPage", 1);
 
-// 監聽當前頁碼
-watch(() => store.state.page.nowPage, getProductData);
+    // 初始化產品資料
+    getProductData();
+
+    // 監聽當前頁碼
+    watch(() => store.state.page.nowPage, getProductData);
+});
+
+/**
+ * 搜尋商品
+ *
+ * @returns {void}
+ */
+const searchProduct = () => {
+    if (store.state.page.nowPage === 1) {
+        // 直接取得資料
+        getProductData();
+    } else {
+        // 透過換頁取得資料
+        store.commit("page/setNowPage", 1);
+    }
+};
 
 /**
  * 編輯商品狀態
@@ -214,7 +234,7 @@ const toStockPage = (productId) => {
  *
  * @returns {void}
  */
-async function getProductData() {
+const getProductData = async () => {
     const response = await apiProduct.getProductPage(
         store.state.page.nowPage,
         keyword.value
@@ -234,7 +254,7 @@ async function getProductData() {
     } else {
         toolNotify.error("通知", response.message);
     }
-}
+};
 
 /**
  * 設定商品資料
@@ -243,7 +263,7 @@ async function getProductData() {
  *
  * @returns {object} 商品資料
  */
-function setProduct(data) {
+const setProduct = (data) => {
     const product = {
         productId: data.productId,
         name: data.name,
@@ -257,5 +277,5 @@ function setProduct(data) {
     };
 
     return product;
-}
+};
 </script>

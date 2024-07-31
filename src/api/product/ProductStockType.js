@@ -5,7 +5,7 @@ import toolAjax from '@/tool/Ajax.js';
  * 
  * @returns {object} 
  */
-export async function getProductStockTypeList() {
+export const getProductStockTypeList = async () => {
     const uri = '/product/stock/type';
 
     const response = await toolAjax('get', uri);

@@ -80,7 +80,7 @@
 
 <script setup>
 import page from "@/components/public/page/Index.vue";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 import * as toolNotify from "@/tool/Notify.js";
@@ -91,14 +91,33 @@ const router = useRouter();
 const store = useStore();
 
 const tableData = ref([]);
-
 const keyword = defineModel("");
 
-// 初始化時取得首頁商品類型資料
-getProductTypeData();
+onMounted(() => {
+    // 重設分頁資料
+    store.commit("page/setNowPage", 1);
 
-// 監聽當前頁碼
-watch(() => store.state.page.nowPage, getProductTypeData);
+    // 初始化時取得首頁商品類型資料
+    getProductTypeData();
+
+    // 監聽當前頁碼
+    watch(() => store.state.page.nowPage, getProductTypeData);
+});
+
+/**
+ * 搜尋商品類型
+ *
+ * @returns {void}
+ */
+const searchProductType = () => {
+    if (store.state.page.nowPage === 1) {
+        // 直接取得資料
+        getProductTypeData();
+    } else {
+        // 透過換頁取得資料
+        store.commit("page/setNowPage", 1);
+    }
+};
 
 /**
  * 編輯商品類型狀態
@@ -178,7 +197,7 @@ const toEditPage = (productTypeId) => {
  *
  * @returns {void}
  */
-async function getProductTypeData() {
+const getProductTypeData = async () => {
     const response = await apiProductType.getProductTypePage(
         store.state.page.nowPage,
         keyword.value
@@ -198,7 +217,7 @@ async function getProductTypeData() {
     } else {
         toolNotify.error("通知", response.message);
     }
-}
+};
 
 /**
  * 設定商品類型資料
@@ -207,7 +226,7 @@ async function getProductTypeData() {
  *
  * @returns {object} 商品類型資料
  */
-function setProductType(data) {
+const setProductType = (data) => {
     const productType = {
         productTypeId: data.productTypeId,
         name: data.name,
@@ -215,5 +234,5 @@ function setProductType(data) {
     };
 
     return productType;
-}
+};
 </script>

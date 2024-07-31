@@ -30,7 +30,7 @@
 </template>
 
 <script setup>
-import { ref, reactive } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as apiProductType from "@/api/product/ProductType.js";
 import * as toolNotify from "@/tool/Notify.js";
@@ -43,16 +43,16 @@ const form = reactive({
     status: false,
 });
 
-const formTitle = ref("");
+const formTitle = ref(route.meta.title);
 
 const productTypeId = route.params.productTypeId;
 
-formTitle.value = route.meta.title;
-
-// 若為編輯則取得商品類型資料
-if (productTypeId) {
-    getProductType();
-}
+onMounted(() => {
+    // 若為編輯則取得商品類型資料
+    if (productTypeId) {
+        getProductType();
+    }
+});
 
 /**
  * 儲存商品類型
@@ -83,7 +83,7 @@ const saveProductType = async () => {
  *
  * @return {void}
  */
-async function getProductType() {
+const getProductType = async () => {
     const response = await apiProductType.getProductType(productTypeId);
 
     if (response.status) {
@@ -96,7 +96,7 @@ async function getProductType() {
 
         toListPage();
     }
-}
+};
 
 /**
  * 進入列表頁面

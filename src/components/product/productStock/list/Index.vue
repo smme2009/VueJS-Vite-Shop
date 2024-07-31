@@ -50,7 +50,7 @@
 
 <script setup>
 import page from "@/components/public/page/Index.vue";
-import { ref, watch } from "vue";
+import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import * as toolNotify from "@/tool/Notify.js";
@@ -67,14 +67,16 @@ const product = ref({});
 
 const productId = route.params.productId;
 
-// 初始化時取得商品資料
-getProduct();
+onMounted(() => {
+    // 初始化時取得商品資料
+    getProduct();
 
-// 初始化時取得商品庫存單資料
-getProductStockData();
+    // 初始化時取得商品庫存單資料
+    getProductStockData();
 
-// 監聽當前頁碼
-watch(() => store.state.page.nowPage, getProductStockData);
+    // 監聽當前頁碼
+    watch(() => store.state.page.nowPage, getProductStockData);
+});
 
 /**
  * 進入新增頁面
@@ -126,7 +128,7 @@ const setRowClass = (row) => {
  *
  * @returns {void}
  */
-async function getProductStockData() {
+const getProductStockData = async () => {
     const response = await apiProductStock.getProductStockPage(
         productId,
         store.state.page.nowPage
@@ -146,7 +148,22 @@ async function getProductStockData() {
     } else {
         toolNotify.error("通知", response.message);
     }
-}
+};
+
+/**
+ * 取得商品資料
+ *
+ * @return {void}
+ */
+const getProduct = async () => {
+    const response = await apiProduct.getProduct(productId);
+
+    if (response.status) {
+        product.value = response.data.product;
+    } else {
+        toolNotify.error("通知", response.message);
+    }
+};
 
 /**
  * 設定商品庫存單資料
@@ -155,7 +172,7 @@ async function getProductStockData() {
  *
  * @returns {object} 商品庫存單資料
  */
-function setProductStock(data) {
+const setProductStock = (data) => {
     const productStock = {
         productStockId: data.productStockId,
         productStockTypeId: data.productStockTypeId,
@@ -165,20 +182,5 @@ function setProductStock(data) {
     };
 
     return productStock;
-}
-
-/**
- * 取得商品資料
- *
- * @return {void}
- */
-async function getProduct() {
-    const response = await apiProduct.getProduct(productId);
-
-    if (response.status) {
-        product.value = response.data.product;
-    } else {
-        toolNotify.error("通知", response.message);
-    }
-}
+};
 </script>
