@@ -30,10 +30,12 @@
 <script setup>
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
+import { useStore } from "vuex";
 import * as apiAccount from "@/api/user/Login.js";
 import * as toolNotify from "@/tool/Notify.js";
 
 const router = useRouter();
+const store = useStore();
 
 const form = reactive({
     account: "",
@@ -51,7 +53,8 @@ const login = async () => {
     if (response.status) {
         // 儲存JWT Token
         const jwtToken = response.data.jwtToken;
-        localStorage.setItem("jwtToken", jwtToken);
+
+        store.commit("user/setJwtToken", jwtToken);
 
         router.push({ name: "mgmtHome" });
     } else {

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import store from '@/store/Index.js';
 
 /**
  * 發送Ajax
@@ -13,7 +14,7 @@ import axios from 'axios';
 async function ajax(method, uri, data = {}, header = {}) {
     const apiUrl = import.meta.env.VITE_API_URL;
     const fullUrl = apiUrl + uri;
-    const jwtToken = localStorage.getItem('jwtToken');
+    const jwtToken = store.state.user.jwtToken;
 
     // 基本設定
     const setting = {

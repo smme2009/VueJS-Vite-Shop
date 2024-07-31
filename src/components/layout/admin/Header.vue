@@ -1,7 +1,7 @@
 <template>
     <el-page-header
         class="w-full"
-        :icon="ArrowLeft"
+        icon="ArrowLeft"
         title="返回"
         @back="toBackPage()"
     >
@@ -16,9 +16,10 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import { ArrowLeft } from "@element-plus/icons-vue";
+import { useStore } from "vuex";
 
 const router = useRouter();
+const store = useStore();
 
 /**
  * 返回上一頁
@@ -35,7 +36,7 @@ const toBackPage = () => {
  * @returns {void}
  */
 const logout = () => {
-    localStorage.removeItem("jwtToken");
+    store.commit("user/resetJwtToken");
 
     router.push({ name: "mgmtLogin" });
 };
