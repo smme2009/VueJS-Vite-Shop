@@ -8,7 +8,7 @@ const router = {
     children: [
         {
             path: '',
-            component: () => import('@/components/layout/admin/Index.vue'),
+            component: () => import('@/components/mgmt/layout/admin/Index.vue'),
             children: [
                 home,
                 product,

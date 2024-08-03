@@ -7,7 +7,7 @@ const router = {
         {
             path: '',
             name: 'mgmtProductType',
-            component: () => import('@/components/product/productType/list/Index.vue'),
+            component: () => import('@/components/mgmt/product/productType/list/Index.vue'),
         },
         {
             path: 'add',
@@ -15,7 +15,7 @@ const router = {
             meta: {
                 title: '新增商品類型',
             },
-            component: () => import('@/components/product/productType/form/Index.vue'),
+            component: () => import('@/components/mgmt/product/productType/form/Index.vue'),
         },
         {
             path: 'edit/:productTypeId',
@@ -23,7 +23,7 @@ const router = {
             meta: {
                 title: '編輯商品類型',
             },
-            component: () => import('@/components/product/productType/form/Index.vue'),
+            component: () => import('@/components/mgmt/product/productType/form/Index.vue'),
         },
     ]
 };

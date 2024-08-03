@@ -99,7 +99,7 @@
 </template>
 
 <script setup>
-import page from "@/components/public/page/Index.vue";
+import page from "@/components/mgmt/public/page/Index.vue";
 import { ref, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";

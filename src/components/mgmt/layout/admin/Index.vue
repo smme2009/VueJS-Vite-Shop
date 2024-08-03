@@ -16,7 +16,7 @@
 </template>
 
 <script setup>
-import Menu from "@/components/layout/admin/Menu.vue";
-import Header from "@/components/layout/admin/Header.vue";
-import Breadcrumb from "@/components/layout/admin/Breadcrumb.vue";
+import Menu from "@/components/mgmt/layout/admin/Menu.vue";
+import Header from "@/components/mgmt/layout/admin/Header.vue";
+import Breadcrumb from "@/components/mgmt/layout/admin/Breadcrumb.vue";
 </script>

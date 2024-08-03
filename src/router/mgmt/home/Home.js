@@ -5,7 +5,7 @@ const router = {
         title: '首頁',
         isHome: true,
     },
-    component: () => import('@/components/home/Index.vue'),
+    component: () => import('@/components/mgmt/home/Index.vue'),
 };
 
 export default router;
