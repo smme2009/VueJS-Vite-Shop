@@ -107,7 +107,7 @@ import * as toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
 import * as toolStr from "@/tool/Str.js";
-import * as apiProduct from "@/api/product/Product.js";
+import * as apiProduct from "@/api/mgmt/product/Product.js";
 
 const router = useRouter();
 const store = useStore();

@@ -55,8 +55,8 @@ import { useRoute, useRouter } from "vue-router";
 import { useStore } from "vuex";
 import * as toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
-import * as apiProduct from "@/api/product/Product.js";
-import * as apiProductStock from "@/api/product/ProductStock.js";
+import * as apiProduct from "@/api/mgmt/product/Product.js";
+import * as apiProductStock from "@/api/mgmt/product/ProductStock.js";
 
 const route = useRoute();
 const router = useRouter();

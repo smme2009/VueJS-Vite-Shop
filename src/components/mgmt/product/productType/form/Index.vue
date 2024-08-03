@@ -32,7 +32,7 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import * as apiProductType from "@/api/product/ProductType.js";
+import * as apiProductType from "@/api/mgmt/product/ProductType.js";
 import * as toolNotify from "@/tool/Notify.js";
 
 const route = useRoute();

@@ -46,8 +46,8 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import * as apiProductStock from "@/api/product/ProductStock.js";
-import * as apiProductStockType from "@/api/product/ProductStockType.js";
+import * as apiProductStock from "@/api/mgmt/product/ProductStock.js";
+import * as apiProductStockType from "@/api/mgmt/product/ProductStockType.js";
 import * as toolNotify from "@/tool/Notify.js";
 
 const route = useRoute();
