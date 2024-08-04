@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import mgmt from '@/router/mgmt/Index.js';
+import shop from '@/router/shop/Index.js';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -9,6 +10,7 @@ const router = createRouter({
             path: '',
             component: () => import('@/App.vue'),
             children: [
+                shop,
                 mgmt,
             ],
         },
