@@ -24,5 +24,13 @@
                 <template #title>商品類型管理</template>
             </el-menu-item>
         </router-link>
+        <router-link :to="{ name: 'mgmtBanner' }">
+            <el-menu-item index="4">
+                <el-icon>
+                    <Picture />
+                </el-icon>
+                <template #title>橫幅管理</template>
+            </el-menu-item>
+        </router-link>
     </el-menu>
 </template>

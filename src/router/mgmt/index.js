@@ -2,6 +2,7 @@ import login from '@/router/mgmt/user/Login.js';
 import home from '@/router/mgmt/home/Home.js';
 import product from '@/router/mgmt/product/Product.js';
 import productType from '@/router/mgmt/product/ProductType.js';
+import Banner from '@/router/mgmt/banner/Banner.js';
 
 const router = {
     path: 'mgmt',
@@ -13,6 +14,7 @@ const router = {
                 home,
                 product,
                 productType,
+                Banner,
             ],
         },
         login,
