@@ -9,7 +9,7 @@ import toolAjax from '@/tool/Ajax.js';
  * @returns {object} 
  */
 export const getProductPage = async (page, keyword) => {
-    const uri = '/product';
+    const uri = '/backend/product';
 
     const data = {
         page: page,
@@ -29,7 +29,7 @@ export const getProductPage = async (page, keyword) => {
  * @returns {object}
  */
 export const deleteProduct = async (productId) => {
-    const uri = `/product/${productId}`;
+    const uri = `/backend/product/${productId}`;
 
     const response = await toolAjax('delete', uri);
 
@@ -45,7 +45,7 @@ export const deleteProduct = async (productId) => {
  * @returns {object}
  */
 export const editProductStatus = async (productId, status) => {
-    const uri = `/product/${productId}/status`;
+    const uri = `/backend/product/${productId}/status`;
 
     const data = {
         status: status,
@@ -64,7 +64,7 @@ export const editProductStatus = async (productId, status) => {
  * @return {object}
  */
 export const uploadProductPhoto = async (file) => {
-    const uri = '/product/photo';
+    const uri = '/backend/product/photo';
 
     // 設定Form
     const form = new FormData;
@@ -88,7 +88,7 @@ export const uploadProductPhoto = async (file) => {
  * @returns {object}
  */
 export const addProduct = async (productData) => {
-    const uri = '/product';
+    const uri = '/backend/product';
 
     const response = await toolAjax('post', uri, productData);
 
@@ -103,7 +103,7 @@ export const addProduct = async (productData) => {
  * @returns {object}
  */
 export const getProduct = async (productId) => {
-    const uri = `/product/${productId}`;
+    const uri = `/backend/product/${productId}`;
 
     const response = await toolAjax('get', uri);
 
@@ -119,7 +119,7 @@ export const getProduct = async (productId) => {
  * @returns {object}
  */
 export const editProduct = async (productId, productData) => {
-    const uri = `/product/${productId}`;
+    const uri = `/backend/product/${productId}`;
 
     const response = await toolAjax('put', uri, productData);
 

@@ -9,7 +9,7 @@ import toolAjax from '@/tool/Ajax.js';
  * @returns {object} 
  */
 export const getProductStockPage = async (productId, page) => {
-    const uri = `/product/${productId}/stock`;
+    const uri = `/backend/product/${productId}/stock`;
 
     const data = {
         page: page,
@@ -29,7 +29,7 @@ export const getProductStockPage = async (productId, page) => {
  * @returns {object}
  */
 export const addProductStock = async (productId, productStockData) => {
-    const uri = `/product/${productId}/stock`;
+    const uri = `/backend/product/${productId}/stock`;
 
     const response = await toolAjax('post', uri, productStockData);
 

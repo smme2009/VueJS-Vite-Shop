@@ -9,7 +9,7 @@ import toolAjax from '@/tool/Ajax.js';
  * @returns {object} 
  */
 export const getProductTypePage = async (page, keyword) => {
-    const uri = '/product/type';
+    const uri = '/backend/product/type';
 
     const data = {
         page: page,
@@ -29,7 +29,7 @@ export const getProductTypePage = async (page, keyword) => {
  * @returns {object}
  */
 export const deleteProductType = async (productTypeId) => {
-    const uri = `/product/type/${productTypeId}`;
+    const uri = `/backend/product/type/${productTypeId}`;
 
     const response = await toolAjax('delete', uri);
 
@@ -45,7 +45,7 @@ export const deleteProductType = async (productTypeId) => {
  * @returns {object}
  */
 export const editProductTypeStatus = async (productTypeId, status) => {
-    const uri = `/product/type/${productTypeId}/status`;
+    const uri = `/backend/product/type/${productTypeId}/status`;
 
     const data = {
         status: status,
@@ -64,7 +64,7 @@ export const editProductTypeStatus = async (productTypeId, status) => {
  * @returns {object}
  */
 export const addProductType = async (productTypeData) => {
-    const uri = '/product/type';
+    const uri = '/backend/product/type';
 
     const response = await toolAjax('post', uri, productTypeData);
 
@@ -79,7 +79,7 @@ export const addProductType = async (productTypeData) => {
  * @returns {object}
  */
 export const getProductType = async (productTypeId) => {
-    const uri = `/product/type/${productTypeId}`;
+    const uri = `/backend/product/type/${productTypeId}`;
 
     const response = await toolAjax('get', uri);
 
@@ -95,7 +95,7 @@ export const getProductType = async (productTypeId) => {
  * @returns {object}
  */
 export const editProductType = async (productTypeId, productTypeData) => {
-    const uri = `/product/type/${productTypeId}`;
+    const uri = `/backend/product/type/${productTypeId}`;
 
     const response = await toolAjax('put', uri, productTypeData);
 

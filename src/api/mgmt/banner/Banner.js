@@ -9,7 +9,7 @@ import toolAjax from '@/tool/Ajax.js';
  * @returns {object} 
  */
 export const getBannerPage = async (page, keyword) => {
-    const uri = '/banner';
+    const uri = '/backend/banner';
 
     const data = {
         page: page,
@@ -29,7 +29,7 @@ export const getBannerPage = async (page, keyword) => {
  * @returns {object}
  */
 export const deleteBanner = async (bannerId) => {
-    const uri = `/banner/${bannerId}`;
+    const uri = `/backend/banner/${bannerId}`;
 
     const response = await toolAjax('delete', uri);
 
@@ -45,7 +45,7 @@ export const deleteBanner = async (bannerId) => {
  * @returns {object}
  */
 export const editBannerStatus = async (bannerId, status) => {
-    const uri = `/banner/${bannerId}/status`;
+    const uri = `/backend/banner/${bannerId}/status`;
 
     const data = {
         status: status,
@@ -64,7 +64,7 @@ export const editBannerStatus = async (bannerId, status) => {
  * @return {object}
  */
 export const uploadBannerPhoto = async (file) => {
-    const uri = '/banner/photo';
+    const uri = '/backend/banner/photo';
 
     // 設定Form
     const form = new FormData;
@@ -88,7 +88,7 @@ export const uploadBannerPhoto = async (file) => {
  * @returns {object}
  */
 export const addBanner = async (bannerData) => {
-    const uri = '/banner';
+    const uri = '/backend/banner';
 
     const response = await toolAjax('post', uri, bannerData);
 
@@ -103,7 +103,7 @@ export const addBanner = async (bannerData) => {
  * @returns {object}
  */
 export const getBanner = async (bannerId) => {
-    const uri = `/banner/${bannerId}`;
+    const uri = `/backend/banner/${bannerId}`;
 
     const response = await toolAjax('get', uri);
 
@@ -119,7 +119,7 @@ export const getBanner = async (bannerId) => {
  * @returns {object}
  */
 export const editBanner = async (bannerId, bannerData) => {
-    const uri = `/banner/${bannerId}`;
+    const uri = `/backend/banner/${bannerId}`;
 
     const response = await toolAjax('put', uri, bannerData);
 

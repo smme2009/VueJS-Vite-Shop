@@ -9,7 +9,7 @@ import toolAjax from '@/tool/Ajax.js';
  * @returns {string} 
  */
 export const login = async (account, password) => {
-    const uri = '/login';
+    const uri = '/backend/login';
 
     const data = {
         account: account,
