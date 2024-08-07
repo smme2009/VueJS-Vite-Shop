@@ -3,7 +3,17 @@ const router = {
     children: [
         {
             path: '',
+            meta: {
+                title: 'COORD',
+            },
             component: () => import('@/components/shop/layout/default/Index.vue'),
+            children: [
+                {
+                    path: '',
+                    name: 'shopHome',
+                    component: () => import('@/components/shop/home/Index.vue'),
+                },
+            ],
         },
     ],
 }
