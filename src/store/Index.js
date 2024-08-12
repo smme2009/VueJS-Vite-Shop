@@ -1,16 +1,16 @@
 import { createStore } from 'vuex';
 import createPersistedState from "vuex-persistedstate";
 
-import page from '@/store/page/Index.js';
-import user from '@/store/user/Index.js';
+import page from '@/store/backend/page/Index.js';
+import user from '@/store/backend/user/Index.js';
 
 const store = createStore({
     plugins: [
         createPersistedState()
     ],
     modules: {
-        page: page, // 分頁
-        user: user, // 使用者
+        bePage: page, // 分頁
+        beUser: user, // 使用者
     },
 });
 

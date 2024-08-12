@@ -102,13 +102,13 @@ const keyword = defineModel("");
 
 onMounted(() => {
     // 重設分頁資料
-    store.commit("page/setNowPage", 1);
+    store.commit("bePage/setNowPage", 1);
 
     // 初始化產品資料
     getBannerData();
 
     // 監聽當前頁碼
-    watch(() => store.state.page.nowPage, getBannerData);
+    watch(() => store.state.bePage.nowPage, getBannerData);
 });
 
 /**
@@ -117,12 +117,12 @@ onMounted(() => {
  * @returns {void}
  */
 const searchBanner = () => {
-    if (store.state.page.nowPage === 1) {
+    if (store.state.bePage.nowPage === 1) {
         // 直接取得資料
         getBannerData();
     } else {
         // 透過換頁取得資料
-        store.commit("page/setNowPage", 1);
+        store.commit("bePage/setNowPage", 1);
     }
 };
 
@@ -203,7 +203,7 @@ const toEditPage = (bannerId) => {
  */
 const getBannerData = async () => {
     const response = await apiBanner.getBannerPage(
-        store.state.page.nowPage,
+        store.state.bePage.nowPage,
         keyword.value
     );
 
@@ -224,7 +224,7 @@ const getBannerData = async () => {
         });
 
         // 設定資料總數
-        store.commit("page/setDataTotal", bannerPage.total);
+        store.commit("bePage/setDataTotal", bannerPage.total);
     } else {
         toolNotify.error("通知", response.message);
     }

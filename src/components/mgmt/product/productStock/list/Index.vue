@@ -75,7 +75,7 @@ onMounted(() => {
     getProductStockData();
 
     // 監聽當前頁碼
-    watch(() => store.state.page.nowPage, getProductStockData);
+    watch(() => store.state.bePage.nowPage, getProductStockData);
 });
 
 /**
@@ -131,7 +131,7 @@ const setRowClass = (row) => {
 const getProductStockData = async () => {
     const response = await apiProductStock.getProductStockPage(
         productId,
-        store.state.page.nowPage
+        store.state.bePage.nowPage
     );
 
     if (response.status) {
@@ -144,7 +144,7 @@ const getProductStockData = async () => {
         });
 
         // 設定資料總數
-        store.commit("page/setDataTotal", productStockPage.total);
+        store.commit("bePage/setDataTotal", productStockPage.total);
     } else {
         toolNotify.error("通知", response.message);
     }

@@ -14,7 +14,7 @@ import store from '@/store/Index.js';
 async function ajax(method, uri, data = {}, header = {}) {
     const apiUrl = import.meta.env.VITE_API_URL;
     const fullUrl = apiUrl + uri;
-    const jwtToken = store.state.user.jwtToken;
+    const jwtToken = store.state.beUser.jwtToken;
 
     // 基本設定
     const setting = {

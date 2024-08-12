@@ -36,7 +36,7 @@ const toBackPage = () => {
  * @returns {void}
  */
 const logout = () => {
-    store.commit("user/resetJwtToken");
+    store.commit("beUser/resetJwtToken");
 
     router.push({ name: "mgmtLogin" });
 };

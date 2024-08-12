@@ -3,9 +3,9 @@
         <el-pagination
             background
             layout="prev,pager,next"
-            :current-page="store.state.page.nowPage"
+            :current-page="store.state.bePage.nowPage"
             :default-page-size="pageSize"
-            :total="store.state.page.dataTotal"
+            :total="store.state.bePage.dataTotal"
             @current-change="setNowPage"
         />
     </div>
@@ -27,6 +27,6 @@ const pageSize = 15;
  * @returns {void}
  */
 const setNowPage = (page) => {
-    store.commit("page/setNowPage", page);
+    store.commit("bePage/setNowPage", page);
 };
 </script>

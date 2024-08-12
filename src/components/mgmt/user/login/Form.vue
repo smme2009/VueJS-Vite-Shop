@@ -54,7 +54,7 @@ const login = async () => {
         // 儲存JWT Token
         const jwtToken = response.data.jwtToken;
 
-        store.commit("user/setJwtToken", jwtToken);
+        store.commit("beUser/setJwtToken", jwtToken);
 
         router.push({ name: "mgmtHome" });
     } else {

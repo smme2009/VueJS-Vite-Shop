@@ -117,13 +117,13 @@ const keyword = defineModel("");
 
 onMounted(() => {
     // 重設分頁資料
-    store.commit("page/setNowPage", 1);
+    store.commit("bePage/setNowPage", 1);
 
     // 初始化產品資料
     getProductData();
 
     // 監聽當前頁碼
-    watch(() => store.state.page.nowPage, getProductData);
+    watch(() => store.state.bePage.nowPage, getProductData);
 });
 
 /**
@@ -132,12 +132,12 @@ onMounted(() => {
  * @returns {void}
  */
 const searchProduct = () => {
-    if (store.state.page.nowPage === 1) {
+    if (store.state.bePage.nowPage === 1) {
         // 直接取得資料
         getProductData();
     } else {
         // 透過換頁取得資料
-        store.commit("page/setNowPage", 1);
+        store.commit("bePage/setNowPage", 1);
     }
 };
 
@@ -236,7 +236,7 @@ const toStockPage = (productId) => {
  */
 const getProductData = async () => {
     const response = await apiProduct.getProductPage(
-        store.state.page.nowPage,
+        store.state.bePage.nowPage,
         keyword.value
     );
 
@@ -250,7 +250,7 @@ const getProductData = async () => {
         });
 
         // 設定資料總數
-        store.commit("page/setDataTotal", productPage.total);
+        store.commit("bePage/setDataTotal", productPage.total);
     } else {
         toolNotify.error("通知", response.message);
     }
