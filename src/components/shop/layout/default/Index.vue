@@ -1,12 +1,12 @@
 <template>
-    <div class="h-full">
-        <div class="h-20">
+    <el-container class="h-full">
+        <el-header>
             <Header />
-        </div>
-        <div class="h-full">
+        </el-header>
+        <el-main>
             <router-view></router-view>
-        </div>
-    </div>
+        </el-main>
+    </el-container>
 </template>
 
 <script setup>
