@@ -1,26 +1,23 @@
 <template>
-    <div class="flex justify-center">
-        <div class="w-4/5">
-            <!-- 如果使用單一元件做類型切換，會有圖片大小異常的問題，所以先分為兩個元件 -->
-            <el-carousel v-if="isCard" type="card" class="h-80" ref="carousel">
-                <el-carousel-item
-                    v-for="banner in bannerData"
-                    class="!flex justify-center"
-                    @click="toUrl(banner.url)"
-                >
-                    <el-image class="rounded-lg" :src="banner.photoUrl" />
-                </el-carousel-item>
-            </el-carousel>
-            <el-carousel v-else class="h-80" ref="carousel">
-                <el-carousel-item
-                    v-for="banner in bannerData"
-                    @click="toUrl(banner.url)"
-                >
-                    <el-image class="rounded-lg" :src="banner.photoUrl" />
-                </el-carousel-item>
-            </el-carousel>
-        </div>
-    </div>
+    <!-- 如果使用單一元件做類型切換，會有圖片大小異常的問題，所以先分為兩個元件 -->
+    <el-carousel v-if="isCard" type="card" class="h-80" ref="carousel">
+        <el-carousel-item
+            v-for="banner in bannerData"
+            class="!flex justify-center rounded-lg"
+            @click="toUrl(banner.url)"
+        >
+            <el-image class="rounded-lg" :src="banner.photoUrl" />
+        </el-carousel-item>
+    </el-carousel>
+    <el-carousel v-else class="h-80" ref="carousel">
+        <el-carousel-item
+            class="rounded-lg"
+            v-for="banner in bannerData"
+            @click="toUrl(banner.url)"
+        >
+            <el-image class="rounded-lg" :src="banner.photoUrl" />
+        </el-carousel-item>
+    </el-carousel>
 </template>
 
 <script setup>
