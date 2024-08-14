@@ -1,23 +1,25 @@
 <template>
-    <!-- 如果使用單一元件做類型切換，會有圖片大小異常的問題，所以先分為兩個元件 -->
-    <el-carousel v-if="isCard" type="card" class="h-80" ref="carousel">
-        <el-carousel-item
-            v-for="banner in bannerData"
-            class="!flex justify-center rounded-lg"
-            @click="toUrl(banner.url)"
-        >
-            <el-image class="rounded-lg" :src="banner.photoUrl" />
-        </el-carousel-item>
-    </el-carousel>
-    <el-carousel v-else class="h-80" ref="carousel">
-        <el-carousel-item
-            class="rounded-lg"
-            v-for="banner in bannerData"
-            @click="toUrl(banner.url)"
-        >
-            <el-image class="rounded-lg" :src="banner.photoUrl" />
-        </el-carousel-item>
-    </el-carousel>
+    <div class="p-1">
+        <!-- 如果使用單一元件做類型切換，會有圖片大小異常的問題，所以先分為兩個元件 -->
+        <el-carousel v-if="isCard" type="card" height="auto">
+            <el-carousel-item
+                v-for="banner in bannerData"
+                class="!h-80 rounded-lg"
+                @click="toUrl(banner.url)"
+            >
+                <el-image class="h-full w-full" :src="banner.photoUrl" />
+            </el-carousel-item>
+        </el-carousel>
+        <el-carousel v-else height="auto">
+            <el-carousel-item
+                v-for="banner in bannerData"
+                @click="toUrl(banner.url)"
+                class="xs:!h-52 sm:!h-64 md:!h-72 rounded-lg"
+            >
+                <el-image class="h-full w-full" :src="banner.photoUrl" />
+            </el-carousel-item>
+        </el-carousel>
+    </div>
 </template>
 
 <script setup>
@@ -25,7 +27,6 @@ import { ref, onMounted } from "vue";
 import * as toolNotify from "@/tool/Notify.js";
 import * as apiBanner from "@/api/shop/banner/Banner.js";
 
-const carousel = ref();
 const bannerData = ref([]);
 const isCard = ref();
 
