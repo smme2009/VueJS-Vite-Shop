@@ -1,12 +1,14 @@
 <template>
-    <el-button
-        type="primary"
-        class="w-full m-2"
-        :loading="load"
-        @click="getProductPage"
-    >
-        載入更多
-    </el-button>
+    <div class="p-1">
+        <el-button
+            type="primary"
+            class="w-full"
+            :loading="load"
+            @click="getProductPage"
+        >
+            載入更多
+        </el-button>
+    </div>
 </template>
 
 <script setup>
