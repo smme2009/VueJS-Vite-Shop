@@ -6,6 +6,7 @@ const module = {
     namespaced: true,
     state: {
         page: 0,
+        productTypeId: null,
         data: [],
         load: true,
     },
@@ -22,14 +23,14 @@ const module = {
         },
 
         /**
-        * 新增頁面資料
+        * 設定頁面資料
         * 
         * @param {array} data 頁面資料
         * 
         * @returns {void} 
         */
-        addData(state, data) {
-            state.data = [...state.data, ...data];
+        setData(state, data) {
+            state.data = data;
         },
 
         /**
@@ -44,17 +45,52 @@ const module = {
         },
 
         /**
+         * 設定商品類型ID
+         * 
+         * @param {int} productTypeId 商品類型ID
+         * 
+         * @returns {void} 
+         */
+        setProductTypeId(state, productTypeId) {
+            state.productTypeId = productTypeId;
+        },
+
+        /**
          * 重設狀態
          * 
          * @returns {void} 
          */
         reSetState(state) {
             state.page = 0;
+            state.productTypeId = null;
             state.data = [];
             state.load = true;
         },
     },
     actions: {
+        /**
+         * 設定商品類型ID
+         * 
+         * @param {int} productTypeId 商品類型ID
+         * 
+         * @returns {void}  
+         */
+        async setProductTypeId({ commit, state }, productTypeId) {
+            commit('setLoadStatus', true);
+            commit('setProductTypeId', productTypeId);
+
+            const searchData = {
+                productTypeId: state.productTypeId,
+            };
+
+            const page = 1;
+            const productPage = await getProductPage(page, searchData);
+
+            commit('setPage', page);
+            commit('setData', productPage);
+            commit('setLoadStatus', false);
+        },
+
         /**
          * 到下一頁
          *
@@ -63,41 +99,61 @@ const module = {
         async toNextPage({ commit, state }) {
             commit('setLoadStatus', true);
 
-            const nextPage = state.page + 1;
-            const response = await apiProduct.getProductPage(nextPage);
+            const searchData = {
+                productTypeId: state.productTypeId,
+            };
 
-            if (response.status === false) {
-                toolNotify.error("通知", response.message);
+            const page = state.page + 1;
+            let productPage = await getProductPage(page, searchData);
 
-                return;
-            }
-
-            const productPage = response.data.productPage.data;
-
-            if (productPage.length <= 0) {
+            if (productPage.length === 0) {
                 commit('setLoadStatus', false);
 
                 return;
             }
 
-            // 設定商品資料
-            const data = [];
-            productPage.forEach((item) => {
-                data.push({
-                    productId: item.productId,
-                    photoUrl: item.photoUrl,
-                    name: item.name,
-                    price: toolStr.formatNumber(item.price),
-                    quantity: item.quantity,
-                    description: item.description,
-                });
-            });
+            productPage = [...state.data, ...productPage];
 
-            commit('setPage', nextPage);
-            commit('addData', data);
+            commit('setPage', page);
+            commit('setData', productPage);
             commit('setLoadStatus', false);
         },
     },
+};
+
+/**
+ * 取得商品分頁
+ * 
+ * @param {int} page 頁碼
+ * @param {object} searchData 搜尋資料
+ * 
+ * @returns {array} 
+ */
+const getProductPage = async (page, searchData) => {
+    const response = await apiProduct.getProductPage(page, searchData);
+
+    if (response.status === false) {
+        toolNotify.error("通知", response.message);
+
+        return [];
+    }
+
+    const data = response.data.productPage.data;
+
+    // 設定商品資料
+    const productPage = [];
+    data.forEach((item) => {
+        productPage.push({
+            productId: item.productId,
+            photoUrl: item.photoUrl,
+            name: item.name,
+            price: toolStr.formatNumber(item.price),
+            quantity: item.quantity,
+            description: item.description,
+        });
+    });
+
+    return productPage;
 };
 
 export default module;
