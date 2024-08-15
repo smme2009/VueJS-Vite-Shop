@@ -10,9 +10,16 @@
         <div class="w-2/4 flex justify-center">
             <el-input
                 class="!w-1/2"
-                suffix-icon="Search"
+                v-model="keyword"
+                @keyup.enter.native="searchProduct"
                 placeholder="搜尋商品"
-            />
+            >
+                <template #suffix>
+                    <el-icon @click="searchProduct">
+                        <Search />
+                    </el-icon>
+                </template>
+            </el-input>
         </div>
         <div class="w-1/4 flex justify-start">
             <div class="flex">
@@ -22,3 +29,19 @@
         </div>
     </div>
 </template>
+
+<script setup>
+import { useStore } from "vuex";
+
+const store = useStore();
+const keyword = defineModel("");
+
+/**
+ * 搜尋商品
+ *
+ * @returns {void}
+ */
+const searchProduct = () => {
+    store.dispatch("feProduct/setKeyword", keyword);
+};
+</script>

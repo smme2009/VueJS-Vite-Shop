@@ -14,6 +14,7 @@ export const getProductPage = async (page, searchData) => {
     const data = {
         page: page,
         productTypeId: searchData.productTypeId,
+        keyword: searchData.keyword,
     };
 
     const response = await toolAjax('get', uri, data);

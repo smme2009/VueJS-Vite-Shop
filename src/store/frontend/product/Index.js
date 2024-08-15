@@ -56,6 +56,17 @@ const module = {
         },
 
         /**
+        * 設定關鍵字
+        * 
+        * @param {string} keyword 關鍵字
+        * 
+        * @returns {void} 
+        */
+        setKeyword(state, keyword) {
+            state.keyword = keyword;
+        },
+
+        /**
          * 重設狀態
          * 
          * @returns {void} 
@@ -81,6 +92,31 @@ const module = {
 
             const searchData = {
                 productTypeId: state.productTypeId,
+                keyword: state.keyword,
+            };
+
+            const page = 1;
+            const productPage = await getProductPage(page, searchData);
+
+            commit('setPage', page);
+            commit('setData', productPage);
+            commit('setLoadStatus', false);
+        },
+
+        /**
+         * 設定關鍵字
+         * 
+         * @param {string} keyword 關鍵字
+         * 
+         * @returns {void}  
+         */
+        async setKeyword({ commit, state }, keyword) {
+            commit('setLoadStatus', true);
+            commit('setKeyword', keyword);
+
+            const searchData = {
+                productTypeId: state.productTypeId,
+                keyword: state.keyword,
             };
 
             const page = 1;
