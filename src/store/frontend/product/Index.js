@@ -7,6 +7,7 @@ const module = {
     state: {
         page: 0,
         productTypeId: null,
+        keyword: '',
         data: [],
         load: true,
     },
@@ -74,6 +75,7 @@ const module = {
         reSetState(state) {
             state.page = 0;
             state.productTypeId = null;
+            state.keyword = '';
             state.data = [];
             state.load = true;
         },
