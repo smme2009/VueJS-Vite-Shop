@@ -1,20 +1,21 @@
 <template>
     <div class="p-1">
         <!-- 如果使用單一元件做類型切換，會有圖片大小異常的問題，所以先分為兩個元件 -->
-        <el-carousel v-if="isCard" type="card" height="auto">
+        <!-- 元件的自動高度在手機版型會有異常，所以先把高度寫死 -->
+        <el-carousel type="card" class="xs:max-md:hidden md:h-72 xl:h-80">
             <el-carousel-item
                 v-for="banner in bannerData"
-                class="!h-80 rounded-lg"
+                class="md:!h-72 xl:!h-80 rounded-lg"
                 @click="toUrl(banner.url)"
             >
                 <el-image class="h-full w-full" :src="banner.photoUrl" />
             </el-carousel-item>
         </el-carousel>
-        <el-carousel v-else height="auto">
+        <el-carousel class="xs:h-60 sm:h-64 md:hidden">
             <el-carousel-item
                 v-for="banner in bannerData"
+                class="xs:!h-60 sm:!h-64 rounded-lg"
                 @click="toUrl(banner.url)"
-                class="xs:!h-52 sm:!h-64 md:!h-72 rounded-lg"
             >
                 <el-image class="h-full w-full" :src="banner.photoUrl" />
             </el-carousel-item>
@@ -28,27 +29,11 @@ import * as toolNotify from "@/tool/Notify.js";
 import * as apiBanner from "@/api/shop/banner/Banner.js";
 
 const bannerData = ref([]);
-const isCard = ref();
 
-onMounted(function () {
-    // 確認螢幕寬度，並初始化橫幅元件樣式
-    checkScreenWidth();
-
+onMounted(() => {
     // 取得橫幅資料
     getBannerList();
-
-    // 監聽螢幕寬度變更，並調整橫幅元件樣式
-    window.addEventListener("resize", checkScreenWidth);
 });
-
-/**
- * 確認螢幕寬度
- *
- * @requires {void}
- */
-const checkScreenWidth = () => {
-    isCard.value = window.innerWidth > 1024;
-};
 
 /**
  * 取得橫幅列表

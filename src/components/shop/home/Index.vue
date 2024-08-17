@@ -1,6 +1,6 @@
 <template>
     <div class="flex justify-center">
-        <div>
+        <div class="xs:w-full sm:w-5/6">
             <!-- 橫幅 -->
             <banner />
             <!-- 分類列表 -->
