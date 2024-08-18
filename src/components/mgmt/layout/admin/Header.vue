@@ -16,10 +16,10 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+import storeBeUser from "@/store/backend/user/Index.js";
 
 const router = useRouter();
-const store = useStore();
+const store = storeBeUser();
 
 /**
  * 返回上一頁
@@ -36,7 +36,7 @@ const toBackPage = () => {
  * @returns {void}
  */
 const logout = () => {
-    store.commit("beUser/resetJwtToken");
+    store.$reset();
 
     router.push({ name: "mgmtLogin" });
 };

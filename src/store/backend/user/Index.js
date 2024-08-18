@@ -1,29 +1,45 @@
-const module = {
-    namespaced: true,
-    state: {
-        jwtToken: '', // JWT Token
-    },
-    mutations: {
+import { defineStore } from 'pinia';
+import { login as apiLogin } from "@/api/mgmt/user/Login.js";
+import { error as notifyError, success as notifySuccess } from "@/tool/Notify.js";
+
+// Store名稱
+const name = 'beUser';
+
+// Store設定
+const option = {
+    persist: true,
+    state: () => ({
+        jwtToken: '',
+    }),
+    actions: {
         /**
          * 設定JWT Token
          * 
-         * @param {string} jwtToken JWT Token
+         * @param {string} account 帳號
+         * @param {string} password 密碼
          * 
-         * @returns {void} 
+         * @returns {bool} 
          */
-        setJwtToken(state, jwtToken) {
-            state.jwtToken = jwtToken;
-        },
+        async setJwtToken(account, password) {
+            this.$reset;
 
-        /**
-         * 重設JWT Token
-         * 
-         * @returns {void}
-         */
-        resetDataTotal(state) {
-            state.jwtToken = '';
+            const response = await apiLogin(account, password);
+
+            if (response.status === false) {
+                notifyError("通知", response.message, false);
+
+                return false;
+            }
+
+            this.jwtToken = response.data.jwtToken;
+
+            notifySuccess("通知", response.message);
+
+            return true;
         },
-    }
+    },
 };
 
-export default module;
+const store = defineStore(name, option);
+
+export default store;
