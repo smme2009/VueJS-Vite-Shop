@@ -52,7 +52,7 @@
 import page from "@/components/mgmt/public/page/Index.vue";
 import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { useStore } from "vuex";
+import storeBePage from "@/store/backend/page/Index.js";
 import * as toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
 import * as apiProduct from "@/api/mgmt/product/Product.js";
@@ -60,7 +60,7 @@ import * as apiProductStock from "@/api/mgmt/product/ProductStock.js";
 
 const route = useRoute();
 const router = useRouter();
-const store = useStore();
+const store = storeBePage();
 
 const tableData = ref([]);
 const product = ref({});
@@ -71,11 +71,14 @@ onMounted(() => {
     // 初始化時取得商品資料
     getProduct();
 
-    // 初始化時取得商品庫存單資料
-    getProductStockData();
+    // 監聽分頁頁碼變更
+    watch(() => store.nowPage, getProductStockData, { deep: true });
 
-    // 監聽當前頁碼
-    watch(() => store.state.bePage.nowPage, getProductStockData);
+    // 重設分頁資料
+    store.$reset();
+
+    // 取得第一頁資料
+    store.nowPage = 1;
 });
 
 /**
@@ -131,7 +134,7 @@ const setRowClass = (row) => {
 const getProductStockData = async () => {
     const response = await apiProductStock.getProductStockPage(
         productId,
-        store.state.bePage.nowPage
+        store.nowPage
     );
 
     if (response.status) {
@@ -144,7 +147,7 @@ const getProductStockData = async () => {
         });
 
         // 設定資料總數
-        store.commit("bePage/setDataTotal", productStockPage.total);
+        store.setDataTotal = productStockPage.total;
     } else {
         toolNotify.error("通知", response.message);
     }
