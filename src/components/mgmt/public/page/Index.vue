@@ -3,18 +3,18 @@
         <el-pagination
             background
             layout="prev,pager,next"
-            :current-page="store.state.bePage.nowPage"
+            :current-page="store.nowPage"
             :default-page-size="pageSize"
-            :total="store.state.bePage.dataTotal"
+            :total="store.dataTotal"
             @current-change="setNowPage"
         />
     </div>
 </template>
 
 <script setup>
-import { useStore } from "vuex";
+import storeBePage from "@/store/backend/page/Index.js";
 
-const store = useStore();
+const store = storeBePage();
 
 // 單頁資料上限
 const pageSize = 15;
@@ -27,6 +27,6 @@ const pageSize = 15;
  * @returns {void}
  */
 const setNowPage = (page) => {
-    store.commit("bePage/setNowPage", page);
+    store.nowPage = page;
 };
 </script>

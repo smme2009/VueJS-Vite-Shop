@@ -82,26 +82,22 @@
 import page from "@/components/mgmt/public/page/Index.vue";
 import { ref, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+import storeBePage from "@/store/backend/page/Index.js";
 import * as toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as apiProductType from "@/api/mgmt/product/ProductType.js";
 
 const router = useRouter();
-const store = useStore();
-
+const store = storeBePage();
 const tableData = ref([]);
 const keyword = defineModel("");
 
 onMounted(() => {
-    // 重設分頁資料
-    store.commit("bePage/setNowPage", 1);
+    // 監聽分頁頁碼變更
+    watch(() => store.nowPage, getProductTypeData, { deep: true });
 
-    // 初始化時取得首頁商品類型資料
-    getProductTypeData();
-
-    // 監聽當前頁碼
-    watch(() => store.state.bePage.nowPage, getProductTypeData);
+    // 觸發搜尋
+    searchProductType();
 });
 
 /**
@@ -110,13 +106,11 @@ onMounted(() => {
  * @returns {void}
  */
 const searchProductType = () => {
-    if (store.state.bePage.nowPage === 1) {
-        // 直接取得資料
-        getProductTypeData();
-    } else {
-        // 透過換頁取得資料
-        store.commit("bePage/setNowPage", 1);
-    }
+    // 重設分頁資料
+    store.$reset();
+
+    // 取得第一頁資料
+    store.nowPage = 1;
 };
 
 /**
@@ -199,7 +193,7 @@ const toEditPage = (productTypeId) => {
  */
 const getProductTypeData = async () => {
     const response = await apiProductType.getProductTypePage(
-        store.state.bePage.nowPage,
+        store.nowPage,
         keyword.value
     );
 
@@ -213,7 +207,7 @@ const getProductTypeData = async () => {
         });
 
         // 設定資料總數
-        store.commit("bePage/setDataTotal", productTypePage.total);
+        store.setDataTotal = productTypePage.total;
     } else {
         toolNotify.error("通知", response.message);
     }

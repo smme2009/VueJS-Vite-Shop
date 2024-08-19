@@ -88,27 +88,23 @@
 import page from "@/components/mgmt/public/page/Index.vue";
 import { ref, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import { useStore } from "vuex";
+import storeBePage from "@/store/backend/page/Index.js";
 import * as toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
 import * as apiBanner from "@/api/mgmt/banner/Banner.js";
 
 const router = useRouter();
-const store = useStore();
-
+const store = storeBePage();
 const tableData = ref([]);
 const keyword = defineModel("");
 
 onMounted(() => {
-    // 重設分頁資料
-    store.commit("bePage/setNowPage", 1);
+    // 監聽分頁頁碼變更
+    watch(() => store.nowPage, getBannerData, { deep: true });
 
-    // 初始化產品資料
-    getBannerData();
-
-    // 監聽當前頁碼
-    watch(() => store.state.bePage.nowPage, getBannerData);
+    // 觸發搜尋
+    searchBanner();
 });
 
 /**
@@ -117,13 +113,11 @@ onMounted(() => {
  * @returns {void}
  */
 const searchBanner = () => {
-    if (store.state.bePage.nowPage === 1) {
-        // 直接取得資料
-        getBannerData();
-    } else {
-        // 透過換頁取得資料
-        store.commit("bePage/setNowPage", 1);
-    }
+    // 重設分頁資料
+    store.$reset();
+
+    // 取得第一頁資料
+    store.nowPage = 1;
 };
 
 /**
@@ -203,7 +197,7 @@ const toEditPage = (bannerId) => {
  */
 const getBannerData = async () => {
     const response = await apiBanner.getBannerPage(
-        store.state.bePage.nowPage,
+        store.nowPage,
         keyword.value
     );
 
@@ -224,7 +218,7 @@ const getBannerData = async () => {
         });
 
         // 設定資料總數
-        store.commit("bePage/setDataTotal", bannerPage.total);
+        store.setDataTotal = bannerPage.total;
     } else {
         toolNotify.error("通知", response.message);
     }
