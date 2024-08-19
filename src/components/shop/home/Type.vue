@@ -13,13 +13,13 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import { useStore } from "vuex";
+import storeFeProduct from "@/store/frontend/product/Index.js";
 import * as toolNotify from "@/tool/Notify.js";
 import * as apiProductType from "@/api/shop/product/ProductType.js";
 
 const productTypeData = ref([]);
 const active = ref();
-const store = useStore();
+const store = storeFeProduct();
 
 onMounted(function () {
     // 取得商品類型
@@ -59,8 +59,7 @@ const getProductTypeList = async () => {
  * @return {void}
  */
 const changeProductType = (tab) => {
-    const productTypeId = tab.props.name;
-
-    store.dispatch("feProduct/setProductTypeId", productTypeId);
+    store.productTypeId = tab.props.name;
+    store.searchProduct();
 };
 </script>

@@ -3,7 +3,7 @@
         <el-button
             type="primary"
             class="w-full"
-            :loading="load"
+            :loading="store.load"
             @click="getProductPage"
         >
             載入更多
@@ -12,22 +12,16 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
-import { useStore } from "vuex";
+import storeFeProduct from "@/store/frontend/product/Index.js";
 
-const store = useStore();
-const load = ref(false);
+const store = storeFeProduct();
 
 /**
  * 取得商品頁面
  *
  * @requires {void}
  */
-const getProductPage = async () => {
-    load.value = true;
-
-    await store.dispatch("feProduct/toNextPage");
-
-    load.value = false;
+const getProductPage = () => {
+    store.getNextPage();
 };
 </script>

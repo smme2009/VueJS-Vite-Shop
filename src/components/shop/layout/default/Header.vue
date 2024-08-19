@@ -11,7 +11,7 @@
             <el-input
                 class="!w-1/2"
                 v-model="keyword"
-                @keyup.enter.native="searchProduct"
+                @keypress.enter="searchProduct"
                 placeholder="搜尋商品"
             >
                 <template #suffix>
@@ -31,9 +31,9 @@
 </template>
 
 <script setup>
-import { useStore } from "vuex";
+import storeFeProduct from "@/store/frontend/product/Index.js";
 
-const store = useStore();
+const store = storeFeProduct();
 const keyword = defineModel("");
 
 /**
@@ -42,6 +42,7 @@ const keyword = defineModel("");
  * @returns {void}
  */
 const searchProduct = () => {
-    store.dispatch("feProduct/setKeyword", keyword);
+    store.keyword = keyword;
+    store.searchProduct();
 };
 </script>

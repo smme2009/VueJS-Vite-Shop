@@ -1,10 +1,7 @@
 <template>
-    <div
-        class="flex flex-wrap justify-start"
-        v-loading="store.state.feProduct.load"
-    >
+    <div class="flex flex-wrap justify-start" v-loading="store.load">
         <div
-            v-for="product in store.state.feProduct.data"
+            v-for="product in store.data"
             class="xs:w-1/2 sm:w-1/3 md:w-1/3 lg:w-1/4 xl:w-1/5 2xl:w-1/6 p-1"
         >
             <el-card class="!rounded-lg">
@@ -35,15 +32,15 @@
 
 <script setup>
 import { onMounted } from "vue";
-import { useStore } from "vuex";
+import storeFeProduct from "@/store/frontend/product/Index.js";
 
-const store = useStore();
+const store = storeFeProduct();
 
 onMounted(() => {
     // 重設商品資料
-    store.commit("feProduct/reSetState");
+    store.$reset();
 
-    // 取得商品資料
-    store.dispatch("feProduct/toNextPage");
+    // 搜尋商品資料
+    store.getNextPage();
 });
 </script>
