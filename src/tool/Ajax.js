@@ -1,5 +1,5 @@
 import axios from 'axios';
-import storeBeUser from '@/store/backend/user/Index.js';
+import storeBeAdmin from '@/store/backend/admin/Index.js';
 
 /**
  * 發送Ajax
@@ -16,7 +16,7 @@ async function ajax(method, uri, data = {}, header = {}) {
     const fullUrl = apiUrl + uri;
 
     // 取得JWT Token
-    const store = storeBeUser();
+    const store = storeBeAdmin();
     const jwtToken = store.jwtToken;
 
     // 基本設定

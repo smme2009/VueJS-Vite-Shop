@@ -1,9 +1,9 @@
 import { defineStore } from 'pinia';
-import { login as apiLogin } from "@/api/mgmt/user/Login.js";
+import { login as apiLogin } from "@/api/mgmt/admin/Login.js";
 import { error as notifyError, success as notifySuccess } from "@/tool/Notify.js";
 
 // Store名稱
-const name = 'beUser';
+const name = 'beAdmin';
 
 // Store設定
 const option = {

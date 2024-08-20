@@ -4,7 +4,7 @@ const router = {
     meta: {
         title: '登入',
     },
-    component: () => import('@/components/mgmt/user/login/Index.vue'),
+    component: () => import('@/components/mgmt/admin/login/Index.vue'),
 };
 
 export default router;

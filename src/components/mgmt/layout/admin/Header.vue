@@ -16,10 +16,10 @@
 
 <script setup>
 import { useRouter } from "vue-router";
-import storeBeUser from "@/store/backend/user/Index.js";
+import storeBeAdmin from "@/store/backend/admin/Index.js";
 
 const router = useRouter();
-const store = storeBeUser();
+const store = storeBeAdmin();
 
 /**
  * 返回上一頁

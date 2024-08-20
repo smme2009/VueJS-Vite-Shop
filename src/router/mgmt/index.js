@@ -1,4 +1,4 @@
-import login from '@/router/mgmt/user/Login.js';
+import login from '@/router/mgmt/admin/Login.js';
 import home from '@/router/mgmt/home/Home.js';
 import product from '@/router/mgmt/product/Product.js';
 import productType from '@/router/mgmt/product/ProductType.js';
