@@ -23,7 +23,13 @@
         </div>
         <div class="w-1/4 flex justify-start">
             <div class="flex">
-                <el-button type="warning" icon="User" circle />
+                <el-button
+                    v-if="storeFeMember.hasToken"
+                    type="warning"
+                    icon="User"
+                    circle
+                />
+                <el-button v-else type="success" icon="User" circle />
                 <el-button type="warning" icon="ShoppingCart" circle />
             </div>
         </div>
@@ -32,6 +38,7 @@
 
 <script setup>
 import storeFeProduct from "@/store/frontend/product/Index.js";
+import storeFeMember from "@/store/frontend/member/Index.js";
 
 const store = storeFeProduct();
 const keyword = defineModel("");

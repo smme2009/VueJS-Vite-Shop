@@ -1,3 +1,5 @@
+import Login from '@/router/shop/member/Login.js';
+
 const router = {
     path: 'shop',
     children: [
@@ -6,12 +8,25 @@ const router = {
             meta: {
                 title: 'COORD',
             },
-            component: () => import('@/components/shop/layout/default/Index.vue'),
+
             children: [
                 {
                     path: '',
-                    name: 'shopHome',
-                    component: () => import('@/components/shop/home/Index.vue'),
+                    component: () => import('@/components/shop/layout/default/Index.vue'),
+                    children: [
+                        Login,
+                    ],
+                },
+                {
+                    path: '',
+                    component: () => import('@/components/shop/layout/shop/Index.vue'),
+                    children: [
+                        {
+                            path: 'home',
+                            name: 'shopHome',
+                            component: () => import('@/components/shop/home/Index.vue'),
+                        },
+                    ],
                 },
             ],
         },
