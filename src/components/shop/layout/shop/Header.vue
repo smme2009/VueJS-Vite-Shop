@@ -1,11 +1,12 @@
 <template>
     <div class="h-full flex items-center">
         <div class="w-1/4 flex justify-end">
-            <span
+            <router-link
                 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-sky-500"
+                :to="{ name: 'shopHome' }"
             >
                 COORD
-            </span>
+            </router-link>
         </div>
         <el-form
             :model="form"
