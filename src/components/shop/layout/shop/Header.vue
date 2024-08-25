@@ -7,10 +7,14 @@
                 COORD
             </span>
         </div>
-        <div class="w-2/4 flex justify-center">
+        <el-form
+            :model="form"
+            class="w-2/4 flex justify-center"
+            @submit.prevent
+        >
             <el-input
                 class="!w-1/2"
-                v-model="keyword"
+                v-model="form.keyword"
                 @keypress.enter="searchProduct"
                 placeholder="搜尋商品"
             >
@@ -20,7 +24,7 @@
                     </el-icon>
                 </template>
             </el-input>
-        </div>
+        </el-form>
         <div class="w-1/4 flex justify-start">
             <div class="flex">
                 <el-button
@@ -37,11 +41,15 @@
 </template>
 
 <script setup>
+import { reactive } from "vue";
 import storeFeProduct from "@/store/frontend/product/Index.js";
 import storeFeMember from "@/store/frontend/member/Index.js";
 
 const store = storeFeProduct();
-const keyword = defineModel("");
+
+const form = reactive({
+    keyword: "",
+});
 
 /**
  * 搜尋商品
@@ -49,7 +57,7 @@ const keyword = defineModel("");
  * @returns {void}
  */
 const searchProduct = () => {
-    store.keyword = keyword;
+    store.keyword = form.keyword;
     store.searchProduct();
 };
 </script>

@@ -3,10 +3,10 @@
         <!-- 搜尋列 -->
         <div class="flex justify-center mt-5">
             <div class="w-11/12 flex justify-between">
-                <div class="flex">
+                <el-form :model="form" class="flex">
                     <el-input
                         class="mr-1.5"
-                        v-model="keyword"
+                        v-model="form.keyword"
                         placeholder="請輸入橫幅名稱"
                     />
                     <el-button
@@ -16,7 +16,7 @@
                     >
                         搜尋
                     </el-button>
-                </div>
+                </el-form>
                 <div>
                     <el-button type="success" @click="toAddPage" icon="Plus">
                         新增橫幅
@@ -86,7 +86,7 @@
 
 <script setup>
 import page from "@/components/mgmt/public/page/Index.vue";
-import { ref, watch, onMounted } from "vue";
+import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import storeBePage from "@/store/backend/page/Index.js";
 import * as toolNotify from "@/tool/Notify.js";
@@ -97,7 +97,10 @@ import * as apiBanner from "@/api/mgmt/banner/Banner.js";
 const router = useRouter();
 const store = storeBePage();
 const tableData = ref([]);
-const keyword = defineModel("");
+
+const form = reactive({
+    keyword: "",
+});
 
 onMounted(() => {
     // 監聽分頁頁碼變更
@@ -196,10 +199,7 @@ const toEditPage = (bannerId) => {
  * @returns {void}
  */
 const getBannerData = async () => {
-    const response = await apiBanner.getBannerPage(
-        store.nowPage,
-        keyword.value
-    );
+    const response = await apiBanner.getBannerPage(store.nowPage, form.keyword);
 
     if (response.status) {
         const bannerPage = response.data.bannerPage;
