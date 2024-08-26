@@ -37,16 +37,14 @@
             <template #footer>
                 <div class="space-y-2">
                     <div>
-                        <el-button
-                            type="primary"
-                            class="w-full"
-                            @click="login()"
-                        >
+                        <el-button type="primary" class="w-full" @click="login">
                             登入
                         </el-button>
                     </div>
                     <div>
-                        <el-button class="w-full">註冊</el-button>
+                        <el-button class="w-full" @click="toRegisterPage">
+                            註冊
+                        </el-button>
                     </div>
                 </div>
             </template>
@@ -78,5 +76,14 @@ const login = async () => {
     if (isLogin === true) {
         router.push({ name: "shopHome" });
     }
+};
+
+/**
+ * 跳轉至註冊頁
+ *
+ * @returns {void}
+ */
+const toRegisterPage = () => {
+    router.push({ name: "shopRegister" });
 };
 </script>

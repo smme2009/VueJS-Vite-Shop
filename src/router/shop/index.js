@@ -1,4 +1,5 @@
 import Login from '@/router/shop/member/Login.js';
+import Register from '@/router/shop/member/Register.js';
 
 const router = {
     path: 'shop',
@@ -15,6 +16,7 @@ const router = {
                     component: () => import('@/components/shop/layout/default/Index.vue'),
                     children: [
                         Login,
+                        Register,
                     ],
                 },
                 {
