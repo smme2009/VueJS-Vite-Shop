@@ -3,11 +3,12 @@
         <el-card class="xs:w-auto md:w-96 !rounded-lg">
             <template #header>
                 <div class="flex justify-center">
-                    <span
+                    <router-link
                         class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-sky-500"
+                        :to="{ name: 'shopHome' }"
                     >
                         COORD
-                    </span>
+                    </router-link>
                 </div>
             </template>
             <el-form>
