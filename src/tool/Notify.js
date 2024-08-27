@@ -37,6 +37,10 @@ export function error(title, message, autoHide = true) {
  * @returns {void}
  */
 function showNotify(type, title, message, autoHide) {
+    if (message.length === 0) {
+        return;
+    }
+
     if (Array.isArray(message)) {
         message = message.join('<br>');
     }
