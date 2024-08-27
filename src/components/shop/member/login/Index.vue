@@ -11,28 +11,24 @@
                     </router-link>
                 </div>
             </template>
-            <el-form>
-                <el-form-item>
-                    <el-input v-model="form.account" placeholder="請輸入帳號">
-                        <template #prepend>
-                            <el-icon>
-                                <User />
-                            </el-icon>
-                        </template>
-                    </el-input>
+            <el-form label-width="auto">
+                <el-form-item
+                    label="帳號(E-Mail)"
+                    :error="formErrMsg.account"
+                    required="true"
+                >
+                    <el-input v-model="form.account" placeholder="請輸入帳號" />
                 </el-form-item>
-                <el-form-item>
+                <el-form-item
+                    label="密碼"
+                    :error="formErrMsg.password"
+                    required="true"
+                >
                     <el-input
                         v-model="form.password"
                         type="password"
                         placeholder="請輸入密碼"
-                    >
-                        <template #prepend>
-                            <el-icon>
-                                <Key />
-                            </el-icon>
-                        </template>
-                    </el-input>
+                    />
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -54,9 +50,12 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import storeFeMember from "@/store/frontend/member/Index.js";
+import { success as notifySuccess } from "@/tool/Notify.js";
+import { error as notifyError } from "@/tool/Notify.js";
+import { login as apiLogin } from "@/api/shop/member/Login.js";
 
 const router = useRouter();
 const store = storeFeMember();
@@ -66,17 +65,32 @@ const form = reactive({
     password: "",
 });
 
+const formErrMsg = ref({});
+
 /**
  * 登入
  *
  * @returns {void}
  */
 const login = async () => {
-    const isLogin = await store.setJwtToken(form.account, form.password);
+    formErrMsg.value = {};
 
-    if (isLogin === true) {
-        router.push({ name: "shopHome" });
+    const response = await apiLogin(form.account, form.password);
+    if (response.status === false) {
+        notifyError("標題", response.message);
+
+        response.data.forEach((error) => {
+            formErrMsg.value[error.name] = error.message.join("、");
+        });
+
+        return;
     }
+
+    store.setJwtToken(response.data.jwtToken);
+
+    notifySuccess("通知", response.message);
+
+    router.push({ name: "shopHome" });
 };
 
 /**
