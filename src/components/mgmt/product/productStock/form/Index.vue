@@ -48,7 +48,7 @@ import { ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as apiProductStock from "@/api/mgmt/product/ProductStock.js";
 import * as apiProductStockType from "@/api/mgmt/product/ProductStockType.js";
-import * as toolNotify from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -71,13 +71,24 @@ const productId = route.params.productId;
 const saveProductStock = async () => {
     const response = await apiProductStock.addProductStock(productId, form);
 
-    if (response.status) {
-        toolNotify.success("通知", response.message);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+            autoHide: false,
+        });
 
-        toListPage();
-    } else {
-        toolNotify.error("通知", response.message, false);
+        return;
     }
+
+    toolNotify({
+        type: "success",
+        title: "通知",
+        message: response.message,
+    });
+
+    toListPage();
 };
 
 /**
@@ -106,22 +117,30 @@ const getProductStockType = async () => {
 
     const response = await apiProductStockType.getProductStockTypeList();
 
-    if (response.status) {
-        const productStockTypeList = response.data.productStockTypeList;
-
-        // 設定列表資料
-        productStockType.value = [];
-        productStockTypeList.forEach((item) => {
-            const data = {
-                productStockTypeId: item.productStockTypeId,
-                name: item.name,
-            };
-
-            productStockType.value.push(data);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
         });
-    } else {
-        toolNotify.error("通知", response.message);
+
+        productStockTypeLoading.value = false;
+
+        return;
     }
+
+    const productStockTypeList = response.data.productStockTypeList;
+
+    // 設定列表資料
+    productStockType.value = [];
+    productStockTypeList.forEach((item) => {
+        const data = {
+            productStockTypeId: item.productStockTypeId,
+            name: item.name,
+        };
+
+        productStockType.value.push(data);
+    });
 
     productStockTypeLoading.value = false;
 };

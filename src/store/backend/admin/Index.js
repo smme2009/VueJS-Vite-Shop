@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { login as apiLogin } from "@/api/mgmt/admin/Login.js";
-import { error as notifyError, success as notifySuccess } from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 
 // Store名稱
 const name = 'beAdmin';
@@ -26,14 +26,23 @@ const option = {
             const response = await apiLogin(account, password);
 
             if (response.status === false) {
-                notifyError("通知", response.message, false);
+                toolNotify({
+                    type: "error",
+                    title: "通知",
+                    message: response.message,
+                    autoHide: false,
+                });
 
                 return false;
             }
 
             this.jwtToken = response.data.jwtToken;
 
-            notifySuccess("通知", response.message);
+            toolNotify({
+                type: "success",
+                title: "通知",
+                message: response.message,
+            });
 
             return true;
         },

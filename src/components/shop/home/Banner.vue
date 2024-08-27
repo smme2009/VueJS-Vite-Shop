@@ -25,7 +25,7 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import * as toolNotify from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 import * as apiBanner from "@/api/shop/banner/Banner.js";
 
 const bannerData = ref([]);
@@ -43,22 +43,28 @@ onMounted(() => {
 const getBannerList = async () => {
     const response = await apiBanner.getBannerList();
 
-    if (response.status) {
-        const bannerList = response.data.bannerList;
-
-        // 設定橫幅資料
-        bannerData.value = [];
-        bannerList.forEach((item) => {
-            bannerData.value.push({
-                bannerId: item.bannerId,
-                photoUrl: item.photoUrl,
-                name: item.name,
-                url: item.url,
-            });
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
         });
-    } else {
-        toolNotify.error("通知", response.message);
+
+        return;
     }
+
+    const bannerList = response.data.bannerList;
+
+    // 設定橫幅資料
+    bannerData.value = [];
+    bannerList.forEach((item) => {
+        bannerData.value.push({
+            bannerId: item.bannerId,
+            photoUrl: item.photoUrl,
+            name: item.name,
+            url: item.url,
+        });
+    });
 };
 
 /**

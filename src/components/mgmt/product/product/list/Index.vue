@@ -103,7 +103,7 @@ import page from "@/components/mgmt/public/page/Index.vue";
 import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import storeBePage from "@/store/backend/page/Index.js";
-import * as toolNotify from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
 import * as toolStr from "@/tool/Str.js";
@@ -149,14 +149,25 @@ const searchProduct = () => {
 const editProductStatus = async (productId, status) => {
     const response = await apiProduct.editProductStatus(productId, status);
 
-    if (response.status) {
-        toolNotify.success("通知", response.message);
-    } else {
-        toolNotify.error("通知", response.message, false);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+            autoHide: false,
+        });
 
         // 編輯失敗後重新刷新列表
         getProductData();
+
+        return;
     }
+
+    toolNotify({
+        type: "success",
+        title: "通知",
+        message: response.message,
+    });
 };
 
 /**
@@ -170,14 +181,24 @@ const deleteProduct = async (productId) => {
     toolMessage.confirm("確定要刪除商品嗎?", async () => {
         const response = await apiProduct.deleteProduct(productId);
 
-        if (response.status) {
-            toolNotify.success("通知", response.message);
+        if (response.status === false) {
+            toolNotify({
+                type: "error",
+                title: "通知",
+                message: response.message,
+            });
 
-            // 刪除成功後重新刷新列表
-            getProductData();
-        } else {
-            toolNotify.error("通知", response.message);
+            return;
         }
+
+        toolNotify({
+            type: "success",
+            title: "通知",
+            message: response.message,
+        });
+
+        // 刪除成功後重新刷新列表
+        getProductData();
     });
 };
 
@@ -237,20 +258,26 @@ const getProductData = async () => {
         form.keyword
     );
 
-    if (response.status) {
-        const productPage = response.data.productPage;
-
-        // 設定列表資料
-        tableData.value = [];
-        productPage.data.forEach((item) => {
-            tableData.value.push(setProduct(item));
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
         });
 
-        // 設定資料總數
-        store.setDataTotal = productPage.total;
-    } else {
-        toolNotify.error("通知", response.message);
+        return;
     }
+
+    const productPage = response.data.productPage;
+
+    // 設定列表資料
+    tableData.value = [];
+    productPage.data.forEach((item) => {
+        tableData.value.push(setProduct(item));
+    });
+
+    // 設定資料總數
+    store.setDataTotal = productPage.total;
 };
 
 /**

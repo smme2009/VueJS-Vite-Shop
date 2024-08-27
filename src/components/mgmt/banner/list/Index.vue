@@ -89,7 +89,7 @@ import page from "@/components/mgmt/public/page/Index.vue";
 import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import storeBePage from "@/store/backend/page/Index.js";
-import * as toolNotify from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
 import * as apiBanner from "@/api/mgmt/banner/Banner.js";
@@ -134,14 +134,25 @@ const searchBanner = () => {
 const editBannerStatus = async (bannerId, status) => {
     const response = await apiBanner.editBannerStatus(bannerId, status);
 
-    if (response.status) {
-        toolNotify.success("通知", response.message);
-    } else {
-        toolNotify.error("通知", response.message, false);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+            autoHide: false,
+        });
 
         // 編輯失敗後重新刷新列表
         getBannerData();
+
+        return;
     }
+
+    toolNotify({
+        type: "success",
+        title: "通知",
+        message: response.message,
+    });
 };
 
 /**
@@ -155,14 +166,24 @@ const deleteBanner = async (bannerId) => {
     toolMessage.confirm("確定要刪除橫幅嗎?", async () => {
         const response = await apiBanner.deleteBanner(bannerId);
 
-        if (response.status) {
-            toolNotify.success("通知", response.message);
+        if (response.status === false) {
+            toolNotify({
+                type: "error",
+                title: "通知",
+                message: response.message,
+            });
 
-            // 刪除成功後重新刷新列表
-            getBannerData();
-        } else {
-            toolNotify.error("通知", response.message);
+            return;
         }
+
+        toolNotify({
+            type: "success",
+            title: "通知",
+            message: response.message,
+        });
+
+        // 刪除成功後重新刷新列表
+        getBannerData();
     });
 };
 
@@ -201,26 +222,32 @@ const toEditPage = (bannerId) => {
 const getBannerData = async () => {
     const response = await apiBanner.getBannerPage(store.nowPage, form.keyword);
 
-    if (response.status) {
-        const bannerPage = response.data.bannerPage;
-
-        // 設定列表資料
-        tableData.value = [];
-        bannerPage.data.forEach((item) => {
-            tableData.value.push({
-                bannerId: item.bannerId,
-                name: item.name,
-                photoUrl: item.photoUrl,
-                startTime: toolTime.getDateTime(item.startTime),
-                endTime: toolTime.getDateTime(item.endTime),
-                status: item.status,
-            });
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
         });
 
-        // 設定資料總數
-        store.setDataTotal = bannerPage.total;
-    } else {
-        toolNotify.error("通知", response.message);
+        return;
     }
+
+    const bannerPage = response.data.bannerPage;
+
+    // 設定列表資料
+    tableData.value = [];
+    bannerPage.data.forEach((item) => {
+        tableData.value.push({
+            bannerId: item.bannerId,
+            name: item.name,
+            photoUrl: item.photoUrl,
+            startTime: toolTime.getDateTime(item.startTime),
+            endTime: toolTime.getDateTime(item.endTime),
+            status: item.status,
+        });
+    });
+
+    // 設定資料總數
+    store.setDataTotal = bannerPage.total;
 };
 </script>

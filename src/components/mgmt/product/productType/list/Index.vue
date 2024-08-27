@@ -83,7 +83,7 @@ import page from "@/components/mgmt/public/page/Index.vue";
 import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import storeBePage from "@/store/backend/page/Index.js";
-import * as toolNotify from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 import * as toolMessage from "@/tool/Message.js";
 import * as apiProductType from "@/api/mgmt/product/ProductType.js";
 
@@ -130,14 +130,25 @@ const editProductTypeStatus = async (productTypeId, status) => {
         status
     );
 
-    if (response.status) {
-        toolNotify.success("通知", response.message);
-    } else {
-        toolNotify.error("通知", response.message, false);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+            autoHide: false,
+        });
 
         // 編輯失敗後重新刷新列表
         getProductTypeData();
+
+        return;
     }
+
+    toolNotify({
+        type: "success",
+        title: "通知",
+        message: response.message,
+    });
 };
 
 /**
@@ -151,14 +162,24 @@ const deleteProductType = async (productTypeId) => {
     toolMessage.confirm("確定要刪除商品類型嗎?", async () => {
         const response = await apiProductType.deleteProductType(productTypeId);
 
-        if (response.status) {
-            toolNotify.success("通知", response.message);
+        if (response.status === false) {
+            toolNotify({
+                type: "error",
+                title: "通知",
+                message: response.message,
+            });
 
-            // 刪除成功後重新刷新列表
-            getProductTypeData();
-        } else {
-            toolNotify.error("通知", response.message);
+            return;
         }
+
+        toolNotify({
+            type: "success",
+            title: "通知",
+            message: response.message,
+        });
+
+        // 刪除成功後重新刷新列表
+        getProductTypeData();
     });
 };
 
@@ -200,20 +221,26 @@ const getProductTypeData = async () => {
         form.keyword
     );
 
-    if (response.status) {
-        const productTypePage = response.data.productTypePage;
-
-        // 設定列表資料
-        tableData.value = [];
-        productTypePage.data.forEach((item) => {
-            tableData.value.push(setProductType(item));
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
         });
 
-        // 設定資料總數
-        store.setDataTotal = productTypePage.total;
-    } else {
-        toolNotify.error("通知", response.message);
+        return;
     }
+
+    const productTypePage = response.data.productTypePage;
+
+    // 設定列表資料
+    tableData.value = [];
+    productTypePage.data.forEach((item) => {
+        tableData.value.push(setProductType(item));
+    });
+
+    // 設定資料總數
+    store.setDataTotal = productTypePage.total;
 };
 
 /**

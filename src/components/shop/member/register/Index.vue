@@ -92,7 +92,7 @@
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import { register as apiRegister } from "@/api/shop/member/Register.js";
-import { success as notifySuccess } from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 
 const router = useRouter();
 
@@ -119,7 +119,12 @@ const register = async () => {
         return;
     }
 
-    notifySuccess("通知", response.message);
+    toolNotify({
+        type: "success",
+        title: "通知",
+        message: response.message,
+    });
+
     router.push({ name: "shopLogin" });
 };
 

@@ -53,8 +53,7 @@
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import storeFeMember from "@/store/frontend/member/Index.js";
-import { success as notifySuccess } from "@/tool/Notify.js";
-import { error as notifyError } from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 import { login as apiLogin } from "@/api/shop/member/Login.js";
 
 const router = useRouter();
@@ -77,7 +76,11 @@ const login = async () => {
 
     const response = await apiLogin(form.account, form.password);
     if (response.status === false) {
-        notifyError("標題", response.message);
+        toolNotify({
+            type: "error",
+            title: "標題",
+            message: response.message,
+        });
 
         response.data.forEach((error) => {
             formErrMsg.value[error.name] = error.message.join("、");
@@ -88,7 +91,11 @@ const login = async () => {
 
     store.setJwtToken(response.data.jwtToken);
 
-    notifySuccess("通知", response.message);
+    toolNotify({
+        type: "success",
+        title: "通知",
+        message: response.message,
+    });
 
     router.push({ name: "shopHome" });
 };

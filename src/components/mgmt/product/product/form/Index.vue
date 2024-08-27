@@ -104,7 +104,7 @@ import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as apiProduct from "@/api/mgmt/product/Product.js";
 import * as apiProductType from "@/api/mgmt/product/ProductType.js";
-import * as toolNotify from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
 
 const route = useRoute();
@@ -147,14 +147,21 @@ onMounted(() => {
 const uploadPhoto = async (data) => {
     const response = await apiProduct.uploadProductPhoto(data.file);
 
-    if (response.status) {
-        const fileInfo = response.data.fileInfo;
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+            autoHide: false,
+        });
 
-        photoUrl.value = fileInfo.url;
-        form.photoFileId = fileInfo.fileId;
-    } else {
-        toolNotify.error("通知", response.message, false);
+        return;
     }
+
+    const fileInfo = response.data.fileInfo;
+
+    photoUrl.value = fileInfo.url;
+    form.photoFileId = fileInfo.fileId;
 };
 
 /**
@@ -172,13 +179,24 @@ const saveProduct = async () => {
         response = await apiProduct.addProduct(form);
     }
 
-    if (response.status) {
-        toolNotify.success("通知", response.message);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+            autoHide: false,
+        });
 
-        toListPage();
-    } else {
-        toolNotify.error("通知", response.message, false);
+        return;
     }
+
+    toolNotify({
+        type: "success",
+        title: "通知",
+        message: response.message,
+    });
+
+    toListPage();
 };
 
 /**
@@ -189,33 +207,39 @@ const saveProduct = async () => {
 const getProduct = async () => {
     const response = await apiProduct.getProduct(productId);
 
-    if (response.status) {
-        const product = response.data.product;
-
-        // 根據資料加入預設的商品類型選項
-        const data = {
-            productTypeId: product.productTypeId,
-            name: product.productTypeName,
-        };
-
-        productType.value.push(data);
-
-        form.name = product.name;
-        form.photoFileId = product.photoFileId;
-        form.price = product.price;
-        form.quantity = product.quantity;
-        form.startTime = toolTime.getDateTime(product.startTime);
-        form.endTime = toolTime.getDateTime(product.endTime);
-        form.description = product.description;
-        form.status = product.status;
-        form.productTypeId = product.productTypeId;
-
-        photoUrl.value = product.photoUrl;
-    } else {
-        toolNotify.error("通知", response.message);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+        });
 
         toListPage();
+
+        return;
     }
+
+    const product = response.data.product;
+
+    // 根據資料加入預設的商品類型選項
+    const data = {
+        productTypeId: product.productTypeId,
+        name: product.productTypeName,
+    };
+
+    productType.value.push(data);
+
+    form.name = product.name;
+    form.photoFileId = product.photoFileId;
+    form.price = product.price;
+    form.quantity = product.quantity;
+    form.startTime = toolTime.getDateTime(product.startTime);
+    form.endTime = toolTime.getDateTime(product.endTime);
+    form.description = product.description;
+    form.status = product.status;
+    form.productTypeId = product.productTypeId;
+
+    photoUrl.value = product.photoUrl;
 };
 
 /**
@@ -239,22 +263,30 @@ const getProductType = async (keyword) => {
 
     const response = await apiProductType.getProductTypePage(1, keyword);
 
-    if (response.status) {
-        const productTypePage = response.data.productTypePage;
-
-        // 設定列表資料
-        productType.value = [];
-        productTypePage.data.forEach((item) => {
-            const data = {
-                productTypeId: item.productTypeId,
-                name: item.name,
-            };
-
-            productType.value.push(data);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
         });
-    } else {
-        toolNotify.error("通知", response.message);
+
+        productTypeLoading.value = false;
+
+        return;
     }
+
+    const productTypePage = response.data.productTypePage;
+
+    // 設定列表資料
+    productType.value = [];
+    productTypePage.data.forEach((item) => {
+        const data = {
+            productTypeId: item.productTypeId,
+            name: item.name,
+        };
+
+        productType.value.push(data);
+    });
 
     productTypeLoading.value = false;
 };

@@ -33,7 +33,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as apiProductType from "@/api/mgmt/product/ProductType.js";
-import * as toolNotify from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 
 const route = useRoute();
 const router = useRouter();
@@ -69,13 +69,24 @@ const saveProductType = async () => {
         response = await apiProductType.addProductType(form);
     }
 
-    if (response.status) {
-        toolNotify.success("通知", response.message);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+            autoHide: false,
+        });
 
-        toListPage();
-    } else {
-        toolNotify.error("通知", response.message, false);
+        return;
     }
+
+    toolNotify({
+        type: "success",
+        title: "通知",
+        message: response.message,
+    });
+
+    toListPage();
 };
 
 /**
@@ -86,16 +97,22 @@ const saveProductType = async () => {
 const getProductType = async () => {
     const response = await apiProductType.getProductType(productTypeId);
 
-    if (response.status) {
-        const productType = response.data.productType;
-
-        form.name = productType.name;
-        form.status = productType.status;
-    } else {
-        toolNotify.error("通知", response.message);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+        });
 
         toListPage();
+
+        return;
     }
+
+    const productType = response.data.productType;
+
+    form.name = productType.name;
+    form.status = productType.status;
 };
 
 /**

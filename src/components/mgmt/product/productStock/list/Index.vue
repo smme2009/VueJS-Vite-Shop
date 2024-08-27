@@ -53,7 +53,7 @@ import page from "@/components/mgmt/public/page/Index.vue";
 import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import storeBePage from "@/store/backend/page/Index.js";
-import * as toolNotify from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
 import * as apiProduct from "@/api/mgmt/product/Product.js";
 import * as apiProductStock from "@/api/mgmt/product/ProductStock.js";
@@ -137,20 +137,26 @@ const getProductStockData = async () => {
         store.nowPage
     );
 
-    if (response.status) {
-        const productStockPage = response.data.productStockPage;
-
-        // 設定列表資料
-        tableData.value = [];
-        productStockPage.data.forEach((item) => {
-            tableData.value.push(setProductStock(item));
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
         });
 
-        // 設定資料總數
-        store.setDataTotal = productStockPage.total;
-    } else {
-        toolNotify.error("通知", response.message);
+        return;
     }
+
+    const productStockPage = response.data.productStockPage;
+
+    // 設定列表資料
+    tableData.value = [];
+    productStockPage.data.forEach((item) => {
+        tableData.value.push(setProductStock(item));
+    });
+
+    // 設定資料總數
+    store.setDataTotal = productStockPage.total;
 };
 
 /**
@@ -161,11 +167,17 @@ const getProductStockData = async () => {
 const getProduct = async () => {
     const response = await apiProduct.getProduct(productId);
 
-    if (response.status) {
-        product.value = response.data.product;
-    } else {
-        toolNotify.error("通知", response.message);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+        });
+
+        return;
     }
+
+    product.value = response.data.product;
 };
 
 /**

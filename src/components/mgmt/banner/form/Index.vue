@@ -75,7 +75,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as apiBanner from "@/api/mgmt/banner/Banner.js";
-import * as toolNotify from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
 
 const route = useRoute();
@@ -120,7 +120,12 @@ const uploadPhoto = async (data) => {
         photoUrl.value = fileInfo.url;
         form.photoFileId = fileInfo.fileId;
     } else {
-        toolNotify.error("通知", response.message, false);
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+            autoHide: false,
+        });
     }
 };
 
@@ -139,13 +144,24 @@ const saveBanner = async () => {
         response = await apiBanner.addBanner(form);
     }
 
-    if (response.status) {
-        toolNotify.success("通知", response.message);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+            autoHide: false,
+        });
 
-        toListPage();
-    } else {
-        toolNotify.error("通知", response.message, false);
+        return;
     }
+
+    toolNotify({
+        type: "success",
+        title: "通知",
+        message: response.message,
+    });
+
+    toListPage();
 };
 
 /**
@@ -156,23 +172,29 @@ const saveBanner = async () => {
 const getBanner = async () => {
     const response = await apiBanner.getBanner(bannerId);
 
-    if (response.status) {
-        const banner = response.data.banner;
-
-        form.name = banner.name;
-        form.photoFileId = banner.photoFileId;
-        form.url = banner.url;
-        form.startTime = toolTime.getDateTime(banner.startTime);
-        form.endTime = toolTime.getDateTime(banner.endTime);
-        form.sort = banner.sort;
-        form.status = banner.status;
-
-        photoUrl.value = banner.photoUrl;
-    } else {
-        toolNotify.error("通知", response.message);
+    if (response.status === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+        });
 
         toListPage();
+
+        return;
     }
+
+    const banner = response.data.banner;
+
+    form.name = banner.name;
+    form.photoFileId = banner.photoFileId;
+    form.url = banner.url;
+    form.startTime = toolTime.getDateTime(banner.startTime);
+    form.endTime = toolTime.getDateTime(banner.endTime);
+    form.sort = banner.sort;
+    form.status = banner.status;
+
+    photoUrl.value = banner.photoUrl;
 };
 
 /**

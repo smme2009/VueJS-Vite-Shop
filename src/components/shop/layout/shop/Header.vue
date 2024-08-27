@@ -54,7 +54,7 @@
 <script setup>
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import { success as notifySuccess } from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 import storeFeProduct from "@/store/frontend/product/Index.js";
 import storeFeMember from "@/store/frontend/member/Index.js";
 
@@ -92,6 +92,11 @@ const toLoginPage = () => {
  */
 const logout = () => {
     storeMember.$reset();
-    notifySuccess("通知", "登出成功");
+
+    toolNotify({
+        type: "success",
+        title: "通知",
+        message: "登出成功",
+    });
 };
 </script>

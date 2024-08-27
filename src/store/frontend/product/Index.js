@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import * as apiProduct from "@/api/shop/product/Product.js";
-import * as toolNotify from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 import * as toolStr from "@/tool/Str.js";
 
 // Store名稱
@@ -46,7 +46,11 @@ const option = {
             const response = await apiProduct.getProductPage(page, searchData);
 
             if (response.status === false) {
-                toolNotify.error("通知", response.message);
+                toolNotify({
+                    type: "error",
+                    title: "通知",
+                    message: response.message,
+                });
 
                 return;
             }

@@ -14,7 +14,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import storeFeProduct from "@/store/frontend/product/Index.js";
-import * as toolNotify from "@/tool/Notify.js";
+import toolNotify from "@/tool/Notify.js";
 import * as apiProductType from "@/api/shop/product/ProductType.js";
 
 const productTypeData = ref([]);
@@ -35,7 +35,11 @@ const getProductTypeList = async () => {
     const response = await apiProductType.getProductTypeList();
 
     if (response.status === false) {
-        toolNotify.error("通知", response.message);
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: response.message,
+        });
 
         return;
     }
