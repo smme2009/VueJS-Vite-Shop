@@ -1,43 +1,46 @@
 import axios from 'axios';
-import storeBeAdmin from '@/store/backend/admin/Index.js';
+import router from '@/router/index.js';
+import storeBeAdmin from "@/store/backend/admin/Index.js";
+import storeBeMember from "@/store/frontend/member/Index.js";
+import toolNotify from "@/tool/Notify.js";
 
 /**
  * 發送Ajax
  * 
- * @param {string} method 方法
- * @param {string} uri 路徑
- * @param {object} data 資料
- * @param {object} header Header
+ * @param {object} param 參數
+ * @param {string} param.method 方法
+ * @param {string} param.apiTarget API目標
+ * @param {string} param.uri 路徑
+ * @param {object} param.data 資料
+ * @param {object} param.header Header
  * 
- * @returns {AxiosResponse}
+ * @returns {object}
  */
-async function ajax(method, uri, data = {}, header = {}) {
+const ajax = async (param) => {
     const apiUrl = import.meta.env.VITE_API_URL;
-    const fullUrl = apiUrl + uri;
+    const fullUrl = apiUrl + param.uri;
 
-    // 取得JWT Token
-    const store = storeBeAdmin();
-    const jwtToken = store.jwtToken;
+    const store = {
+        mgmt: storeBeAdmin(),
+        shop: storeBeMember(),
+    };
+
+    const jwtToken = store[param.apiTarget].jwtToken;
 
     // 基本設定
     const setting = {
-        method: method,
+        method: param.method,
         url: fullUrl,
         headers: {
-            Authorization: 'Bearer ' + jwtToken,
-            ...header,
+            Authorization: "Bearer " + jwtToken,
+            ...(param.header ?? {}),
         },
     };
 
-    // 設定API參數
-    if (method === 'get') {
-        setting.params = data;
-    } else {
-        setting.data = data;
-    }
+    const paramName = (param.method === "get") ? "params" : "data";
+    setting[paramName] = param.data ?? {};
 
     let response = {};
-
     await axios(setting)
         .then((r) => {
             response = {
@@ -46,16 +49,27 @@ async function ajax(method, uri, data = {}, header = {}) {
                 data: r.data.data,
             };
         }).catch((e) => {
-            // 無權限時強制跳轉登入頁
-            if (e.response.status === 401) {
-                window.location.href = '/mgmt/login';
-            }
+            switch (e.response.status) {
+                case 401: // 無權限時強制跳轉登入頁
+                    toolNotify({
+                        type: "error",
+                        title: "通知",
+                        message: "請重新登入",
+                        autoHide: false,
+                    });
 
-            response = {
-                status: false,
-                message: e.response.data.message,
-                data: e.response.data.data,
-            };
+                    router.push({ name: `${param.apiTarget}Login` })
+
+                    break;
+                default: // 其餘Code回傳處理
+                    response = {
+                        status: false,
+                        message: e.response.data.message,
+                        data: e.response.data.data,
+                    };
+
+                    break;
+            }
         });
 
     return response;

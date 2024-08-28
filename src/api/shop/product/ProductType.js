@@ -1,5 +1,8 @@
 import toolAjax from '@/tool/Ajax.js';
 
+// API目標
+const apiTarget = 'shop';
+
 /**
  * 商品分類列表API
  *
@@ -8,7 +11,13 @@ import toolAjax from '@/tool/Ajax.js';
 export const getProductTypeList = async () => {
     const uri = '/frontend/product/type';
 
-    const response = await toolAjax('get', uri);
+    const param = {
+        method: 'get',
+        apiTarget: apiTarget,
+        uri: uri,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }

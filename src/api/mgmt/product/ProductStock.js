@@ -1,5 +1,8 @@
 import toolAjax from '@/tool/Ajax.js';
 
+// API目標
+const apiTarget = 'mgmt';
+
 /**
  * 商品庫存單列表API
  * 
@@ -15,7 +18,14 @@ export const getProductStockPage = async (productId, page) => {
         page: page,
     };
 
-    const response = await toolAjax('get', uri, data);
+    const param = {
+        method: 'get',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: data,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -31,7 +41,14 @@ export const getProductStockPage = async (productId, page) => {
 export const addProductStock = async (productId, productStockData) => {
     const uri = `/backend/product/${productId}/stock`;
 
-    const response = await toolAjax('post', uri, productStockData);
+    const param = {
+        method: 'post',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: productStockData,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }

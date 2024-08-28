@@ -1,5 +1,8 @@
 import toolAjax from '@/tool/Ajax.js';
 
+// API目標
+const apiTarget = 'mgmt';
+
 /**
  * 商品列表API
  * 
@@ -16,7 +19,14 @@ export const getProductPage = async (page, keyword) => {
         keyword: keyword,
     };
 
-    const response = await toolAjax('get', uri, data);
+    const param = {
+        method: 'get',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: data,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -31,7 +41,13 @@ export const getProductPage = async (page, keyword) => {
 export const deleteProduct = async (productId) => {
     const uri = `/backend/product/${productId}`;
 
-    const response = await toolAjax('delete', uri);
+    const param = {
+        method: 'delete',
+        apiTarget: apiTarget,
+        uri: uri,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -51,7 +67,14 @@ export const editProductStatus = async (productId, status) => {
         status: status,
     };
 
-    const response = await toolAjax('put', uri, data);
+    const param = {
+        method: 'put',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: data,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -75,7 +98,15 @@ export const uploadProductPhoto = async (file) => {
         "Content-Type": "multipart/form-data"
     };
 
-    const response = await toolAjax('post', uri, form, header);
+    const param = {
+        method: 'post',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: form,
+        header: header,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -90,7 +121,14 @@ export const uploadProductPhoto = async (file) => {
 export const addProduct = async (productData) => {
     const uri = '/backend/product';
 
-    const response = await toolAjax('post', uri, productData);
+    const param = {
+        method: 'post',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: productData,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -105,7 +143,13 @@ export const addProduct = async (productData) => {
 export const getProduct = async (productId) => {
     const uri = `/backend/product/${productId}`;
 
-    const response = await toolAjax('get', uri);
+    const param = {
+        method: 'get',
+        apiTarget: apiTarget,
+        uri: uri,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -121,7 +165,14 @@ export const getProduct = async (productId) => {
 export const editProduct = async (productId, productData) => {
     const uri = `/backend/product/${productId}`;
 
-    const response = await toolAjax('put', uri, productData);
+    const param = {
+        method: 'put',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: productData,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }

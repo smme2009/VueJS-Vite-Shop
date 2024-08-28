@@ -1,5 +1,8 @@
 import toolAjax from '@/tool/Ajax.js';
 
+// API目標
+const apiTarget = 'shop';
+
 /**
  * 登入API
  * 
@@ -16,7 +19,14 @@ export const login = async (account, password) => {
         password: password,
     };
 
-    const response = await toolAjax('post', uri, data);
+    const param = {
+        method: 'post',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: data,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }

@@ -1,5 +1,8 @@
 import toolAjax from '@/tool/Ajax.js';
 
+// API目標
+const apiTarget = 'shop';
+
 /**
  * 商品分頁API
  * 
@@ -17,7 +20,14 @@ export const getProductPage = async (page, searchData) => {
         keyword: searchData.keyword,
     };
 
-    const response = await toolAjax('get', uri, data);
+    const param = {
+        method: 'get',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: data,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }

@@ -1,5 +1,8 @@
 import toolAjax from '@/tool/Ajax.js';
 
+// API目標
+const apiTarget = 'shop';
+
 /**
  * 註冊API
  * 
@@ -10,7 +13,14 @@ import toolAjax from '@/tool/Ajax.js';
 export const register = async (memberData) => {
     const uri = '/frontend/register';
 
-    const response = await toolAjax('post', uri, memberData);
+    const param = {
+        method: 'post',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: memberData,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }

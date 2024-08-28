@@ -1,5 +1,8 @@
 import toolAjax from '@/tool/Ajax.js';
 
+// API目標
+const apiTarget = 'mgmt';
+
 /**
  * 橫幅列表API
  * 
@@ -16,7 +19,14 @@ export const getBannerPage = async (page, keyword) => {
         keyword: keyword,
     };
 
-    const response = await toolAjax('get', uri, data);
+    const param = {
+        method: 'get',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: data,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -31,7 +41,13 @@ export const getBannerPage = async (page, keyword) => {
 export const deleteBanner = async (bannerId) => {
     const uri = `/backend/banner/${bannerId}`;
 
-    const response = await toolAjax('delete', uri);
+    const param = {
+        method: 'delete',
+        apiTarget: apiTarget,
+        uri: uri,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -51,7 +67,14 @@ export const editBannerStatus = async (bannerId, status) => {
         status: status,
     };
 
-    const response = await toolAjax('put', uri, data);
+    const param = {
+        method: 'put',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: data,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -75,7 +98,15 @@ export const uploadBannerPhoto = async (file) => {
         "Content-Type": "multipart/form-data"
     };
 
-    const response = await toolAjax('post', uri, form, header);
+    const param = {
+        method: 'post',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: form,
+        header: header,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -90,7 +121,14 @@ export const uploadBannerPhoto = async (file) => {
 export const addBanner = async (bannerData) => {
     const uri = '/backend/banner';
 
-    const response = await toolAjax('post', uri, bannerData);
+    const param = {
+        method: 'post',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: bannerData,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -105,7 +143,13 @@ export const addBanner = async (bannerData) => {
 export const getBanner = async (bannerId) => {
     const uri = `/backend/banner/${bannerId}`;
 
-    const response = await toolAjax('get', uri);
+    const param = {
+        method: 'get',
+        apiTarget: apiTarget,
+        uri: uri,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
@@ -121,7 +165,14 @@ export const getBanner = async (bannerId) => {
 export const editBanner = async (bannerId, bannerData) => {
     const uri = `/backend/banner/${bannerId}`;
 
-    const response = await toolAjax('put', uri, bannerData);
+    const param = {
+        method: 'put',
+        apiTarget: apiTarget,
+        uri: uri,
+        data: bannerData,
+    };
+
+    const response = await toolAjax(param);
 
     return response;
 }
