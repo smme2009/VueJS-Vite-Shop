@@ -1,16 +1,12 @@
 <template>
-    <div class="flex justify-center">
-        <div class="xs:w-full sm:w-5/6">
-            <!-- 橫幅 -->
-            <banner />
-            <!-- 分類列表 -->
-            <productType />
-            <!-- 商品列表 -->
-            <product />
-            <!-- 載入更多按鈕 -->
-            <load />
-        </div>
-    </div>
+    <!-- 橫幅 -->
+    <banner />
+    <!-- 分類列表 -->
+    <productType />
+    <!-- 商品列表 -->
+    <product />
+    <!-- 載入更多按鈕 -->
+    <load />
 </template>
 
 <script setup>
