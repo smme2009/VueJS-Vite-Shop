@@ -31,3 +31,24 @@ export const getProductPage = async (page, searchData) => {
 
     return response;
 }
+
+/**
+ * 取得商品
+ * 
+ * @param {int} productId 商品ID
+ * 
+ * @returns {object}
+ */
+export const getProduct = async (productId) => {
+    const uri = `/frontend/product/${productId}`;
+
+    const param = {
+        method: 'get',
+        apiTarget: apiTarget,
+        uri: uri,
+    };
+
+    const response = await toolAjax(param);
+
+    return response;
+};

@@ -8,7 +8,10 @@
                 class="h-full !rounded-lg"
                 body-class="h-full flex flex-col p-0"
             >
-                <div class="flex-auto">
+                <div
+                    class="flex-auto"
+                    @click="toProductPage(product.productId)"
+                >
                     <el-image
                         class="h-full"
                         :src="product.photoUrl"
@@ -30,7 +33,10 @@
                 <div class="flex justify-end p-2">
                     <el-button-group>
                         <el-tooltip content="直接購買">
-                            <el-button icon="Goods" />
+                            <el-button
+                                icon="Goods"
+                                @click="toProductPage(product.productId)"
+                            />
                         </el-tooltip>
                         <el-tooltip content="加入購物車">
                             <el-button icon="ShoppingCart" />
@@ -44,8 +50,10 @@
 
 <script setup>
 import { onMounted } from "vue";
+import { useRouter } from "vue-router";
 import storeFeProduct from "@/store/frontend/product/Index.js";
 
+const router = useRouter();
 const store = storeFeProduct();
 
 onMounted(() => {
@@ -55,4 +63,22 @@ onMounted(() => {
     // 搜尋商品資料
     store.getNextPage();
 });
+
+/**
+ * 跳轉至商品頁面
+ *
+ * @param productId 商品ID
+ *
+ * @returns {void}
+ */
+const toProductPage = (productId) => {
+    const param = {
+        productId: productId,
+    };
+
+    router.push({
+        name: "shopProduct",
+        params: param,
+    });
+};
 </script>

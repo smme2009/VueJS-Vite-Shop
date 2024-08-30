@@ -28,6 +28,11 @@ const router = {
                             name: 'shopHome',
                             component: () => import('@/components/shop/home/Index.vue'),
                         },
+                        {
+                            path: 'product/:productId',
+                            name: 'shopProduct',
+                            component: () => import('@/components/shop/product/Index.vue'),
+                        },
                     ],
                 },
             ],
