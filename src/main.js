@@ -7,8 +7,6 @@ import router from '@/router/Index.js';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
-import { QuillEditor } from '@vueup/vue-quill';
-import '@vueup/vue-quill/dist/vue-quill.snow.css';
 
 const app = createApp(App);
 
@@ -24,8 +22,5 @@ app.use(pinia);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component);
 }
-
-// 導入Quill編輯器
-app.component('QuillEditor', QuillEditor)
 
 app.mount('#app');
