@@ -7,6 +7,7 @@ import router from '@/router/Index.js';
 import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
+import { CkeditorPlugin } from '@ckeditor/ckeditor5-vue';
 
 const app = createApp(App);
 
@@ -22,5 +23,8 @@ app.use(pinia);
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
     app.component(key, component);
 }
+
+// 加入CKEditor
+app.use(CkeditorPlugin);
 
 app.mount('#app');
