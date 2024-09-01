@@ -83,6 +83,11 @@
                         placeholder="請輸入商品介紹"
                     />
                 </el-form-item>
+                <el-form-item label="商品自訂頁面">
+                    <div class="w-full">
+                        <editor v-model="form.pageHtml" />
+                    </div>
+                </el-form-item>
                 <el-form-item label="狀態">
                     <el-switch v-model="form.status" />
                 </el-form-item>
@@ -100,6 +105,7 @@
 </template>
 
 <script setup>
+import editor from "@/components/mgmt/public/editor/Index.vue";
 import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as apiProduct from "@/api/mgmt/product/Product.js";
@@ -109,6 +115,12 @@ import * as toolTime from "@/tool/Time.js";
 
 const route = useRoute();
 const router = useRouter();
+const formTitle = ref(route.meta.title);
+const photoUrl = ref("");
+const timeFormat = ref("YYYY-MM-DD HH:mm:ss");
+const productType = ref([]);
+const productTypeLoading = ref(false);
+const productId = route.params.productId;
 
 const form = reactive({
     name: "",
@@ -120,15 +132,8 @@ const form = reactive({
     description: "",
     status: false,
     productTypeId: null,
+    pageHtml: "",
 });
-
-const formTitle = ref(route.meta.title);
-const photoUrl = ref("");
-const timeFormat = ref("YYYY-MM-DD HH:mm:ss");
-const productType = ref([]);
-const productTypeLoading = ref(false);
-
-const productId = route.params.productId;
 
 onMounted(() => {
     // 若為編輯則取得商品資料
@@ -236,6 +241,7 @@ const getProduct = async () => {
     form.startTime = toolTime.getDateTime(product.startTime);
     form.endTime = toolTime.getDateTime(product.endTime);
     form.description = product.description;
+    form.pageHtml = product.pageHtml;
     form.status = product.status;
     form.productTypeId = product.productTypeId;
 
