@@ -1,13 +1,9 @@
 <template>
-    <div class="h-80 flex flex-wrap">
-        <div class="h-full xs:w-full md:w-2/5 flex justify-center">
-            <el-image
-                class="h-full rounded-lg"
-                :src="productData.photoUrl"
-                fit="fill"
-            />
+    <div class="min-h-96 flex flex-wrap justify-center">
+        <div class="max-w-96 p-1">
+            <img class="rounded-lg" :src="productData.photoUrl" />
         </div>
-        <div class="h-full xs:w-full md:w-3/5 flex flex-col space-y-2">
+        <div class="flex-auto flex flex-col space-y-2 p-1">
             <div class="text-2xl font-medium">
                 {{ productData.name }}
             </div>
@@ -42,7 +38,14 @@
             </div>
         </div>
     </div>
-    <div></div>
+    <div class="mt-2 p-1">
+        <el-tabs type="card">
+            <el-tab-pane label="商品介紹" />
+        </el-tabs>
+    </div>
+    <div class="ck-content mt-1 p-1">
+        <div v-html="productData.pageHtml" />
+    </div>
 </template>
 
 <script setup>
@@ -95,6 +98,7 @@ const getProductData = async () => {
         price: "$" + formatNumber(product.price),
         quantity: product.quantity,
         description: product.description,
+        pageHtml: product.pageHtml,
     };
 };
 
