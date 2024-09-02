@@ -8,6 +8,7 @@ import * as ElementPlusIconsVue from '@element-plus/icons-vue';
 import { createPinia } from 'pinia';
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate';
 import { CkeditorPlugin } from '@ckeditor/ckeditor5-vue';
+import 'ckeditor5/ckeditor5.css';
 
 const app = createApp(App);
 

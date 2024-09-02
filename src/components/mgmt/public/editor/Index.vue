@@ -4,7 +4,6 @@
 
 <script setup>
 import uploadAdapter from "@/components/mgmt/public/editor/UploadAdapter.js";
-import "ckeditor5/ckeditor5.css";
 import translations from "ckeditor5/translations/zh.js";
 
 import {
