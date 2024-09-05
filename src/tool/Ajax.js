@@ -61,6 +61,16 @@ const ajax = async (param) => {
                     router.push({ name: `${param.apiTarget}Login` })
 
                     break;
+                case 500: // 系統錯誤統一處理
+                    toolNotify({
+                        type: "error",
+                        title: "通知",
+                        message: "系統異常",
+                    });
+
+                    console.error(e.response.data.message);
+
+                    break;
                 default: // 其餘Code回傳處理
                     response = {
                         status: false,
