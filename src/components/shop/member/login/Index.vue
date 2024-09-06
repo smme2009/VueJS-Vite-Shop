@@ -53,11 +53,13 @@
 import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import storeFeMember from "@/store/frontend/member/Index.js";
+import storeFeCart from "@/store/frontend/cart/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import { login as apiLogin } from "@/api/shop/member/Login.js";
 
 const router = useRouter();
-const store = storeFeMember();
+const storeMember = storeFeMember();
+const storeCart = storeFeCart();
 
 const form = reactive({
     account: "",
@@ -89,7 +91,11 @@ const login = async () => {
         return;
     }
 
-    store.setJwtToken(response.data.jwtToken);
+    // 設定JWT Token
+    storeMember.setJwtToken(response.data.jwtToken);
+
+    // 將本地購物車與會員購物車合併
+    storeCart.editMemberCartProductFormLocal();
 
     toolNotify({
         type: "success",

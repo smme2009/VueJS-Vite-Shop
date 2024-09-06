@@ -32,7 +32,11 @@
                 <el-button type="primary" class="w-1/2" icon="Goods">
                     直接購買
                 </el-button>
-                <el-button class="w-1/2" icon="ShoppingCart">
+                <el-button
+                    class="w-1/2"
+                    icon="ShoppingCart"
+                    @click="editCartProduct"
+                >
                     加入購物車
                 </el-button>
             </div>
@@ -51,6 +55,8 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
+import storeFeMember from "@/store/frontend/member/Index.js";
+import storeFeCart from "@/store/frontend/cart/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import { formatNumber } from "@/tool/Str.js";
 import { getProduct as apiGetProduct } from "@/api/shop/product/Product.js";
@@ -64,6 +70,8 @@ const route = useRoute();
 const router = useRouter();
 const productId = route.params.productId;
 const productData = ref({});
+const storeMember = storeFeMember();
+const storeCart = storeFeCart();
 
 const form = reactive({
     quantity: 1,
@@ -113,5 +121,21 @@ const getCoupon = () => {
         title: "通知",
         message: "查無可用優惠券",
     });
+};
+
+/**
+ * 編輯購物車商品
+ *
+ * @returns {void}
+ */
+const editCartProduct = () => {
+    const param = {
+        productId: productId,
+        quantity: 1,
+    };
+
+    storeMember.hasToken
+        ? storeCart.editMemberCartProduct(param)
+        : storeCart.editLocalCartProduct(param);
 };
 </script>

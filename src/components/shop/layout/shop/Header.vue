@@ -27,8 +27,8 @@
             </el-input>
         </el-form>
         <div class="w-1/4 flex justify-start">
-            <div class="space-x-3">
-                <el-dropdown v-if="storeMember.hasToken" placement="bottom">
+            <div v-if="storeMember.hasToken" class="space-x-3">
+                <el-dropdown placement="bottom">
                     <el-button type="success" icon="User" circle />
                     <template #dropdown>
                         <el-dropdown-menu>
@@ -38,14 +38,20 @@
                         </el-dropdown-menu>
                     </template>
                 </el-dropdown>
+                <el-badge :value="storeCart.memberQuantity">
+                    <el-button type="warning" icon="ShoppingCart" circle />
+                </el-badge>
+            </div>
+            <div v-else class="space-x-3">
                 <el-button
-                    v-else
                     type="warning"
                     @click="toLoginPage"
                     icon="User"
                     circle
                 />
-                <el-button type="warning" icon="ShoppingCart" circle />
+                <el-badge :value="storeCart.localQuantity">
+                    <el-button type="warning" icon="ShoppingCart" circle />
+                </el-badge>
             </div>
         </div>
     </div>
@@ -57,10 +63,12 @@ import { useRouter } from "vue-router";
 import toolNotify from "@/tool/Notify.js";
 import storeFeProduct from "@/store/frontend/product/Index.js";
 import storeFeMember from "@/store/frontend/member/Index.js";
+import storeFeCart from "@/store/frontend/cart/Index.js";
 
 const router = useRouter();
 const storeProduct = storeFeProduct();
 const storeMember = storeFeMember();
+const storeCart = storeFeCart();
 
 const form = reactive({
     keyword: "",
