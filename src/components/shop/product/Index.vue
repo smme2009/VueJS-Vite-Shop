@@ -80,7 +80,7 @@ const form = reactive({
 /**
  * 取得商品資料
  *
- * @requires {void}
+ * @returns {void}
  */
 const getProductData = async () => {
     const response = await apiGetProduct(productId);
@@ -113,7 +113,7 @@ const getProductData = async () => {
 /**
  * 取得優惠券
  *
- * @requires {void}
+ * @returns {void}
  */
 const getCoupon = () => {
     toolNotify({

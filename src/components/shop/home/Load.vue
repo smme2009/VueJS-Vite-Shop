@@ -19,7 +19,7 @@ const store = storeFeProduct();
 /**
  * 取得商品頁面
  *
- * @requires {void}
+ * @returns {void}
  */
 const getProductPage = () => {
     store.getNextPage();

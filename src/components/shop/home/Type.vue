@@ -29,7 +29,7 @@ onMounted(function () {
 /**
  * 取得商品類型列表
  *
- * @requires {void}
+ * @returns {void}
  */
 const getProductTypeList = async () => {
     const response = await apiProductType.getProductTypeList();

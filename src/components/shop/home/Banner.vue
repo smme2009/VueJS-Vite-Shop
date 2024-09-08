@@ -38,7 +38,7 @@ onMounted(() => {
 /**
  * 取得橫幅列表
  *
- * @requires {void}
+ * @returns {void}
  */
 const getBannerList = async () => {
     const response = await apiBanner.getBannerList();
@@ -72,7 +72,7 @@ const getBannerList = async () => {
  *
  * @param {string} url 網址
  *
- * @requires {void}
+ * @returns {void}
  */
 const toUrl = (url) => {
     if (url !== null) {
