@@ -1,5 +1,7 @@
 import Login from '@/router/shop/member/Login.js';
 import Register from '@/router/shop/member/Register.js';
+import Product from '@/router/shop/product/Product.js';
+import Cart from '@/router/shop/cart/Cart.js';
 
 const router = {
     path: 'shop',
@@ -28,11 +30,8 @@ const router = {
                             name: 'shopHome',
                             component: () => import('@/components/shop/home/Index.vue'),
                         },
-                        {
-                            path: 'product/:productId',
-                            name: 'shopProduct',
-                            component: () => import('@/components/shop/product/Index.vue'),
-                        },
+                        Product,
+                        Cart,
                     ],
                 },
             ],

@@ -51,12 +51,13 @@
 
 <script setup>
 import { ref, reactive } from "vue";
-import { useRouter } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import storeFeMember from "@/store/frontend/member/Index.js";
 import storeFeCart from "@/store/frontend/cart/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import { login as apiLogin } from "@/api/shop/member/Login.js";
 
+const route = useRoute();
 const router = useRouter();
 const storeMember = storeFeMember();
 const storeCart = storeFeCart();
@@ -103,7 +104,10 @@ const login = async () => {
         message: response.message,
     });
 
-    router.push({ name: "shopHome" });
+    const pushPageName = route.query.pushPageName;
+    const name = pushPageName === undefined ? "shopHome" : pushPageName;
+
+    router.push({ name: name });
 };
 
 /**

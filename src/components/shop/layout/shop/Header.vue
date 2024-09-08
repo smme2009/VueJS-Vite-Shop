@@ -39,7 +39,12 @@
                     </template>
                 </el-dropdown>
                 <el-badge :value="storeCart.memberQuantity">
-                    <el-button type="warning" icon="ShoppingCart" circle />
+                    <el-button
+                        type="success"
+                        @click="toCartPage"
+                        icon="ShoppingCart"
+                        circle
+                    />
                 </el-badge>
             </div>
             <div v-else class="space-x-3">
@@ -50,7 +55,12 @@
                     circle
                 />
                 <el-badge :value="storeCart.localQuantity">
-                    <el-button type="warning" icon="ShoppingCart" circle />
+                    <el-button
+                        type="warning"
+                        @click="toCartPage"
+                        icon="ShoppingCart"
+                        circle
+                    />
                 </el-badge>
             </div>
         </div>
@@ -91,6 +101,15 @@ const searchProduct = () => {
  */
 const toLoginPage = () => {
     router.push({ name: "shopLogin" });
+};
+
+/**
+ * 跳轉至購物車頁
+ *
+ * @returns {void}
+ */
+const toCartPage = () => {
+    router.push({ name: "shopCart" });
 };
 
 /**

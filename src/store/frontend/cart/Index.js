@@ -39,11 +39,9 @@ const option = {
         /**
          * 取得會員購物車列表
          * 
-         * @returns {void}
+         * @returns {bool}
          */
         async getMemberCartProductList() {
-            this.$reset();
-
             const response = await apiCart.getCartProductList();
 
             if (response.status === false) {
@@ -53,9 +51,10 @@ const option = {
                     message: response.message,
                 });
 
-                return;
+                return false;
             }
 
+            this.memberData = [];
             response.data.cartProductList.forEach(cart => {
                 this.memberData.push({
                     cartId: cart.cartId,
@@ -63,10 +62,13 @@ const option = {
                     productId: cart.productId,
                     productName: cart.productName,
                     productPhotoUrl: cart.productPhotoUrl,
+                    productPrice: cart.productPrice,
                     productQuantity: cart.productQuantity,
                     productSataus: cart.productSataus,
                 });
             });
+
+            return true;
         },
 
         /**
@@ -108,7 +110,7 @@ const option = {
          * 
          * @param {array|object} param 參數
          * 
-         * @returns {void}
+         * @returns {bool}
          */
         async editMemberCartProduct(param) {
             const data = Array.isArray(param) ? param : [param];
@@ -122,7 +124,7 @@ const option = {
                     message: response.message,
                 });
 
-                return;
+                return false;
             }
 
             toolNotify({
@@ -131,7 +133,9 @@ const option = {
                 message: "成功加入購物車",
             });
 
-            this.getMemberCartProductList();
+            const isGet = await this.getMemberCartProductList();
+
+            return isGet;
         },
 
         /**
@@ -139,10 +143,18 @@ const option = {
          * 
          * @returns {void}
          */
-        editMemberCartProductFormLocal() {
-            if (this.localData.length > 0) {
-                this.editMemberCartProduct(this.localData);
+        async editMemberCartProductFormLocal() {
+            if (this.localData.length <= 0) {
+                return;
             }
+
+            const isEdit = await this.editMemberCartProduct(this.localData);
+
+            if (isEdit === false) {
+                return
+            }
+
+            this.localData = [];
         },
 
         /**
@@ -161,7 +173,7 @@ const option = {
          * 
          * @param {int|array} cartId 購物車ID
          * 
-         * @returns {void}
+         * @returns {bool}
          */
         async deleteMemberCartProduct(cartId) {
             const data = Number.isInteger(cartId) ? [cartId] : cartId;
@@ -175,7 +187,7 @@ const option = {
                     message: response.message,
                 });
 
-                return;
+                return false;
             }
 
             toolNotify({
@@ -184,7 +196,9 @@ const option = {
                 message: response.message,
             });
 
-            this.getMemberCartProductList();
+            const isGet = this.getMemberCartProductList();
+
+            return isGet;
         }
     },
 };

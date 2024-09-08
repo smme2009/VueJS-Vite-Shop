@@ -1,5 +1,5 @@
 const router = {
-    path: 'product',
+    path: 'product/:productId',
     name: 'shopProduct',
     meta: {
         title: '商品',
