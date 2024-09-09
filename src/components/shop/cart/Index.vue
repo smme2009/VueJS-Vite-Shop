@@ -1,17 +1,32 @@
 <template>
     <div class="space-y-2">
         <el-card class="w-full flex-auto rounded-lg">
-            <div class="space-y-1 mb-1">
+            <template #header>
+                <div class="text-2xl font-bold">COORD快速到貨</div>
+            </template>
+            <div class="space-y-1">
+                <div class="flex justify-between items-end">
+                    <el-checkbox
+                        v-model="checkAllStatus"
+                        :indeterminate="indeterminate"
+                        label="全選"
+                        border
+                        @change="checkAllProduct"
+                    />
+                    <el-button type="danger" class="p-1" @click="clearCart">
+                        <el-icon><Delete /></el-icon>
+                        清空購物車
+                    </el-button>
+                </div>
                 <div
                     v-for="product in storeCart.memberData"
-                    class="h-32 border rounded-lg flex justify-center"
+                    class="h-36 border rounded-lg flex"
                 >
                     <div class="w-10 flex justify-center items-center">
                         <el-checkbox
                             v-model="cartIdList"
                             :value="product.cartId"
-                            size="large"
-                            @change="setTotal"
+                            @change="checkProduct"
                         />
                     </div>
                     <div class="h-full w-32 p-1">
@@ -20,20 +35,19 @@
                             :src="product.productPhotoUrl"
                         />
                     </div>
-                    <div class="flex-auto p-1 space-y-1">
-                        <div class="flex justify-between">
-                            <div class="text-1xl font-medium">
+                    <div class="flex-auto flex flex-col p-1 space-y-1">
+                        <div class="flex-auto flex justify-between">
+                            <div class="text-1xl font-bold">
                                 {{ product.productName }}
                             </div>
                             <el-button
-                                type="danger"
                                 @click="deleteCartProduct(product.cartId)"
                                 circle
                             >
                                 <el-icon><Close /></el-icon>
                             </el-button>
                         </div>
-                        <div class="text-1xl font-medium text-red-600">
+                        <div class="text-1xl font-bold text-red-600">
                             {{ "$" + formatNumber(product.productPrice) }}
                         </div>
                         <div>
@@ -62,7 +76,12 @@
         </el-card>
         <el-card class="w-full rounded-lg">
             <template #header>
-                <div class="text-center text-2xl">結帳明細</div>
+                <div class="flex justify-between">
+                    <div class="text-center text-2xl font-bold">結帳明細</div>
+                    <el-button type="primary" icon="Goods">
+                        結帳({{ count }})
+                    </el-button>
+                </div>
             </template>
             <div class="space-y-1">
                 <div class="flex justify-between">
@@ -77,17 +96,10 @@
                 </div>
             </div>
             <template #footer>
-                <div class="space-y-1">
-                    <div class="flex justify-between">
-                        <div class="text-center text-xl">預計結帳金額</div>
-                        <div class="text-center text-xl text-red-600">
-                            ${{ total + 80 }}
-                        </div>
-                    </div>
-                    <div class="flex justify-end">
-                        <el-button type="primary" icon="Goods">
-                            結帳({{ count }})
-                        </el-button>
+                <div class="flex justify-between">
+                    <div class="text-center text-xl">預計結帳金額</div>
+                    <div class="text-center text-xl text-red-600">
+                        ${{ total + 80 }}
                     </div>
                 </div>
             </template>
@@ -110,6 +122,8 @@ const storeCart = storeFeCart();
 const cartIdList = ref([]);
 const total = ref(0);
 const count = ref(0);
+const checkAllStatus = ref(false);
+const indeterminate = ref(false);
 
 onMounted(() => {
     if (storeMember.hasToken === false) {
@@ -170,11 +184,63 @@ const editCartProductQuantity = async (productId, quantity) => {
 const deleteCartProduct = (cartId) => {
     confirm("確定要刪除商品嗎?", async () => {
         const isDelete = await storeCart.deleteMemberCartProduct(cartId);
+        if (isDelete === false) {
+            return;
+        }
 
-        if (isDelete) {
+        const index = cartIdList.value.indexOf(cartId);
+        if (index === -1) {
+            return;
+        }
+
+        cartIdList.value.splice(index, 1);
+        setTotal();
+        setAllCheckStatus();
+    });
+};
+
+/**
+ * 清空購物車
+ *
+ * @returns {void}
+ */
+const clearCart = async () => {
+    confirm("確定要清空購物車嗎?", async () => {
+        const idList = [];
+        storeCart.memberData.forEach((product) => {
+            idList.push(product.cartId);
+        });
+
+        const isDelete = await storeCart.deleteMemberCartProduct(idList);
+        if (isDelete === true) {
+            cartIdList.value = [];
             setTotal();
+            setAllCheckStatus();
         }
     });
+};
+
+const checkProduct = () => {
+    setTotal();
+    setAllCheckStatus();
+};
+
+/**
+ * 全選商品
+ *
+ * @returns {void}
+ */
+const checkAllProduct = (status) => {
+    cartIdList.value = [];
+
+    if (status === true) {
+        storeCart.memberData.forEach((product) => {
+            cartIdList.value.push(product.cartId);
+        });
+    }
+
+    setTotal();
+    setAllCheckStatus();
 };
 
 /**
@@ -193,5 +259,19 @@ const setTotal = () => {
             count.value++;
         }
     });
+};
+
+/**
+ * 設定全選狀態
+ *
+ * @returns {void}
+ */
+const setAllCheckStatus = () => {
+    const cartLength = cartIdList.value.length;
+    const memberQuantity = storeCart.memberQuantity;
+    const hasProduct = cartLength > 0;
+
+    checkAllStatus.value = hasProduct && cartLength === memberQuantity;
+    indeterminate.value = hasProduct && cartLength < memberQuantity;
 };
 </script>
