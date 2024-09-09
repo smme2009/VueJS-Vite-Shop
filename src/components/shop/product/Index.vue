@@ -4,10 +4,10 @@
             <img class="rounded-lg" :src="productData.photoUrl" />
         </div>
         <div class="flex-auto flex flex-col space-y-2 p-1">
-            <div class="text-2xl font-medium">
+            <div class="text-2xl font-bold">
                 {{ productData.name }}
             </div>
-            <div class="text-2xl font-medium text-red-600">
+            <div class="text-2xl font-bold text-red-600">
                 {{ productData.price }}
             </div>
             <div
