@@ -1,9 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
-import login from '@/router/user/Login.js';
-import home from '@/router/home/Home.js';
-import product from '@/router/product/Product.js';
-import productType from '@/router/product/ProductType.js';
+import mgmt from '@/router/mgmt/Index.js';
+import shop from '@/router/shop/Index.js';
 
 const router = createRouter({
     history: createWebHistory(),
@@ -12,21 +10,8 @@ const router = createRouter({
             path: '',
             component: () => import('@/App.vue'),
             children: [
-                {
-                    path: 'mgmt',
-                    children: [
-                        login,
-                        {
-                            path: '',
-                            component: () => import('@/components/layout/admin/Index.vue'),
-                            children: [
-                                home,
-                                product,
-                                productType,
-                            ],
-                        }
-                    ],
-                },
+                shop,
+                mgmt,
             ],
         },
     ],
