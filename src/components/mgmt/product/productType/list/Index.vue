@@ -84,7 +84,7 @@ import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import storeBePage from "@/store/backend/page/Index.js";
 import toolNotify from "@/tool/Notify.js";
-import * as toolMessage from "@/tool/Message.js";
+import toolMessage from "@/tool/Message.js";
 import * as apiProductType from "@/api/mgmt/product/ProductType.js";
 
 const router = useRouter();
@@ -159,28 +159,36 @@ const editProductTypeStatus = async (productTypeId, status) => {
  * @returns {void}
  */
 const deleteProductType = async (productTypeId) => {
-    toolMessage.confirm("確定要刪除商品類型嗎?", async () => {
-        const response = await apiProductType.deleteProductType(productTypeId);
+    const param = {
+        type: "confirm",
+        message: "確定要刪除商品類型嗎?",
+        agree: async () => {
+            const response = await apiProductType.deleteProductType(
+                productTypeId
+            );
 
-        if (response.status === false) {
+            if (response.status === false) {
+                toolNotify({
+                    type: "error",
+                    title: "通知",
+                    message: response.message,
+                });
+
+                return;
+            }
+
             toolNotify({
-                type: "error",
+                type: "success",
                 title: "通知",
                 message: response.message,
             });
 
-            return;
-        }
+            // 刪除成功後重新刷新列表
+            getProductTypeData();
+        },
+    };
 
-        toolNotify({
-            type: "success",
-            title: "通知",
-            message: response.message,
-        });
-
-        // 刪除成功後重新刷新列表
-        getProductTypeData();
-    });
+    toolMessage(param);
 };
 
 /**

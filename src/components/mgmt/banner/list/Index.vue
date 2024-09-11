@@ -90,7 +90,7 @@ import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import storeBePage from "@/store/backend/page/Index.js";
 import toolNotify from "@/tool/Notify.js";
-import * as toolMessage from "@/tool/Message.js";
+import toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
 import * as apiBanner from "@/api/mgmt/banner/Banner.js";
 
@@ -163,28 +163,34 @@ const editBannerStatus = async (bannerId, status) => {
  * @returns {void}
  */
 const deleteBanner = async (bannerId) => {
-    toolMessage.confirm("確定要刪除橫幅嗎?", async () => {
-        const response = await apiBanner.deleteBanner(bannerId);
+    const param = {
+        type: "confirm",
+        message: "確定要刪除橫幅嗎?",
+        agree: async () => {
+            const response = await apiBanner.deleteBanner(bannerId);
 
-        if (response.status === false) {
+            if (response.status === false) {
+                toolNotify({
+                    type: "error",
+                    title: "通知",
+                    message: response.message,
+                });
+
+                return;
+            }
+
             toolNotify({
-                type: "error",
+                type: "success",
                 title: "通知",
                 message: response.message,
             });
 
-            return;
-        }
+            // 刪除成功後重新刷新列表
+            getBannerData();
+        },
+    };
 
-        toolNotify({
-            type: "success",
-            title: "通知",
-            message: response.message,
-        });
-
-        // 刪除成功後重新刷新列表
-        getBannerData();
-    });
+    toolMessage(param);
 };
 
 /**
