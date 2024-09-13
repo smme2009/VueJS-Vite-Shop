@@ -18,9 +18,7 @@ const showMessage = (param) => {
             cancelButtonText: "取消",
             type: "warning",
         })
-        .then(() => {
-            param.agree();
-        })
+        .then(param.agree)
         .catch(() => {
             if (typeof param.noAgree !== "undefined") {
                 param.noAgree();
