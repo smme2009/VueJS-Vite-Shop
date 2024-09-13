@@ -17,6 +17,8 @@ const showMessage = (param) => {
             confirmButtonText: "確定",
             cancelButtonText: "取消",
             type: "warning",
+            inputPattern: /^.+$/,
+            inputErrorMessage: '請填寫欄位',
         })
         .then(param.agree)
         .catch(() => {
