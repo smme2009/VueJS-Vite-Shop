@@ -78,7 +78,7 @@
             <template #header>
                 <div class="flex justify-between">
                     <div class="text-center text-2xl font-bold">結帳明細</div>
-                    <el-button type="primary" icon="Goods">
+                    <el-button type="primary" icon="Goods" @click="toOrderPage">
                         結帳({{ count }})
                     </el-button>
                 </div>
@@ -287,5 +287,31 @@ const setAllCheckStatus = () => {
 
     checkAllStatus.value = hasProduct && cartLength === memberQuantity;
     indeterminate.value = hasProduct && cartLength < memberQuantity;
+};
+
+/**
+ * 到訂單頁面
+ *
+ * @returns {void}
+ */
+const toOrderPage = () => {
+    if (cartIdList.value.length === 0) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: "請選擇商品",
+        });
+
+        return;
+    }
+
+    const query = {
+        cartIdList: cartIdList.value,
+    };
+
+    router.push({
+        name: "shopOrder",
+        query: query,
+    });
 };
 </script>
