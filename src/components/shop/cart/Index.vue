@@ -138,6 +138,8 @@ onMounted(() => {
 
         return;
     }
+
+    storeCart.getMemberCartProductList();
 });
 
 /**
