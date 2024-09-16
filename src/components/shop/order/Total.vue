@@ -1,9 +1,8 @@
 <template>
     <el-card class="rounded-lg">
         <template #header>
-            <div class="flex justify-between">
+            <div class="flex">
                 <div class="text-center text-2xl font-bold">結帳明細</div>
-                <el-button type="primary" icon="Goods">確認</el-button>
             </div>
         </template>
         <div class="space-y-1">
