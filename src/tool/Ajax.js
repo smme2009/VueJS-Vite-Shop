@@ -68,7 +68,10 @@ const ajax = async (param) => {
                         message: "系統異常",
                     });
 
-                    console.error(e.response.data.message);
+                    response = {
+                        status: false,
+                        message: '',
+                    };
 
                     break;
                 default: // 其餘Code回傳處理
