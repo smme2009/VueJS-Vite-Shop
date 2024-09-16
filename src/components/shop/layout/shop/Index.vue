@@ -1,10 +1,12 @@
 <template>
     <el-container class="h-full">
-        <el-header>
-            <Header />
+        <el-header class="flex justify-center">
+            <div class="w-full max-w-[1080px]">
+                <Header />
+            </div>
         </el-header>
         <el-main class="h-full flex justify-center">
-            <div class="xs:w-full sm:w-[90%] md:w-[80%] xl:w-[70%] 2xl:w-[60%]">
+            <div class="w-full max-w-[1080px]">
                 <router-view></router-view>
             </div>
         </el-main>
