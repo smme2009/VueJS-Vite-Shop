@@ -1,6 +1,6 @@
 <template>
     <div class="h-full flex items-center">
-        <div class="w-1/4 flex justify-end">
+        <div class="flex justify-start">
             <router-link
                 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-sky-500"
                 :to="{ name: 'shopHome' }"
@@ -8,14 +8,10 @@
                 COORD
             </router-link>
         </div>
-        <el-form
-            :model="form"
-            class="w-2/4 flex justify-center"
-            @submit.prevent
-        >
+        <div class="flex-auto flex justify-center">
             <el-input
-                class="!w-1/2"
-                v-model="form.keyword"
+                class="w-[90%] max-w-96"
+                v-model="keyword"
                 @keypress.enter="searchProduct"
                 placeholder="搜尋商品"
             >
@@ -25,9 +21,9 @@
                     </el-icon>
                 </template>
             </el-input>
-        </el-form>
-        <div class="w-1/4 flex justify-start">
-            <div v-if="storeMember.hasToken" class="space-x-3">
+        </div>
+        <div class="flex justify-end">
+            <div v-if="storeMember.hasToken" class="flex space-x-2">
                 <el-dropdown placement="bottom">
                     <el-button type="success" icon="User" circle />
                     <template #dropdown>
@@ -47,7 +43,7 @@
                     />
                 </el-badge>
             </div>
-            <div v-else class="space-x-3">
+            <div v-else class="flex space-x-2">
                 <el-button
                     type="warning"
                     @click="toLoginPage"
@@ -68,7 +64,7 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import toolNotify from "@/tool/Notify.js";
 import storeFeProduct from "@/store/frontend/product/Index.js";
@@ -79,10 +75,7 @@ const router = useRouter();
 const storeProduct = storeFeProduct();
 const storeMember = storeFeMember();
 const storeCart = storeFeCart();
-
-const form = reactive({
-    keyword: "",
-});
+const keyword = ref("");
 
 /**
  * 搜尋商品
@@ -90,7 +83,7 @@ const form = reactive({
  * @returns {void}
  */
 const searchProduct = () => {
-    storeProduct.keyword = form.keyword;
+    storeProduct.keyword = keyword.value;
     storeProduct.searchProduct();
 };
 
