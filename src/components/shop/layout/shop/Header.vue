@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import toolNotify from "@/tool/Notify.js";
 import storeFeProduct from "@/store/frontend/product/Index.js";
@@ -76,6 +76,13 @@ const storeProduct = storeFeProduct();
 const storeMember = storeFeMember();
 const storeCart = storeFeCart();
 const keyword = ref("");
+
+onMounted(() => {
+    // 登入時刷新購物車資料
+    if (storeMember.hasToken === true) {
+        storeCart.getMemberCartProductList();
+    }
+});
 
 /**
  * 搜尋商品
