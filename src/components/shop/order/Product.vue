@@ -29,7 +29,58 @@
 </template>
 
 <script setup>
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import storeFeCart from "@/store/frontend/cart/Index.js";
 import { formatNumber } from "@/tool/Str.js";
 
-const productList = defineModel();
+const route = useRoute();
+const storeCart = storeFeCart();
+const orderProductTotal = defineModel();
+const productList = ref([]);
+const cartIdList = route.query.cartIdList;
+
+onMounted(async () => {
+    const isGet = await getProductList();
+
+    if (isGet === false) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: "請重新選擇商品",
+        });
+
+        router.push({ name: "shopCart" });
+    }
+});
+
+/**
+ * 設定商品列表
+ *
+ * @returns {bool}
+ */
+const getProductList = async () => {
+    await storeCart.getMemberCartProductList();
+
+    let total = 0;
+    storeCart.memberData.forEach((cartProduct) => {
+        if (cartIdList.includes(cartProduct.cartId.toString()) === false) {
+            return;
+        }
+
+        if (cartProduct.quantity > cartProduct.productQuantity) {
+            return;
+        }
+
+        total += cartProduct.productPrice * cartProduct.quantity;
+        productList.value.push(cartProduct);
+    });
+
+    // 在迴圈中使用+=不會有加總效果，不確定問題，故先加總完成再賦值
+    orderProductTotal.value = total;
+
+    const isGet = cartIdList.length === productList.value.length;
+
+    return isGet;
+};
 </script>

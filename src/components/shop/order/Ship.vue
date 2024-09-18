@@ -5,7 +5,12 @@
         </template>
         <div class="space-y-2">
             <div class="flex flex-wrap space-x-2 space-y-1">
-                <el-radio :value="1" v-model="orderShipId" size="large">
+                <el-radio
+                    :value="1"
+                    v-model="orderShipId"
+                    size="large"
+                    @change="checkOrderShip"
+                >
                     宅配
                 </el-radio>
                 <el-form-item class="w-full max-w-96" :error="addressErrMsg">
@@ -18,16 +23,16 @@
                         @change="checkAddress"
                     >
                         <el-option
-                            v-for="(address, addressId) in memberAddressList"
+                            v-for="(address, id) in memberAddressList"
                             :label="address"
-                            :value="addressId"
+                            :value="id"
                         />
                     </el-select>
                 </el-form-item>
                 <el-button
                     v-if="orderShipId === 1"
                     type="primary"
-                    @click="setDialogStatus(true)"
+                    @click="showDialog = true"
                     link
                 >
                     新增地址
@@ -39,6 +44,7 @@
                     v-model="orderShipId"
                     size="large"
                     disabled
+                    @change="checkOrderShip"
                 >
                     超商取貨
                 </el-radio>
@@ -54,7 +60,7 @@
             <el-input v-model="newAddress" placeholder="請輸入地址" />
         </el-form-item>
         <template #footer>
-            <el-button @click="setDialogStatus(false)">取消</el-button>
+            <el-button @click="showDialog = false">取消</el-button>
             <el-button type="primary" @click="addMemberAddress">
                 送出
             </el-button>
@@ -66,19 +72,42 @@
 import { ref, onMounted } from "vue";
 import toolNotify from "@/tool/Notify.js";
 import * as apiMemberAddress from "@/api/shop/member/Address.js";
+import * as apiOrderShip from "@/api/shop/order/OrderShip.js";
 
 const orderShipId = defineModel("orderShipId");
+const orderShipPrice = defineModel("orderShipPrice");
 const address = defineModel("address");
 const addressErrMsg = defineModel("addressErrMsg");
 const addressId = ref();
 const memberAddressList = ref([]);
+const shipPriceList = ref([]);
 const showDialog = ref(false);
 const newAddress = ref("");
 const newAddressErrMsg = ref("");
 
 onMounted(() => {
+    // 取得會員地址列表
     getMemberAddressList();
+
+    // 取得運費列表
+    getShipPriceList();
 });
+
+/**
+ * 取得運費列表
+ *
+ * @returns {void}
+ */
+const getShipPriceList = async () => {
+    const response = await apiOrderShip.getOrderShipList();
+
+    response.data.orderShipList.forEach((orderShip) => {
+        const id = orderShip.orderShipId;
+        const price = orderShip.price;
+
+        shipPriceList.value[id] = price;
+    });
+};
 
 /**
  * 取得會員地址列表
@@ -90,10 +119,10 @@ const getMemberAddressList = async () => {
 
     memberAddressList.value = [];
     response.data.memberAddressList.forEach((memberAddress) => {
-        const addressId = memberAddress.memberAddressId;
+        const id = memberAddress.memberAddressId;
         const address = memberAddress.address;
 
-        memberAddressList.value[addressId] = address;
+        memberAddressList.value[id] = address;
     });
 };
 
@@ -123,24 +152,20 @@ const addMemberAddress = async () => {
 };
 
 /**
- * 設定Dialog狀態
- *
- * @param {bool} status 狀態
+ * 選取運送方式
  *
  * @returns {void}
  */
-const setDialogStatus = (status) => {
-    showDialog.value = status;
+const checkOrderShip = (orderShipId) => {
+    orderShipPrice.value = shipPriceList.value[orderShipId];
 };
 
 /**
  * 選取地址
  *
- * @param {int} addressId 地址ID
- *
  * @returns {void}
  */
-const checkAddress = (addressId) => {
-    address.value = memberAddressList.value[addressId];
+const checkAddress = () => {
+    address.value = memberAddressList.value[addressId.value];
 };
 </script>

@@ -9,19 +9,21 @@
             <div class="flex justify-between">
                 <div class="text-center text-xl">商品總額</div>
                 <div class="text-center text-xl text-red-600">
-                    ${{ formatNumber(productTotal) }}
+                    ${{ formatNumber(orderProductTotal) }}
                 </div>
             </div>
             <div class="flex justify-between">
                 <div class="text-center text-xl">運費</div>
-                <div class="text-center text-xl text-red-600">$80</div>
+                <div class="text-center text-xl text-red-600">
+                    ${{ formatNumber(orderShipPrice) }}
+                </div>
             </div>
         </div>
         <template #footer>
             <div class="flex justify-between">
                 <div class="text-center text-xl">預計結帳金額</div>
                 <div class="text-center text-xl text-red-600">
-                    ${{ formatNumber(productTotal + 80) }}
+                    ${{ formatNumber(orderProductTotal + orderShipPrice) }}
                 </div>
             </div>
         </template>
@@ -29,17 +31,8 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
 import { formatNumber } from "@/tool/Str.js";
 
-const productList = defineModel();
-
-const productTotal = computed(() => {
-    let total = 0;
-    productList.value.forEach((product) => {
-        total += product.productPrice * product.quantity;
-    });
-
-    return total;
-});
+const orderProductTotal = defineModel("orderProductTotal");
+const orderShipPrice = defineModel("orderShipPrice");
 </script>
