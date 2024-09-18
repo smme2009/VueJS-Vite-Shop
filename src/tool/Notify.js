@@ -28,6 +28,7 @@ const showNotify = (param) => {
         message: message,
         position: 'top-right',
         dangerouslyUseHTMLString: true, // 將傳入訊息判定為HTML
+        offset: 50,
     };
 
     if ((param.autoHide ?? true) == false) {
