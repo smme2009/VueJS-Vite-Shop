@@ -4,7 +4,7 @@ const router = {
     meta: {
         title: '訂單',
     },
-    component: () => import('@/components/shop/order/Index.vue'),
+    component: () => import('@/components/shop/order/add/Index.vue'),
 };
 
 export default router;

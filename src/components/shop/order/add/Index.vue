@@ -19,10 +19,10 @@
 </template>
 
 <script setup>
-import ship from "@/components/shop/order/Ship.vue";
-import payment from "@/components/shop/order/Payment.vue";
-import product from "@/components/shop/order/Product.vue";
-import total from "@/components/shop/order/Total.vue";
+import ship from "@/components/shop/order/add/Ship.vue";
+import payment from "@/components/shop/order/add/Payment.vue";
+import product from "@/components/shop/order/add/Product.vue";
+import total from "@/components/shop/order/add/Total.vue";
 import { ref, reactive } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import toolNotify from "@/tool/Notify.js";
