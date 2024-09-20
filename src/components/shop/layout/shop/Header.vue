@@ -10,6 +10,7 @@
         </div>
         <div class="flex-auto flex justify-center">
             <el-input
+                v-if="showSearchBotton"
                 class="w-[90%] max-w-96"
                 v-model="keyword"
                 @keypress.enter="searchProduct"
@@ -23,11 +24,16 @@
             </el-input>
         </div>
         <div class="flex justify-end">
-            <div v-if="storeMember.hasToken" class="flex space-x-2">
+            <div class="flex space-x-2">
                 <el-dropdown placement="bottom">
-                    <el-button type="success" icon="User" circle />
+                    <el-button
+                        :type="buttonType"
+                        icon="User"
+                        circle
+                        @click="toLoginPage"
+                    />
                     <template #dropdown>
-                        <el-dropdown-menu>
+                        <el-dropdown-menu v-if="storeMember.hasToken">
                             <el-dropdown-item @click="toOrderListPage">
                                 訂單管理
                             </el-dropdown-item>
@@ -39,23 +45,7 @@
                 </el-dropdown>
                 <el-badge :value="storeCart.memberQuantity">
                     <el-button
-                        type="success"
-                        @click="toCartPage"
-                        icon="ShoppingCart"
-                        circle
-                    />
-                </el-badge>
-            </div>
-            <div v-else class="flex space-x-2">
-                <el-button
-                    type="warning"
-                    @click="toLoginPage"
-                    icon="User"
-                    circle
-                />
-                <el-badge :value="storeCart.localQuantity">
-                    <el-button
-                        type="warning"
+                        :type="buttonType"
                         @click="toCartPage"
                         icon="ShoppingCart"
                         circle
@@ -67,18 +57,32 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
-import { useRouter } from "vue-router";
+import { ref, onMounted, computed } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import toolNotify from "@/tool/Notify.js";
 import storeFeProduct from "@/store/frontend/product/Index.js";
 import storeFeMember from "@/store/frontend/member/Index.js";
 import storeFeCart from "@/store/frontend/cart/Index.js";
 
+const route = useRoute();
 const router = useRouter();
 const storeProduct = storeFeProduct();
 const storeMember = storeFeMember();
 const storeCart = storeFeCart();
 const keyword = ref("");
+
+const showSearchBotton = computed(() => {
+    const showList = ["shopHome", "shopOrderList"];
+    const isShow = showList.includes(route.name);
+
+    return isShow;
+});
+
+const buttonType = computed(() => {
+    const type = storeMember.hasToken ? "success" : "warning";
+
+    return type;
+});
 
 onMounted(() => {
     // 登入時刷新購物車資料
@@ -103,7 +107,9 @@ const searchProduct = () => {
  * @returns {void}
  */
 const toLoginPage = () => {
-    router.push({ name: "shopLogin" });
+    if (storeMember.hasToken === false) {
+        router.push({ name: "shopLogin" });
+    }
 };
 
 /**
