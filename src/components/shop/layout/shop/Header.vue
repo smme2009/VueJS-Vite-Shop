@@ -28,6 +28,9 @@
                     <el-button type="success" icon="User" circle />
                     <template #dropdown>
                         <el-dropdown-menu>
+                            <el-dropdown-item @click="toOrderListPage">
+                                訂單管理
+                            </el-dropdown-item>
                             <el-dropdown-item @click="logout">
                                 登出
                             </el-dropdown-item>
@@ -110,6 +113,15 @@ const toLoginPage = () => {
  */
 const toCartPage = () => {
     router.push({ name: "shopCart" });
+};
+
+/**
+ * 跳轉至訂單列表頁
+ *
+ * @returns {void}
+ */
+const toOrderListPage = () => {
+    router.push({ name: "shopOrderList" });
 };
 
 /**
