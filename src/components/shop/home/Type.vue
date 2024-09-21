@@ -13,13 +13,12 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
-import storeFeProduct from "@/store/frontend/product/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import * as apiProductType from "@/api/shop/product/ProductType.js";
 
+const productTypeId = defineModel();
 const productTypeData = ref([]);
 const active = ref();
-const store = storeFeProduct();
 
 onMounted(function () {
     // 取得商品類型
@@ -44,10 +43,7 @@ const getProductTypeList = async () => {
         return;
     }
 
-    const productTypeList = response.data.productTypeList;
-
-    productTypeData.value = [];
-    productTypeList.forEach((item) => {
+    response.data.productTypeList.forEach((item) => {
         productTypeData.value.push({
             productTypeId: item.productTypeId,
             name: item.name,
@@ -63,7 +59,6 @@ const getProductTypeList = async () => {
  * @return {void}
  */
 const changeProductType = (tab) => {
-    store.productTypeId = tab.props.name;
-    store.searchProduct();
+    productTypeId.value = tab.props.name;
 };
 </script>
