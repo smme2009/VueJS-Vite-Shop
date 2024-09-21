@@ -73,7 +73,7 @@ const keyword = ref("");
 
 // 根據頁面判斷是否顯示搜尋列
 const needShowSearchBar = computed(() => {
-    const showList = ["shopHome"];
+    const showList = ["shopHome", "shopOrderList"];
     const needShow = showList.includes(route.name);
 
     return needShow;

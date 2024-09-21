@@ -74,16 +74,23 @@
 
 <script setup>
 import { ref, onMounted } from "vue";
+import storeFeSearch from "@/store/frontend/search/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import { formatNumber } from "@/tool/Str.js";
 import { getOrderPage as apiGetOrderPage } from "@/api/shop/order/Order.js";
 import * as apiOrderStatus from "@/api/shop/order/OrderStatus.js";
 
+const storeSearch = storeFeSearch();
 const page = ref(1);
-const orderStatusList = ref([]);
 const orderPage = ref([]);
+const orderStatusList = ref([]);
 
 onMounted(() => {
+    // 設定搜尋列
+    storeSearch.$reset();
+    storeSearch.setTitle("請輸入訂單編號");
+    storeSearch.setSearchFunction(() => getOrderPage(true));
+
     // 取得訂單分頁
     getOrderPage();
 
@@ -117,10 +124,15 @@ const getOrderStatusList = async () => {
 /**
  * 取得訂單分頁
  *
- * @requires {void}
+ * @param {bool} isReset 是否重置資料
+ *
+ * @return {void}
  */
-const getOrderPage = async () => {
-    const response = await apiGetOrderPage(page.value);
+const getOrderPage = async (isReset = false) => {
+    const oldData = orderPage.value;
+    const needPage = isReset === true ? 1 : page.value;
+    const keyword = storeSearch.keyword;
+    const response = await apiGetOrderPage(needPage, keyword);
 
     if (response.status === false) {
         toolNotify({
@@ -132,8 +144,9 @@ const getOrderPage = async () => {
         return;
     }
 
+    const pageData = [];
     response.data.orderPage.forEach((order) => {
-        orderPage.value.push({
+        pageData.push({
             code: order.code,
             createdTime: order.createdTime,
             orderShipName: order.orderShipName,
@@ -146,6 +159,8 @@ const getOrderPage = async () => {
         });
     });
 
-    page.value++;
+    // 若在起頭就根據isReset重設資料，畫面呈現的方式會不佳，所以統一放到結尾執行
+    orderPage.value = isReset === true ? pageData : oldData.concat(pageData);
+    page.value = pageData.length === 0 ? needPage : needPage + 1;
 };
 </script>
