@@ -81,13 +81,13 @@ const page = ref(1);
 const productPage = ref([]);
 
 onMounted(() => {
-    // 取得分頁資料
-    getProductPage();
-
     // 設定搜尋列
     storeSearch.$reset();
     storeSearch.setTitle("請輸入商品名稱");
     storeSearch.setSearchFunction(() => getProductPage(true));
+
+    // 取得分頁資料
+    getProductPage();
 
     // 監聽所選的商品類型並取得分頁資料
     watch(productTypeId, () => getProductPage(true));
