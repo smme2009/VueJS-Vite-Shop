@@ -32,5 +32,13 @@
                 <template #title>橫幅管理</template>
             </el-menu-item>
         </router-link>
+        <router-link :to="{ name: 'mgmtOrder' }">
+            <el-menu-item index="5">
+                <el-icon>
+                    <Tickets />
+                </el-icon>
+                <template #title>訂單管理</template>
+            </el-menu-item>
+        </router-link>
     </el-menu>
 </template>
