@@ -30,3 +30,24 @@ export const getOrderPage = async (page, keyword) => {
 
     return response;
 }
+
+/**
+ * 取得訂單
+ * 
+ * @param {int} orderId 
+ * 
+ * @returns {object} 
+ */
+export const getOrder = async (orderId) => {
+    const uri = `/backend/order/${orderId}`;
+
+    const param = {
+        method: 'get',
+        apiTarget: apiTarget,
+        uri: uri,
+    };
+
+    const response = await toolAjax(param);
+
+    return response;
+}

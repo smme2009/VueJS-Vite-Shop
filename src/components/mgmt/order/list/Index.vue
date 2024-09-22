@@ -37,7 +37,12 @@
                     <el-table-column prop="createTime" label="訂單成立時間" />
                     <el-table-column label="管理">
                         <template #default="scope">
-                            <el-link class="mr-2" type="primary" icon="Tickets">
+                            <el-link
+                                class="mr-2"
+                                type="primary"
+                                icon="Tickets"
+                                @click="toInfoPage(scope.row.orderId)"
+                            >
                                 訂單詳細
                             </el-link>
                         </template>
@@ -53,12 +58,14 @@
 <script setup>
 import page from "@/components/mgmt/public/page/Index.vue";
 import { ref, reactive, watch, onMounted } from "vue";
+import { useRouter } from "vue-router";
 import storeBePage from "@/store/backend/page/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import { getDateTime } from "@/tool/Time.js";
 import { formatNumber } from "@/tool/Str.js";
 import * as apiOrder from "@/api/mgmt/order/Order.js";
 
+const router = useRouter();
 const store = storeBePage();
 const tableData = ref([]);
 
@@ -111,6 +118,7 @@ const getOrderData = async () => {
     tableData.value = [];
     orderPage.data.forEach((item) => {
         tableData.value.push({
+            orderId: item.orderId,
             code: item.code,
             createTime: getDateTime(item.createTime),
             orderStatusName: item.orderStatusName,
@@ -122,5 +130,23 @@ const getOrderData = async () => {
 
     // 設定資料總數
     store.dataTotal = orderPage.total;
+};
+
+/**
+ * 跳轉至訂單資訊頁面
+ *
+ * @param {int} orderId 訂單ID
+ *
+ * @returns {void}
+ */
+const toInfoPage = (orderId) => {
+    const param = {
+        orderId: orderId,
+    };
+
+    router.push({
+        name: "mgmtOrderInfo",
+        params: param,
+    });
 };
 </script>
