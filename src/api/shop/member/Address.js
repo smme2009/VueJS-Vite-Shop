@@ -9,7 +9,7 @@ const apiTarget = 'shop';
  * @returns {object} 
  */
 export const getMemberAddressList = async () => {
-    const uri = '/frontend/member/address';
+    const uri = '/shop/member/address';
 
     const param = {
         method: 'get',
@@ -30,7 +30,7 @@ export const getMemberAddressList = async () => {
  * @returns {object}
  */
 export const addMemberAddress = async (address) => {
-    const uri = '/frontend/member/address';
+    const uri = '/shop/member/address';
 
     const data = {
         address: address,
@@ -56,7 +56,7 @@ export const addMemberAddress = async (address) => {
  * @returns {object} 
  */
 export const deleteCartProduct = async (cartIdList) => {
-    const uri = '/frontend/cart';
+    const uri = '/shop/cart';
 
     const data = {
         cartIdList: cartIdList,

@@ -11,7 +11,7 @@ const apiTarget = 'shop';
  * @returns {object} 
  */
 export const register = async (memberData) => {
-    const uri = '/frontend/register';
+    const uri = '/shop/register';
 
     const param = {
         method: 'post',

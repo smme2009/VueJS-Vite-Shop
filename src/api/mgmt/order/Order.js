@@ -12,7 +12,7 @@ const apiTarget = 'mgmt';
  * @returns {object} 
  */
 export const getOrderPage = async (page, keyword) => {
-    const uri = '/backend/order';
+    const uri = '/mgmt/order';
 
     const data = {
         page: page,
@@ -39,7 +39,7 @@ export const getOrderPage = async (page, keyword) => {
  * @returns {object} 
  */
 export const getOrder = async (orderId) => {
-    const uri = `/backend/order/${orderId}`;
+    const uri = `/mgmt/order/${orderId}`;
 
     const param = {
         method: 'get',

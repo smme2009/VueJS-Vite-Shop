@@ -9,7 +9,7 @@ const apiTarget = 'mgmt';
  * @returns {object} 
  */
 export const getProductStockTypeList = async () => {
-    const uri = '/backend/product/stock/type';
+    const uri = '/mgmt/product/stock/type';
 
     const param = {
         method: 'get',

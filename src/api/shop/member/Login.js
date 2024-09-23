@@ -12,7 +12,7 @@ const apiTarget = 'shop';
  * @returns {string} 
  */
 export const login = async (account, password) => {
-    const uri = '/frontend/login';
+    const uri = '/shop/login';
 
     const data = {
         account: account,

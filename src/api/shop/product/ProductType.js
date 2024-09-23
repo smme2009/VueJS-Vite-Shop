@@ -9,7 +9,7 @@ const apiTarget = 'shop';
  * @returns {object} 
  */
 export const getProductTypeList = async () => {
-    const uri = '/frontend/product/type';
+    const uri = '/shop/product/type';
 
     const param = {
         method: 'get',

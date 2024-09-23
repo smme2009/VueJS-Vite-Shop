@@ -12,7 +12,7 @@ const apiTarget = 'mgmt';
  * @returns {string} 
  */
 export const login = async (account, password) => {
-    const uri = '/backend/login';
+    const uri = '/mgmt/login';
 
     const data = {
         account: account,
