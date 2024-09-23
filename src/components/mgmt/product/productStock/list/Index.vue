@@ -138,12 +138,7 @@ const getProductStockData = async () => {
     );
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 
@@ -168,12 +163,7 @@ const getProduct = async () => {
     const response = await apiProduct.getProduct(productId);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 

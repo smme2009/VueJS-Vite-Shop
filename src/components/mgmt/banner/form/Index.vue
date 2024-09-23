@@ -120,12 +120,7 @@ const uploadPhoto = async (data) => {
         photoUrl.value = fileInfo.url;
         form.photoFileId = fileInfo.fileId;
     } else {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-            autoHide: false,
-        });
+        toolNotify("error", response.message);
     }
 };
 
@@ -145,22 +140,11 @@ const saveBanner = async () => {
     }
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-            autoHide: false,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
-
+    toolNotify("success", response.message);
     toListPage();
 };
 
@@ -173,14 +157,8 @@ const getBanner = async () => {
     const response = await apiBanner.getBanner(bannerId);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         toListPage();
-
         return;
     }
 

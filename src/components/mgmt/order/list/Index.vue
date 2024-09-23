@@ -103,12 +103,7 @@ const getOrderData = async () => {
     const response = await apiOrder.getOrderPage(store.nowPage, form.keyword);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 

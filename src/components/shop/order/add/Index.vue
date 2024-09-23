@@ -52,11 +52,7 @@ const addOrder = async () => {
     const response = await apiAddOrder(form);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
+        toolNotify("error", response.message);
 
         response.data.forEach((error) => {
             formErrMsg.value[error.name] = error.message.join("、");
@@ -65,12 +61,7 @@ const addOrder = async () => {
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: "成功新增訂單",
-    });
-
+    toolNotify("success", "成功新增訂單");
     router.push({ name: "shopCart" });
 };
 </script>

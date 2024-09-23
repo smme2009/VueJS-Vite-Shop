@@ -131,24 +131,12 @@ const editProductTypeStatus = async (productTypeId, status) => {
     );
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-            autoHide: false,
-        });
-
-        // 編輯失敗後重新刷新列表
-        getProductTypeData();
-
+        toolNotify("error", response.message);
+        getProductTypeData(); // 編輯失敗後重新刷新列表
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
+    toolNotify("success", response.message);
 };
 
 /**
@@ -168,23 +156,12 @@ const deleteProductType = async (productTypeId) => {
             );
 
             if (response.status === false) {
-                toolNotify({
-                    type: "error",
-                    title: "通知",
-                    message: response.message,
-                });
-
+                toolNotify("error", response.message);
                 return;
             }
 
-            toolNotify({
-                type: "success",
-                title: "通知",
-                message: response.message,
-            });
-
-            // 刪除成功後重新刷新列表
-            getProductTypeData();
+            toolNotify("success", response.message);
+            getProductTypeData(); // 刪除成功後重新刷新列表
         },
     };
 
@@ -230,12 +207,7 @@ const getProductTypeData = async () => {
     );
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 

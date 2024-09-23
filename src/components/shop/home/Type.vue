@@ -34,12 +34,7 @@ const getProductTypeList = async () => {
     const response = await apiProductType.getProductTypeList();
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 

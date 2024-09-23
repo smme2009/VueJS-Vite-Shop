@@ -150,24 +150,12 @@ const editProductStatus = async (productId, status) => {
     const response = await apiProduct.editProductStatus(productId, status);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-            autoHide: false,
-        });
-
-        // 編輯失敗後重新刷新列表
-        getProductData();
-
+        toolNotify("error", response.message);
+        getProductData(); // 編輯失敗後重新刷新列表
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
+    toolNotify("success", response.message);
 };
 
 /**
@@ -185,23 +173,12 @@ const deleteProduct = async (productId) => {
             const response = await apiProduct.deleteProduct(productId);
 
             if (response.status === false) {
-                toolNotify({
-                    type: "error",
-                    title: "通知",
-                    message: response.message,
-                });
-
+                toolNotify("error", response.message);
                 return;
             }
 
-            toolNotify({
-                type: "success",
-                title: "通知",
-                message: response.message,
-            });
-
-            // 刪除成功後重新刷新列表
-            getProductData();
+            toolNotify("success", response.message);
+            getProductData(); // 刪除成功後重新刷新列表
         },
     };
 
@@ -265,12 +242,7 @@ const getProductData = async () => {
     );
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 

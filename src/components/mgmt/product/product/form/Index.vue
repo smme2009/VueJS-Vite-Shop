@@ -153,13 +153,7 @@ const uploadPhoto = async (data) => {
     const response = await apiProduct.uploadProductPhoto(data.file);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-            autoHide: false,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 
@@ -185,22 +179,11 @@ const saveProduct = async () => {
     }
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-            autoHide: false,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
-
+    toolNotify("success", response.message);
     toListPage();
 };
 
@@ -213,14 +196,8 @@ const getProduct = async () => {
     const response = await apiProduct.getProduct(productId);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         toListPage();
-
         return;
     }
 
@@ -270,14 +247,8 @@ const getProductType = async (keyword) => {
     const response = await apiProductType.getProductTypePage(1, keyword);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         productTypeLoading.value = false;
-
         return;
     }
 

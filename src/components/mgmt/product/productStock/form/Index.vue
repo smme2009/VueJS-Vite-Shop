@@ -72,22 +72,11 @@ const saveProductStock = async () => {
     const response = await apiProductStock.addProductStock(productId, form);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-            autoHide: false,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
-
+    toolNotify("success", response.message);
     toListPage();
 };
 
@@ -118,14 +107,8 @@ const getProductStockType = async () => {
     const response = await apiProductStockType.getProductStockTypeList();
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         productStockTypeLoading.value = false;
-
         return;
     }
 

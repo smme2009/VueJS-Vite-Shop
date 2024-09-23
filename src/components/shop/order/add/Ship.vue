@@ -139,11 +139,7 @@ const addMemberAddress = async () => {
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
+    toolNotify("success", response.message);
 
     showDialog.value = false;
     newAddress.value = "";

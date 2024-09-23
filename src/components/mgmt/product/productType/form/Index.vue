@@ -70,22 +70,11 @@ const saveProductType = async () => {
     }
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-            autoHide: false,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
-
+    toolNotify("success", response.message);
     toListPage();
 };
 
@@ -98,14 +87,8 @@ const getProductType = async () => {
     const response = await apiProductType.getProductType(productTypeId);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         toListPage();
-
         return;
     }
 

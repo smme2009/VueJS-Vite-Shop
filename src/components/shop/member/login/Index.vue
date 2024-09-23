@@ -79,11 +79,7 @@ const login = async () => {
 
     const response = await apiLogin(form.account, form.password);
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "標題",
-            message: response.message,
-        });
+        toolNotify("error", response.message);
 
         response.data.forEach((error) => {
             formErrMsg.value[error.name] = error.message.join("、");
@@ -92,21 +88,12 @@ const login = async () => {
         return;
     }
 
-    // 設定JWT Token
-    storeMember.setJwtToken(response.data.jwtToken);
-
-    // 將本地購物車與會員購物車合併
-    storeCart.editMemberCartProductFormLocal();
-
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
+    storeMember.setJwtToken(response.data.jwtToken); // 設定JWT Token
+    storeCart.editMemberCartProductFormLocal(); // 將本地購物車與會員購物車合併
+    toolNotify("success", response.message);
 
     const pushPageName = route.query.pushPageName;
     const name = pushPageName === undefined ? "shopHome" : pushPageName;
-
     router.push({ name: name });
 };
 

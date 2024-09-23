@@ -44,12 +44,7 @@ const getBannerList = async () => {
     const response = await apiBanner.getBannerList();
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 

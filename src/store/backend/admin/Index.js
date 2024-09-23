@@ -26,23 +26,13 @@ const option = {
             const response = await apiLogin(account, password);
 
             if (response.status === false) {
-                toolNotify({
-                    type: "error",
-                    title: "通知",
-                    message: response.message,
-                    autoHide: false,
-                });
-
+                toolNotify("error", response.message);
                 return false;
             }
 
             this.jwtToken = response.data.jwtToken;
 
-            toolNotify({
-                type: "success",
-                title: "通知",
-                message: response.message,
-            });
+            toolNotify("success", response.message);
 
             return true;
         },

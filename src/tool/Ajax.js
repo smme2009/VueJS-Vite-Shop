@@ -51,22 +51,11 @@ const ajax = async (param) => {
         }).catch((e) => {
             switch (e.response.status) {
                 case 401: // 無權限時強制跳轉登入頁
-                    toolNotify({
-                        type: "error",
-                        title: "通知",
-                        message: "請重新登入",
-                        autoHide: false,
-                    });
-
-                    router.push({ name: `${param.apiTarget}Login` })
-
+                    toolNotify("error", "請重新登入");
+                    router.push({ name: `${param.apiTarget}Login` });
                     break;
                 case 500: // 系統錯誤統一處理
-                    toolNotify({
-                        type: "error",
-                        title: "通知",
-                        message: "系統異常",
-                    });
+                    toolNotify("error", "系統異常");
 
                     response = {
                         status: false,

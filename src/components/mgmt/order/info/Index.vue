@@ -99,14 +99,8 @@ const getOrder = async () => {
     const response = await apiOrder.getOrder(orderId);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         toListPage();
-
         return;
     }
 

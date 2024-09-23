@@ -135,24 +135,12 @@ const editBannerStatus = async (bannerId, status) => {
     const response = await apiBanner.editBannerStatus(bannerId, status);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-            autoHide: false,
-        });
-
-        // 編輯失敗後重新刷新列表
-        getBannerData();
-
+        toolNotify("error", response.message);
+        getBannerData(); //失敗後重新刷新資料
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
+    toolNotify("success", response.message);
 };
 
 /**
@@ -170,23 +158,12 @@ const deleteBanner = async (bannerId) => {
             const response = await apiBanner.deleteBanner(bannerId);
 
             if (response.status === false) {
-                toolNotify({
-                    type: "error",
-                    title: "通知",
-                    message: response.message,
-                });
-
+                toolNotify("error", response.message);
                 return;
             }
 
-            toolNotify({
-                type: "success",
-                title: "通知",
-                message: response.message,
-            });
-
-            // 刪除成功後重新刷新列表
-            getBannerData();
+            toolNotify("success", response.message);
+            getBannerData(); // 刪除成功後重新刷新列表
         },
     };
 
@@ -229,12 +206,7 @@ const getBannerData = async () => {
     const response = await apiBanner.getBannerPage(store.nowPage, form.keyword);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 

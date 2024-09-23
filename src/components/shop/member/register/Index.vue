@@ -119,12 +119,7 @@ const register = async () => {
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
-
+    toolNotify("success", response.message);
     router.push({ name: "shopLogin" });
 };
 
