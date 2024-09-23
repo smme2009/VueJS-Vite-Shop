@@ -2,6 +2,7 @@ import Login from '@/router/shop/member/Login.js';
 import Register from '@/router/shop/member/Register.js';
 import Product from '@/router/shop/product/Product.js';
 import Cart from '@/router/shop/cart/Cart.js';
+import Order from '@/router/shop/order/Order.js';
 
 const router = {
     path: 'shop',
@@ -32,6 +33,7 @@ const router = {
                         },
                         Product,
                         Cart,
+                        Order,
                     ],
                 },
             ],

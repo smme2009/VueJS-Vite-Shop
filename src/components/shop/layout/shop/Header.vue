@@ -1,6 +1,6 @@
 <template>
     <div class="h-full flex items-center">
-        <div class="w-1/4 flex justify-end">
+        <div class="flex justify-start">
             <router-link
                 class="text-3xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-sky-500"
                 :to="{ name: 'shopHome' }"
@@ -8,30 +8,35 @@
                 COORD
             </router-link>
         </div>
-        <el-form
-            :model="form"
-            class="w-2/4 flex justify-center"
-            @submit.prevent
-        >
+        <div class="flex-auto flex justify-center">
             <el-input
-                class="!w-1/2"
-                v-model="form.keyword"
-                @keypress.enter="searchProduct"
-                placeholder="搜尋商品"
+                v-if="needShowSearchBar"
+                class="w-[90%] max-w-96"
+                v-model="keyword"
+                @keypress.enter="searchData"
+                :placeholder="storeSearch.title"
             >
                 <template #suffix>
-                    <el-icon @click="searchProduct">
+                    <el-icon @click="searchData">
                         <Search />
                     </el-icon>
                 </template>
             </el-input>
-        </el-form>
-        <div class="w-1/4 flex justify-start">
-            <div v-if="storeMember.hasToken" class="space-x-3">
+        </div>
+        <div class="flex justify-end">
+            <div class="flex space-x-2">
                 <el-dropdown placement="bottom">
-                    <el-button type="success" icon="User" circle />
+                    <el-button
+                        :type="buttonType"
+                        icon="User"
+                        circle
+                        @click="toLoginPage"
+                    />
                     <template #dropdown>
-                        <el-dropdown-menu>
+                        <el-dropdown-menu v-if="storeMember.hasToken">
+                            <el-dropdown-item @click="toOrderListPage">
+                                訂單管理
+                            </el-dropdown-item>
                             <el-dropdown-item @click="logout">
                                 登出
                             </el-dropdown-item>
@@ -40,23 +45,7 @@
                 </el-dropdown>
                 <el-badge :value="storeCart.memberQuantity">
                     <el-button
-                        type="success"
-                        @click="toCartPage"
-                        icon="ShoppingCart"
-                        circle
-                    />
-                </el-badge>
-            </div>
-            <div v-else class="space-x-3">
-                <el-button
-                    type="warning"
-                    @click="toLoginPage"
-                    icon="User"
-                    circle
-                />
-                <el-badge :value="storeCart.localQuantity">
-                    <el-button
-                        type="warning"
+                        :type="buttonType"
                         @click="toCartPage"
                         icon="ShoppingCart"
                         circle
@@ -68,30 +57,50 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
-import { useRouter } from "vue-router";
+import { ref, onMounted, computed } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import toolNotify from "@/tool/Notify.js";
-import storeFeProduct from "@/store/frontend/product/Index.js";
+import storeFeSearch from "@/store/frontend/search/Index.js";
 import storeFeMember from "@/store/frontend/member/Index.js";
 import storeFeCart from "@/store/frontend/cart/Index.js";
 
+const route = useRoute();
 const router = useRouter();
-const storeProduct = storeFeProduct();
+const storeSearch = storeFeSearch();
 const storeMember = storeFeMember();
 const storeCart = storeFeCart();
+const keyword = ref("");
 
-const form = reactive({
-    keyword: "",
+// 根據頁面判斷是否顯示搜尋列
+const needShowSearchBar = computed(() => {
+    const showList = ["shopHome", "shopOrderList"];
+    const needShow = showList.includes(route.name);
+
+    return needShow;
+});
+
+// 根據登入狀態顯示按鍵顏色
+const buttonType = computed(() => {
+    const type = storeMember.hasToken ? "success" : "warning";
+
+    return type;
+});
+
+onMounted(() => {
+    // 登入時刷新購物車資料
+    if (storeMember.hasToken === true) {
+        storeCart.getMemberCartProductList();
+    }
 });
 
 /**
- * 搜尋商品
+ * 搜尋資料
  *
  * @returns {void}
  */
-const searchProduct = () => {
-    storeProduct.keyword = form.keyword;
-    storeProduct.searchProduct();
+const searchData = () => {
+    storeSearch.setKeyword(keyword.value);
+    storeSearch.searchFunction();
 };
 
 /**
@@ -100,7 +109,9 @@ const searchProduct = () => {
  * @returns {void}
  */
 const toLoginPage = () => {
-    router.push({ name: "shopLogin" });
+    if (storeMember.hasToken === false) {
+        router.push({ name: "shopLogin" });
+    }
 };
 
 /**
@@ -110,6 +121,15 @@ const toLoginPage = () => {
  */
 const toCartPage = () => {
     router.push({ name: "shopCart" });
+};
+
+/**
+ * 跳轉至訂單列表頁
+ *
+ * @returns {void}
+ */
+const toOrderListPage = () => {
+    router.push({ name: "shopOrderList" });
 };
 
 /**

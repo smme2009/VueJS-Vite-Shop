@@ -78,7 +78,7 @@
             <template #header>
                 <div class="flex justify-between">
                     <div class="text-center text-2xl font-bold">結帳明細</div>
-                    <el-button type="primary" icon="Goods">
+                    <el-button type="primary" icon="Goods" @click="toOrderPage">
                         結帳({{ count }})
                     </el-button>
                 </div>
@@ -113,7 +113,7 @@ import { useRouter } from "vue-router";
 import storeFeMember from "@/store/frontend/member/Index.js";
 import storeFeCart from "@/store/frontend/cart/Index.js";
 import toolNotify from "@/tool/Notify.js";
-import { confirm } from "@/tool/Message.js";
+import toolMessage from "@/tool/Message.js";
 import { formatNumber } from "@/tool/Str.js";
 
 const router = useRouter();
@@ -138,6 +138,8 @@ onMounted(() => {
 
         return;
     }
+
+    storeCart.getMemberCartProductList();
 });
 
 /**
@@ -182,21 +184,27 @@ const editCartProductQuantity = async (productId, quantity) => {
  * @returns {void}
  */
 const deleteCartProduct = (cartId) => {
-    confirm("確定要刪除商品嗎?", async () => {
-        const isDelete = await storeCart.deleteMemberCartProduct(cartId);
-        if (isDelete === false) {
-            return;
-        }
+    const param = {
+        type: "confirm",
+        message: "確定要刪除商品嗎?",
+        agree: async () => {
+            const isDelete = await storeCart.deleteMemberCartProduct(cartId);
+            if (isDelete === false) {
+                return;
+            }
 
-        const index = cartIdList.value.indexOf(cartId);
-        if (index === -1) {
-            return;
-        }
+            const index = cartIdList.value.indexOf(cartId);
+            if (index === -1) {
+                return;
+            }
 
-        cartIdList.value.splice(index, 1);
-        setTotal();
-        setAllCheckStatus();
-    });
+            cartIdList.value.splice(index, 1);
+            setTotal();
+            setAllCheckStatus();
+        },
+    };
+
+    toolMessage(param);
 };
 
 /**
@@ -205,19 +213,25 @@ const deleteCartProduct = (cartId) => {
  * @returns {void}
  */
 const clearCart = async () => {
-    confirm("確定要清空購物車嗎?", async () => {
-        const idList = [];
-        storeCart.memberData.forEach((product) => {
-            idList.push(product.cartId);
-        });
+    const param = {
+        type: "confirm",
+        message: "確定要清空購物車嗎?",
+        agree: async () => {
+            const idList = [];
+            storeCart.memberData.forEach((product) => {
+                idList.push(product.cartId);
+            });
 
-        const isDelete = await storeCart.deleteMemberCartProduct(idList);
-        if (isDelete === true) {
-            cartIdList.value = [];
-            setTotal();
-            setAllCheckStatus();
-        }
-    });
+            const isDelete = await storeCart.deleteMemberCartProduct(idList);
+            if (isDelete === true) {
+                cartIdList.value = [];
+                setTotal();
+                setAllCheckStatus();
+            }
+        },
+    };
+
+    toolMessage(param);
 };
 
 const checkProduct = () => {
@@ -273,5 +287,31 @@ const setAllCheckStatus = () => {
 
     checkAllStatus.value = hasProduct && cartLength === memberQuantity;
     indeterminate.value = hasProduct && cartLength < memberQuantity;
+};
+
+/**
+ * 到訂單頁面
+ *
+ * @returns {void}
+ */
+const toOrderPage = () => {
+    if (cartIdList.value.length === 0) {
+        toolNotify({
+            type: "error",
+            title: "通知",
+            message: "請選擇商品",
+        });
+
+        return;
+    }
+
+    const query = {
+        cartIdList: cartIdList.value,
+    };
+
+    router.push({
+        name: "shopOrder",
+        query: query,
+    });
 };
 </script>
