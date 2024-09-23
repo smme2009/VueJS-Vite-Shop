@@ -17,7 +17,7 @@
                         {{ order.code }}
                     </el-descriptions-item>
                     <el-descriptions-item label="訂購時間">
-                        {{ order.createdTime }}
+                        {{ order.createTime }}
                     </el-descriptions-item>
                     <el-descriptions-item label="運送方式">
                         {{ order.orderShipName }}
@@ -29,13 +29,13 @@
                         {{ order.address }}
                     </el-descriptions-item>
                     <el-descriptions-item label="運費">
-                        ${{ formatNumber(order.orderShipPrice) }}
+                        ${{ order.orderShipPrice }}
                     </el-descriptions-item>
                     <el-descriptions-item label="商品總額">
-                        ${{ formatNumber(order.orderProductTotal) }}
+                        ${{ order.orderProductTotal }}
                     </el-descriptions-item>
                     <el-descriptions-item label="訂單總額">
-                        ${{ formatNumber(order.orderTotal) }}
+                        ${{ order.orderTotal }}
                     </el-descriptions-item>
                 </el-descriptions>
             </el-card>
