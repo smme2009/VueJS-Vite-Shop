@@ -7,7 +7,7 @@
                 </div>
             </template>
             <el-form :model="form" label-width="auto">
-                <el-form-item label="商品名稱">
+                <el-form-item :error="formErrMsg.name" label="商品名稱">
                     <el-input
                         v-model="form.name"
                         placeholder="請輸入商品名稱"
@@ -16,7 +16,7 @@
                 <el-form-item v-if="photoUrl" label="預覽照片">
                     <el-image class="w-32 h-32" :src="photoUrl" fit="fill" />
                 </el-form-item>
-                <el-form-item label="商品照片">
+                <el-form-item :error="formErrMsg.photoFileId" label="商品照片">
                     <el-upload
                         :show-file-list="false"
                         :http-request="uploadPhoto"
@@ -31,7 +31,10 @@
                         </template>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="商品類型">
+                <el-form-item
+                    :error="formErrMsg.productTypeId"
+                    label="商品類型"
+                >
                     <el-select
                         class="!w-1/4"
                         v-model="form.productTypeId"
@@ -51,13 +54,16 @@
                         />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商品價格">
+                <el-form-item :error="formErrMsg.price" label="商品價格">
                     <el-input-number v-model="form.price" min="0" />
                 </el-form-item>
-                <el-form-item label="商品數量">
+                <el-form-item :error="formErrMsg.quantity" label="商品數量">
                     <el-input-number v-model="form.quantity" min="0" />
                 </el-form-item>
-                <el-form-item label="商品上架時間">
+                <el-form-item
+                    :error="formErrMsg.startTime"
+                    label="商品上架時間"
+                >
                     <el-date-picker
                         v-model="form.startTime"
                         type="datetime"
@@ -66,7 +72,7 @@
                         :value-format="timeFormat"
                     />
                 </el-form-item>
-                <el-form-item label="商品下架時間">
+                <el-form-item :error="formErrMsg.endTime" label="商品下架時間">
                     <el-date-picker
                         v-model="form.endTime"
                         type="datetime"
@@ -75,7 +81,7 @@
                         :value-format="timeFormat"
                     />
                 </el-form-item>
-                <el-form-item label="商品介紹">
+                <el-form-item :error="formErrMsg.description" label="商品介紹">
                     <el-input
                         v-model="form.description"
                         rows="10"
@@ -83,12 +89,12 @@
                         placeholder="請輸入商品介紹"
                     />
                 </el-form-item>
-                <el-form-item label="商品自訂頁面">
+                <el-form-item :error="formErrMsg.pageHtml" label="商品自訂頁面">
                     <div class="w-full">
                         <editor v-model="form.pageHtml" />
                     </div>
                 </el-form-item>
-                <el-form-item label="狀態">
+                <el-form-item :error="formErrMsg.status" label="狀態">
                     <el-switch v-model="form.status" />
                 </el-form-item>
             </el-form>
@@ -120,6 +126,7 @@ const photoUrl = ref("");
 const timeFormat = ref("YYYY-MM-DD HH:mm:ss");
 const productType = ref([]);
 const productTypeLoading = ref(false);
+const formErrMsg = ref({});
 const productId = route.params.productId;
 
 const form = reactive({
@@ -178,7 +185,14 @@ const saveProduct = async () => {
         response = await apiProduct.addProduct(form);
     }
 
+    formErrMsg.value = {};
     if (response.status === false) {
+        const errorList = response.data.errorList ?? [];
+
+        errorList.forEach((error) => {
+            formErrMsg.value[error.name] = error.message.join("、");
+        });
+
         toolNotify("error", response.message);
         return;
     }
