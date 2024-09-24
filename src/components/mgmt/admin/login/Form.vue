@@ -3,7 +3,14 @@
         <el-card class="w-96 !rounded-lg">
             <template #header>
                 <div class="card-header">
-                    <span>登入</span>
+                    <div class="flex justify-center">
+                        <router-link
+                            class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-sky-500"
+                            :to="{ name: 'mgmtLogin' }"
+                        >
+                            COORD
+                        </router-link>
+                    </div>
                 </div>
             </template>
             <el-form-item label="帳號" :error="formErrMsg.account">
