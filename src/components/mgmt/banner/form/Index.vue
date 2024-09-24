@@ -7,7 +7,7 @@
                 </div>
             </template>
             <el-form :model="form" label-width="auto">
-                <el-form-item label="橫幅名稱">
+                <el-form-item :error="formErrMsg.name" label="橫幅名稱">
                     <el-input
                         v-model="form.name"
                         placeholder="請輸入橫幅名稱"
@@ -16,7 +16,7 @@
                 <el-form-item v-if="photoUrl" label="預覽照片">
                     <el-image class="h-72" :src="photoUrl" fit="fill" />
                 </el-form-item>
-                <el-form-item label="橫幅照片">
+                <el-form-item :error="formErrMsg.photoFileId" label="橫幅照片">
                     <el-upload
                         :show-file-list="false"
                         :http-request="uploadPhoto"
@@ -31,10 +31,13 @@
                         </template>
                     </el-upload>
                 </el-form-item>
-                <el-form-item label="網址">
+                <el-form-item :error="formErrMsg.url" label="網址">
                     <el-input v-model="form.url" placeholder="請輸入網址" />
                 </el-form-item>
-                <el-form-item label="橫幅上架時間">
+                <el-form-item
+                    :error="formErrMsg.startTime"
+                    label="橫幅上架時間"
+                >
                     <el-date-picker
                         v-model="form.startTime"
                         type="datetime"
@@ -43,7 +46,7 @@
                         :value-format="timeFormat"
                     />
                 </el-form-item>
-                <el-form-item label="橫幅下架時間">
+                <el-form-item :error="formErrMsg.endTime" label="橫幅下架時間">
                     <el-date-picker
                         v-model="form.endTime"
                         type="datetime"
@@ -52,10 +55,10 @@
                         :value-format="timeFormat"
                     />
                 </el-form-item>
-                <el-form-item label="排序">
+                <el-form-item :error="formErrMsg.sort" label="排序">
                     <el-input-number v-model="form.sort" min="1" max="100" />
                 </el-form-item>
-                <el-form-item label="狀態">
+                <el-form-item :error="formErrMsg.status" label="狀態">
                     <el-switch v-model="form.status" />
                 </el-form-item>
             </el-form>
@@ -80,6 +83,11 @@ import * as toolTime from "@/tool/Time.js";
 
 const route = useRoute();
 const router = useRouter();
+const formTitle = ref(route.meta.title);
+const photoUrl = ref("");
+const timeFormat = ref("YYYY-MM-DD HH:mm:ss");
+const formErrMsg = ref({});
+const bannerId = route.params.bannerId;
 
 const form = reactive({
     name: "",
@@ -90,12 +98,6 @@ const form = reactive({
     sort: 1,
     status: false,
 });
-
-const formTitle = ref(route.meta.title);
-const photoUrl = ref("");
-const timeFormat = ref("YYYY-MM-DD HH:mm:ss");
-
-const bannerId = route.params.bannerId;
 
 onMounted(() => {
     // 若為編輯則取得橫幅資料
@@ -139,7 +141,14 @@ const saveBanner = async () => {
         response = await apiBanner.addBanner(form);
     }
 
+    formErrMsg.value = {};
     if (response.status === false) {
+        const errorList = response.data.errorList ?? [];
+
+        errorList.forEach((error) => {
+            formErrMsg.value[error.name] = error.message.join("、");
+        });
+
         toolNotify("error", response.message);
         return;
     }
