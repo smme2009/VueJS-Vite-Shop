@@ -7,7 +7,10 @@
                 </div>
             </template>
             <el-form :model="form" label-width="auto">
-                <el-form-item label="商品庫存單類型">
+                <el-form-item
+                    :error="formErrMsg.productStockTypeId"
+                    label="商品庫存單類型"
+                >
                     <el-select
                         class="!w-1/4"
                         v-model="form.productStockTypeId"
@@ -27,7 +30,7 @@
                         />
                     </el-select>
                 </el-form-item>
-                <el-form-item label="商品數量">
+                <el-form-item :error="formErrMsg.quantity" label="商品數量">
                     <el-input-number v-model="form.quantity" min="0" />
                 </el-form-item>
             </el-form>
@@ -52,16 +55,15 @@ import toolNotify from "@/tool/Notify.js";
 
 const route = useRoute();
 const router = useRouter();
+const productStockType = ref([]);
+const productStockTypeLoading = ref(false);
+const productId = route.params.productId;
+const formErrMsg = ref({});
 
 const form = reactive({
     productStockTypeId: null,
     quantity: 0,
 });
-
-const productStockType = ref([]);
-const productStockTypeLoading = ref(false);
-
-const productId = route.params.productId;
 
 /**
  * 儲存商品庫存單
@@ -71,7 +73,14 @@ const productId = route.params.productId;
 const saveProductStock = async () => {
     const response = await apiProductStock.addProductStock(productId, form);
 
+    formErrMsg.value = {};
     if (response.status === false) {
+        const errorList = response.data.errorList ?? [];
+
+        errorList.forEach((error) => {
+            formErrMsg.value[error.name] = error.message.join("、");
+        });
+
         toolNotify("error", response.message);
         return;
     }
