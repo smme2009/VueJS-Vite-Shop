@@ -95,6 +95,7 @@ import { register as apiRegister } from "@/api/shop/member/Register.js";
 import toolNotify from "@/tool/Notify.js";
 
 const router = useRouter();
+const formErrMsg = ref({});
 
 const form = reactive({
     account: "",
@@ -104,18 +105,18 @@ const form = reactive({
     phone: "",
 });
 
-const formErrMsg = ref({});
-
 const register = async () => {
-    formErrMsg.value = {};
-
     const response = await apiRegister(form);
 
+    formErrMsg.value = {};
     if (response.status === false) {
-        response.data.forEach((error) => {
+        const errorList = response.data.errorList ?? [];
+
+        errorList.forEach((error) => {
             formErrMsg.value[error.name] = error.message.join("、");
         });
 
+        toolNotify("error", response.message);
         return;
     }
 

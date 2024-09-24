@@ -30,7 +30,6 @@ import { addOrder as apiAddOrder } from "@/api/shop/order/Order.js";
 
 const route = useRoute();
 const router = useRouter();
-
 const cartIdList = route.query.cartIdList;
 const formErrMsg = ref({});
 const orderShipPrice = ref(0);
@@ -51,13 +50,15 @@ const form = reactive({
 const addOrder = async () => {
     const response = await apiAddOrder(form);
 
+    formErrMsg.value = {};
     if (response.status === false) {
-        toolNotify("error", response.message);
+        const errorList = response.data.errorList ?? [];
 
-        response.data.forEach((error) => {
+        errorList.forEach((error) => {
             formErrMsg.value[error.name] = error.message.join("、");
         });
 
+        toolNotify("error", response.message);
         return;
     }
 
