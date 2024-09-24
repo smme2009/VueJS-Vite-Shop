@@ -7,13 +7,13 @@
                 </div>
             </template>
             <el-form :model="form" label-width="auto">
-                <el-form-item label="商品類型名稱">
+                <el-form-item :error="formErrMsg.name" label="商品類型名稱">
                     <el-input
                         v-model="form.name"
                         placeholder="請輸入商品類型類型名稱"
                     />
                 </el-form-item>
-                <el-form-item label="狀態">
+                <el-form-item :error="formErrMsg.status" label="狀態">
                     <el-switch v-model="form.status" />
                 </el-form-item>
             </el-form>
@@ -37,15 +37,14 @@ import toolNotify from "@/tool/Notify.js";
 
 const route = useRoute();
 const router = useRouter();
+const formErrMsg = ref({});
+const formTitle = ref(route.meta.title);
+const productTypeId = route.params.productTypeId;
 
 const form = reactive({
     name: "",
     status: false,
 });
-
-const formTitle = ref(route.meta.title);
-
-const productTypeId = route.params.productTypeId;
 
 onMounted(() => {
     // 若為編輯則取得商品類型資料
@@ -69,7 +68,14 @@ const saveProductType = async () => {
         response = await apiProductType.addProductType(form);
     }
 
+    formErrMsg.value = {};
     if (response.status === false) {
+        const errorList = response.data.errorList ?? [];
+
+        errorList.forEach((error) => {
+            formErrMsg.value[error.name] = error.message.join("、");
+        });
+
         toolNotify("error", response.message);
         return;
     }
