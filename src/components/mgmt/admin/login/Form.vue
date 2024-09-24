@@ -1,15 +1,15 @@
 <template>
-    <el-form>
+    <el-form @keypress.enter="login()">
         <el-card class="w-96 !rounded-lg">
             <template #header>
                 <div class="card-header">
                     <span>登入</span>
                 </div>
             </template>
-            <el-form-item label="帳號">
+            <el-form-item label="帳號" :error="formErrMsg.account">
                 <el-input v-model="form.account" placeholder="請輸入帳號" />
             </el-form-item>
-            <el-form-item label="密碼">
+            <el-form-item label="密碼" :error="formErrMsg.password">
                 <el-input
                     v-model="form.password"
                     type="password"
@@ -28,12 +28,15 @@
 </template>
 
 <script setup>
-import { reactive } from "vue";
+import { ref, reactive } from "vue";
 import { useRouter } from "vue-router";
 import storeBeAdmin from "@/store/backend/admin/Index.js";
+import { login as apiLogin } from "@/api/mgmt/admin/Login.js";
+import toolNotify from "@/tool/Notify.js";
 
 const router = useRouter();
-const store = storeBeAdmin();
+const storeAdmin = storeBeAdmin();
+const formErrMsg = ref({});
 
 const form = reactive({
     account: "",
@@ -46,10 +49,21 @@ const form = reactive({
  * @returns {void}
  */
 const login = async () => {
-    const isLogin = await store.setJwtToken(form.account, form.password);
+    const response = await apiLogin(form.account, form.password);
 
-    if (isLogin === true) {
-        router.push({ name: "mgmtHome" });
+    formErrMsg.value = {};
+    if (response.status === false) {
+        const errorList = response.data.errorList ?? [];
+
+        errorList.forEach((error) => {
+            formErrMsg.value[error.name] = error.message.join("、");
+        });
+
+        toolNotify("error", response.message);
+        return;
     }
+
+    storeAdmin.jwtToken = response.data.jwtToken;
+    router.push({ name: "mgmtHome" });
 };
 </script>
