@@ -39,16 +39,13 @@
                         class="!w-1/4"
                         v-model="form.productTypeId"
                         filterable
-                        remote
-                        reserve-keyword
                         placeholder="請選擇商品類型"
                         loading-text="讀取中..."
                         no-data-text="無資料"
                         :loading="productTypeLoading"
-                        :remote-method="getProductType"
                     >
                         <el-option
-                            v-for="item in productType"
+                            v-for="item in productTypeList"
                             :label="item.name"
                             :value="item.productTypeId"
                         />
@@ -115,7 +112,7 @@ import editor from "@/components/mgmt/public/editor/Index.vue";
 import { ref, reactive, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import * as apiProduct from "@/api/mgmt/product/Product.js";
-import * as apiProductType from "@/api/mgmt/product/ProductType.js";
+import * as apiPubProductType from "@/api/public/product/ProductType.js";
 import toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
 
@@ -124,7 +121,7 @@ const router = useRouter();
 const formTitle = ref(route.meta.title);
 const photoUrl = ref("");
 const timeFormat = ref("YYYY-MM-DD HH:mm:ss");
-const productType = ref([]);
+const productTypeList = ref([]);
 const productTypeLoading = ref(false);
 const formErrMsg = ref({});
 const productId = route.params.productId;
@@ -143,6 +140,9 @@ const form = reactive({
 });
 
 onMounted(() => {
+    // 取得商品類型列表
+    getProductTypeList();
+
     // 若為編輯則取得商品資料
     if (productId) {
         getProduct();
@@ -217,14 +217,7 @@ const getProduct = async () => {
 
     const product = response.data.product;
 
-    // 根據資料加入預設的商品類型選項
-    const data = {
-        productTypeId: product.productTypeId,
-        name: product.productTypeName,
-    };
-
-    productType.value.push(data);
-
+    photoUrl.value = product.photoUrl;
     form.name = product.name;
     form.photoFileId = product.photoFileId;
     form.price = product.price;
@@ -235,8 +228,6 @@ const getProduct = async () => {
     form.pageHtml = product.pageHtml;
     form.status = product.status;
     form.productTypeId = product.productTypeId;
-
-    photoUrl.value = product.photoUrl;
 };
 
 /**
@@ -249,16 +240,14 @@ const toListPage = () => {
 };
 
 /**
- * 取得商品類型資料
- *
- * @param {string} keyword 關鍵字
+ * 取得商品類型列表
  *
  * @return {void}
  */
-const getProductType = async (keyword) => {
+const getProductTypeList = async () => {
     productTypeLoading.value = true;
 
-    const response = await apiProductType.getProductTypePage(1, keyword);
+    const response = await apiPubProductType.getProductTypeList();
 
     if (response.status === false) {
         toolNotify("error", response.message);
@@ -266,17 +255,12 @@ const getProductType = async (keyword) => {
         return;
     }
 
-    const productTypePage = response.data.productTypePage;
-
     // 設定列表資料
-    productType.value = [];
-    productTypePage.data.forEach((item) => {
-        const data = {
+    response.data.productTypeList.forEach((item) => {
+        productTypeList.value.push({
             productTypeId: item.productTypeId,
             name: item.name,
-        };
-
-        productType.value.push(data);
+        });
     });
 
     productTypeLoading.value = false;

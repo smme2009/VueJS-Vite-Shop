@@ -14,7 +14,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import toolNotify from "@/tool/Notify.js";
-import * as apiProductType from "@/api/shop/product/ProductType.js";
+import * as apiProductType from "@/api/public/product/ProductType.js";
 
 const productTypeId = defineModel();
 const productTypeData = ref([]);
