@@ -19,13 +19,7 @@ import toolNotify from "@/tool/Notify.js";
 const ajax = async (param) => {
     const apiUrl = import.meta.env.VITE_API_URL;
     const fullUrl = apiUrl + param.uri;
-
-    const store = {
-        mgmt: storeBeAdmin(),
-        shop: storeBeMember(),
-    };
-
-    const jwtToken = store[param.apiTarget].jwtToken;
+    const jwtToken = getJwtToken(param.apiTarget);
 
     // 基本設定
     const setting = {
@@ -76,5 +70,31 @@ const ajax = async (param) => {
 
     return response;
 }
+
+/**
+ * 取得JWT Token
+ * 
+ * @param {string} apiTarget API 目標
+ * 
+ * @returns {string} 
+ */
+const getJwtToken = (apiTarget) => {
+    let jwtToken = '';
+    switch (apiTarget) {
+        case 'mgmt':
+            const storeAdmin = new storeBeAdmin();
+            jwtToken = storeAdmin.jwtToken;
+            break;
+        case 'shop':
+            const storeMember = new storeBeMember();
+            jwtToken = storeMember.jwtToken;
+            break;
+        case 'public':
+            // 不需JWT Token，所以暫無動作
+            break;
+    }
+
+    return jwtToken;
+};
 
 export default ajax;
