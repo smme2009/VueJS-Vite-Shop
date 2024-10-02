@@ -37,22 +37,22 @@
             </el-table-column>
         </el-table>
         <!-- 分頁 -->
-        <page />
+        <compPage v-model:page="page" v-model:dataTotal="dataTotal" />
     </div>
 </template>
 
 <script setup>
-import page from "@/components/mgmt/public/page/Index.vue";
+import compPage from "@/components/mgmt/public/page/Index.vue";
 import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import storeBePage from "@/store/backend/page/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import { getDateTime } from "@/tool/Time.js";
 import { formatNumber } from "@/tool/Str.js";
 import * as apiOrder from "@/api/mgmt/order/Order.js";
 
 const router = useRouter();
-const store = storeBePage();
+const page = ref(1);
+const dataTotal = ref(0);
 const tableData = ref([]);
 
 const form = reactive({
@@ -60,33 +60,20 @@ const form = reactive({
 });
 
 onMounted(() => {
-    // 監聽分頁頁碼變更
-    watch(() => store.nowPage, getOrderData, { deep: true });
+    // 取得訂單分頁
+    getOrderPage();
 
-    // 觸發搜尋
-    searchOrder();
+    // 監聽分頁頁碼變更
+    watch(page, getOrderPage);
 });
 
 /**
- * 搜尋訂單
+ * 取得訂單分頁
  *
  * @returns {void}
  */
-const searchOrder = () => {
-    // 重設分頁資料
-    store.$reset();
-
-    // 取得第一頁資料
-    store.nowPage = 1;
-};
-
-/**
- * 取得訂單資料
- *
- * @returns {void}
- */
-const getOrderData = async () => {
-    const response = await apiOrder.getOrderPage(store.nowPage, form.keyword);
+const getOrderPage = async () => {
+    const response = await apiOrder.getOrderPage(page.value, form.keyword);
 
     if (response.status === false) {
         toolNotify("error", response.message);
@@ -110,7 +97,16 @@ const getOrderData = async () => {
     });
 
     // 設定資料總數
-    store.dataTotal = orderPage.total;
+    dataTotal.value = orderPage.total;
+};
+
+/**
+ * 搜尋訂單
+ *
+ * @returns {void}
+ */
+const searchOrder = () => {
+    page.value !== 1 ? (page.value = 1) : getOrderPage();
 };
 
 /**

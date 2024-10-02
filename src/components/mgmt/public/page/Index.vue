@@ -3,30 +3,25 @@
         <el-pagination
             background
             layout="prev,pager,next"
-            :current-page="store.nowPage"
+            :current-page="page"
             :default-page-size="pageSize"
-            :total="store.dataTotal"
-            @current-change="setNowPage"
+            :total="dataTotal"
+            @current-change="changePage"
         />
     </div>
 </template>
 
 <script setup>
-import storeBePage from "@/store/backend/page/Index.js";
-
-const store = storeBePage();
-
-// 單頁資料上限
+const page = defineModel("page");
 const pageSize = 15;
+const dataTotal = defineModel("dataTotal");
 
 /**
- * 設定當前頁碼
- *
- * @param {int} page 頁碼
+ * 變更頁碼
  *
  * @returns {void}
  */
-const setNowPage = (page) => {
-    store.nowPage = page;
+const changePage = (pageNumber) => {
+    page.value = pageNumber;
 };
 </script>

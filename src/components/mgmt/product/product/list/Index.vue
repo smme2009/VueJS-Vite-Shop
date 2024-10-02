@@ -78,15 +78,14 @@
             </el-table-column>
         </el-table>
         <!-- 分頁 -->
-        <page />
+        <compPage v-model:page="page" v-model:dataTotal="dataTotal" />
     </div>
 </template>
 
 <script setup>
-import page from "@/components/mgmt/public/page/Index.vue";
+import compPage from "@/components/mgmt/public/page/Index.vue";
 import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import storeBePage from "@/store/backend/page/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
@@ -94,7 +93,8 @@ import * as toolStr from "@/tool/Str.js";
 import * as apiProduct from "@/api/mgmt/product/Product.js";
 
 const router = useRouter();
-const store = storeBePage();
+const page = ref(1);
+const dataTotal = ref(0);
 const tableData = ref([]);
 
 const form = reactive({
@@ -102,25 +102,12 @@ const form = reactive({
 });
 
 onMounted(() => {
+    // 取得商品分頁
+    getProductPage();
+
     // 監聽分頁頁碼變更
-    watch(() => store.nowPage, getProductData, { deep: true });
-
-    // 觸發搜尋
-    searchProduct();
+    watch(page, getProductPage);
 });
-
-/**
- * 搜尋商品
- *
- * @returns {void}
- */
-const searchProduct = () => {
-    // 重設分頁資料
-    store.$reset();
-
-    // 取得第一頁資料
-    store.nowPage = 1;
-};
 
 /**
  * 編輯商品狀態
@@ -135,7 +122,7 @@ const editProductStatus = async (productId, status) => {
 
     if (response.status === false) {
         toolNotify("error", response.message);
-        getProductData(); // 編輯失敗後重新刷新列表
+        getProductPage(); // 編輯失敗後重新刷新列表
         return;
     }
 
@@ -162,7 +149,7 @@ const deleteProduct = async (productId) => {
             }
 
             toolNotify("success", response.message);
-            getProductData(); // 刪除成功後重新刷新列表
+            getProductPage(); // 刪除成功後重新刷新列表
         },
     };
 
@@ -215,15 +202,12 @@ const toStockPage = (productId) => {
 };
 
 /**
- * 取得商品資料
+ * 取得商品分頁
  *
  * @returns {void}
  */
-const getProductData = async () => {
-    const response = await apiProduct.getProductPage(
-        store.nowPage,
-        form.keyword
-    );
+const getProductPage = async () => {
+    const response = await apiProduct.getProductPage(page.value, form.keyword);
 
     if (response.status === false) {
         toolNotify("error", response.message);
@@ -239,7 +223,16 @@ const getProductData = async () => {
     });
 
     // 設定資料總數
-    store.setDataTotal = productPage.total;
+    dataTotal.value = productPage.total;
+};
+
+/**
+ * 搜尋商品
+ *
+ * @returns {void}
+ */
+const searchProduct = () => {
+    page.value !== 1 ? (page.value = 1) : getProductPage();
 };
 
 /**

@@ -66,22 +66,22 @@
             </el-table-column>
         </el-table>
         <!-- 分頁 -->
-        <page />
+        <compPage v-model:page="page" v-model:dataTotal="dataTotal" />
     </div>
 </template>
 
 <script setup>
-import page from "@/components/mgmt/public/page/Index.vue";
+import compPage from "@/components/mgmt/public/page/Index.vue";
 import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import storeBePage from "@/store/backend/page/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
 import * as apiBanner from "@/api/mgmt/banner/Banner.js";
 
 const router = useRouter();
-const store = storeBePage();
+const page = ref(1);
+const dataTotal = ref(0);
 const tableData = ref([]);
 
 const form = reactive({
@@ -89,25 +89,12 @@ const form = reactive({
 });
 
 onMounted(() => {
+    // 取得橫幅分頁
+    getBannerPage();
+
     // 監聽分頁頁碼變更
-    watch(() => store.nowPage, getBannerData, { deep: true });
-
-    // 觸發搜尋
-    searchBanner();
+    watch(page, getBannerPage);
 });
-
-/**
- * 搜尋橫幅
- *
- * @returns {void}
- */
-const searchBanner = () => {
-    // 重設分頁資料
-    store.$reset();
-
-    // 取得第一頁資料
-    store.nowPage = 1;
-};
 
 /**
  * 編輯橫幅狀態
@@ -122,7 +109,7 @@ const editBannerStatus = async (bannerId, status) => {
 
     if (response.status === false) {
         toolNotify("error", response.message);
-        getBannerData(); //失敗後重新刷新資料
+        getBannerPage(); //失敗後重新刷新資料
         return;
     }
 
@@ -149,7 +136,7 @@ const deleteBanner = async (bannerId) => {
             }
 
             toolNotify("success", response.message);
-            getBannerData(); // 刪除成功後重新刷新列表
+            getBannerPage(); // 刪除成功後重新刷新列表
         },
     };
 
@@ -184,12 +171,12 @@ const toEditPage = (bannerId) => {
 };
 
 /**
- * 取得橫幅資料
+ * 取得橫幅分頁
  *
  * @returns {void}
  */
-const getBannerData = async () => {
-    const response = await apiBanner.getBannerPage(store.nowPage, form.keyword);
+const getBannerPage = async () => {
+    const response = await apiBanner.getBannerPage(page.value, form.keyword);
 
     if (response.status === false) {
         toolNotify("error", response.message);
@@ -212,6 +199,15 @@ const getBannerData = async () => {
     });
 
     // 設定資料總數
-    store.setDataTotal = bannerPage.total;
+    dataTotal.value = bannerPage.total;
+};
+
+/**
+ * 搜尋橫幅
+ *
+ * @returns {void}
+ */
+const searchBanner = () => {
+    page.value !== 1 ? (page.value = 1) : getBannerPage();
 };
 </script>

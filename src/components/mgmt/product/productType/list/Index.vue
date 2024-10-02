@@ -67,21 +67,21 @@
             </el-table-column>
         </el-table>
         <!-- 分頁 -->
-        <page />
+        <compPage v-model:page="page" v-model:dataTotal="dataTotal" />
     </div>
 </template>
 
 <script setup>
-import page from "@/components/mgmt/public/page/Index.vue";
+import compPage from "@/components/mgmt/public/page/Index.vue";
 import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import storeBePage from "@/store/backend/page/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import toolMessage from "@/tool/Message.js";
 import * as apiProductType from "@/api/mgmt/product/ProductType.js";
 
 const router = useRouter();
-const store = storeBePage();
+const page = ref(1);
+const dataTotal = ref(0);
 const tableData = ref([]);
 
 const form = reactive({
@@ -89,25 +89,12 @@ const form = reactive({
 });
 
 onMounted(() => {
+    // 取得商品類型分頁
+    getProductTypePage();
+
     // 監聽分頁頁碼變更
-    watch(() => store.nowPage, getProductTypeData, { deep: true });
-
-    // 觸發搜尋
-    searchProductType();
+    watch(page, getProductTypePage);
 });
-
-/**
- * 搜尋商品類型
- *
- * @returns {void}
- */
-const searchProductType = () => {
-    // 重設分頁資料
-    store.$reset();
-
-    // 取得第一頁資料
-    store.nowPage = 1;
-};
 
 /**
  * 編輯商品類型狀態
@@ -125,7 +112,7 @@ const editProductTypeStatus = async (productTypeId, status) => {
 
     if (response.status === false) {
         toolNotify("error", response.message);
-        getProductTypeData(); // 編輯失敗後重新刷新列表
+        getProductTypePage(); // 編輯失敗後重新刷新列表
         return;
     }
 
@@ -154,7 +141,7 @@ const deleteProductType = async (productTypeId) => {
             }
 
             toolNotify("success", response.message);
-            getProductTypeData(); // 刪除成功後重新刷新列表
+            getProductTypePage(); // 刪除成功後重新刷新列表
         },
     };
 
@@ -189,13 +176,13 @@ const toEditPage = (productTypeId) => {
 };
 
 /**
- * 取得商品類型資料
+ * 取得商品類型分頁
  *
  * @returns {void}
  */
-const getProductTypeData = async () => {
+const getProductTypePage = async () => {
     const response = await apiProductType.getProductTypePage(
-        store.nowPage,
+        page.value,
         form.keyword
     );
 
@@ -213,7 +200,16 @@ const getProductTypeData = async () => {
     });
 
     // 設定資料總數
-    store.setDataTotal = productTypePage.total;
+    dataTotal.value = productTypePage.total;
+};
+
+/**
+ * 搜尋商品類型
+ *
+ * @returns {void}
+ */
+const searchProductType = () => {
+    page.value !== 1 ? (page.value = 1) : getProductTypePage();
 };
 
 /**

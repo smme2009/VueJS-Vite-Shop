@@ -31,15 +31,14 @@
             <el-table-column prop="createTime" label="新增時間" />
         </el-table>
         <!-- 分頁 -->
-        <page />
+        <compPage v-model:page="page" v-model:dataTotal="dataTotal" />
     </div>
 </template>
 
 <script setup>
-import page from "@/components/mgmt/public/page/Index.vue";
+import compPage from "@/components/mgmt/public/page/Index.vue";
 import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import storeBePage from "@/store/backend/page/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
 import * as apiProduct from "@/api/mgmt/product/Product.js";
@@ -47,7 +46,8 @@ import * as apiProductStock from "@/api/mgmt/product/ProductStock.js";
 
 const route = useRoute();
 const router = useRouter();
-const store = storeBePage();
+const page = ref(1);
+const dataTotal = ref(0);
 const tableData = ref([]);
 const product = ref({});
 const productId = route.params.productId;
@@ -56,14 +56,11 @@ onMounted(() => {
     // 初始化時取得商品資料
     getProduct();
 
+    // 取得分頁資料
+    getProductStockPage();
+
     // 監聽分頁頁碼變更
-    watch(() => store.nowPage, getProductStockData, { deep: true });
-
-    // 重設分頁資料
-    store.$reset();
-
-    // 取得第一頁資料
-    store.nowPage = 1;
+    watch(page, getProductStockPage);
 });
 
 /**
@@ -112,14 +109,14 @@ const setRowClass = (row) => {
 };
 
 /**
- * 取得商品庫存單資料
+ * 取得商品庫存單分頁
  *
  * @returns {void}
  */
-const getProductStockData = async () => {
+const getProductStockPage = async () => {
     const response = await apiProductStock.getProductStockPage(
         productId,
-        store.nowPage
+        page.value
     );
 
     if (response.status === false) {
@@ -136,7 +133,7 @@ const getProductStockData = async () => {
     });
 
     // 設定資料總數
-    store.setDataTotal = productStockPage.total;
+    dataTotal.value = productStockPage.total;
 };
 
 /**
