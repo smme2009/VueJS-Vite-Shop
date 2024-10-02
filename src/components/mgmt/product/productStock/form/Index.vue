@@ -1,49 +1,47 @@
 <template>
-    <div class="w-full flex justify-center">
-        <el-card class="w-11/12 !rounded-lg">
-            <template #header>
-                <div class="card-header">
-                    <span>新增商品庫存單</span>
-                </div>
-            </template>
-            <el-form :model="form" label-width="auto">
-                <el-form-item
-                    :error="formErrMsg.productStockTypeId"
-                    label="商品庫存單類型"
+    <el-card class="rounded-lg">
+        <template #header>
+            <div class="card-header">
+                <span>新增商品庫存單</span>
+            </div>
+        </template>
+        <el-form :model="form" label-width="auto">
+            <el-form-item
+                :error="formErrMsg.productStockTypeId"
+                label="商品庫存單類型"
+            >
+                <el-select
+                    class="!w-1/4"
+                    v-model="form.productStockTypeId"
+                    filterable
+                    remote
+                    reserve-keyword
+                    placeholder="請選擇商品庫存單類型"
+                    loading-text="讀取中..."
+                    no-data-text="無資料"
+                    :loading="productStockTypeLoading"
+                    :remote-method="getProductStockType"
                 >
-                    <el-select
-                        class="!w-1/4"
-                        v-model="form.productStockTypeId"
-                        filterable
-                        remote
-                        reserve-keyword
-                        placeholder="請選擇商品庫存單類型"
-                        loading-text="讀取中..."
-                        no-data-text="無資料"
-                        :loading="productStockTypeLoading"
-                        :remote-method="getProductStockType"
-                    >
-                        <el-option
-                            v-for="item in productStockType"
-                            :label="item.name"
-                            :value="item.productStockTypeId"
-                        />
-                    </el-select>
-                </el-form-item>
-                <el-form-item :error="formErrMsg.quantity" label="商品數量">
-                    <el-input-number v-model="form.quantity" min="0" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-                <div class="w-full flex justify-end">
-                    <el-button @click="toListPage"> 取消 </el-button>
-                    <el-button type="primary" @click="saveProductStock">
-                        儲存
-                    </el-button>
-                </div>
-            </template>
-        </el-card>
-    </div>
+                    <el-option
+                        v-for="item in productStockType"
+                        :label="item.name"
+                        :value="item.productStockTypeId"
+                    />
+                </el-select>
+            </el-form-item>
+            <el-form-item :error="formErrMsg.quantity" label="商品數量">
+                <el-input-number v-model="form.quantity" min="0" />
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <div class="w-full flex justify-end">
+                <el-button @click="toListPage">取消</el-button>
+                <el-button type="primary" @click="saveProductStock">
+                    儲存
+                </el-button>
+            </div>
+        </template>
+    </el-card>
 </template>
 
 <script setup>

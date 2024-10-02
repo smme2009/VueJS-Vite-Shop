@@ -1,32 +1,30 @@
 <template>
-    <div class="w-full flex justify-center">
-        <el-card class="w-11/12 !rounded-lg">
-            <template #header>
-                <div class="card-header">
-                    <span>{{ formTitle }}</span>
-                </div>
-            </template>
-            <el-form :model="form" label-width="auto">
-                <el-form-item :error="formErrMsg.name" label="商品類型名稱">
-                    <el-input
-                        v-model="form.name"
-                        placeholder="請輸入商品類型類型名稱"
-                    />
-                </el-form-item>
-                <el-form-item :error="formErrMsg.status" label="狀態">
-                    <el-switch v-model="form.status" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-                <div class="w-full flex justify-end">
-                    <el-button @click="toListPage"> 取消 </el-button>
-                    <el-button type="primary" @click="saveProductType">
-                        儲存
-                    </el-button>
-                </div>
-            </template>
-        </el-card>
-    </div>
+    <el-card class="rounded-lg">
+        <template #header>
+            <div class="card-header">
+                <span>{{ formTitle }}</span>
+            </div>
+        </template>
+        <el-form :model="form" label-width="auto">
+            <el-form-item :error="formErrMsg.name" label="商品類型名稱">
+                <el-input
+                    v-model="form.name"
+                    placeholder="請輸入商品類型類型名稱"
+                />
+            </el-form-item>
+            <el-form-item :error="formErrMsg.status" label="狀態">
+                <el-switch v-model="form.status" />
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <div class="w-full flex justify-end">
+                <el-button @click="toListPage"> 取消 </el-button>
+                <el-button type="primary" @click="saveProductType">
+                    儲存
+                </el-button>
+            </div>
+        </template>
+    </el-card>
 </template>
 
 <script setup>

@@ -1,55 +1,41 @@
 <template>
-    <div>
+    <div class="space-y-2">
         <!-- 搜尋列 -->
-        <div class="flex justify-center mt-5">
-            <div class="w-11/12 flex justify-between">
-                <el-form :model="form" class="flex">
-                    <el-input
-                        class="mr-1.5"
-                        v-model="form.keyword"
-                        placeholder="請輸入訂單編號"
-                    />
-                    <el-button
-                        type="warning"
-                        @click="searchOrder"
-                        icon="Search"
-                    >
-                        搜尋
-                    </el-button>
-                </el-form>
-            </div>
+        <div class="flex justify-between">
+            <el-form :model="form" class="flex space-x-1">
+                <el-input v-model="form.keyword" placeholder="請輸入訂單編號" />
+                <el-button type="warning" @click="searchOrder" icon="Search">
+                    搜尋
+                </el-button>
+            </el-form>
         </div>
         <!-- 列表 -->
-        <div class="flex justify-center mt-2.5">
-            <div class="w-11/12">
-                <el-table
-                    class="rounded-lg"
-                    :data="tableData"
-                    stripe
-                    border
-                    empty-text="查無資料"
-                >
-                    <el-table-column prop="code" label="訂單編號" />
-                    <el-table-column prop="orderShipName" label="運送方式" />
-                    <el-table-column prop="orderPaymentName" label="付款方式" />
-                    <el-table-column prop="orderTotal" label="訂單總額" />
-                    <el-table-column prop="orderStatusName" label="訂單狀態" />
-                    <el-table-column prop="createTime" label="訂單成立時間" />
-                    <el-table-column label="管理">
-                        <template #default="scope">
-                            <el-link
-                                class="mr-2"
-                                type="primary"
-                                icon="Tickets"
-                                @click="toInfoPage(scope.row.orderId)"
-                            >
-                                訂單詳細
-                            </el-link>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
-        </div>
+        <el-table
+            class="rounded-lg"
+            :data="tableData"
+            stripe
+            border
+            empty-text="查無資料"
+        >
+            <el-table-column prop="code" label="訂單編號" />
+            <el-table-column prop="orderShipName" label="運送方式" />
+            <el-table-column prop="orderPaymentName" label="付款方式" />
+            <el-table-column prop="orderTotal" label="訂單總額" />
+            <el-table-column prop="orderStatusName" label="訂單狀態" />
+            <el-table-column prop="createTime" label="訂單成立時間" />
+            <el-table-column label="管理">
+                <template #default="scope">
+                    <el-link
+                        @click="toInfoPage(scope.row.orderId)"
+                        :underline="false"
+                        type="primary"
+                        icon="Tickets"
+                    >
+                        訂單詳細
+                    </el-link>
+                </template>
+            </el-table-column>
+        </el-table>
         <!-- 分頁 -->
         <page />
     </div>

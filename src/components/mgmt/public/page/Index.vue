@@ -1,5 +1,5 @@
 <template>
-    <div class="w-11/12 flex justify-center mt-5">
+    <div class="flex justify-center">
         <el-pagination
             background
             layout="prev,pager,next"

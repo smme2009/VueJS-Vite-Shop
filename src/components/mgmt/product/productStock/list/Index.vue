@@ -1,48 +1,35 @@
 <template>
-    <div>
+    <div class="space-y-2">
         <!-- 資訊列 -->
-        <div class="flex justify-center mt-5">
-            <div class="w-11/12 flex justify-start space-x-2">
-                <el-card class="w-1/4 text-lg !rounded-lg">
-                    <b>商品名稱：{{ product.name }}</b>
-                </el-card>
-                <el-card class="w-1/4 text-lg !rounded-lg">
-                    <b>庫存數量：{{ product.quantity }}</b>
-                </el-card>
-            </div>
+        <div class="flex justify-start space-x-1">
+            <el-card class="w-1/4 text-lg rounded-lg">
+                <b>商品名稱：{{ product.name }}</b>
+            </el-card>
+            <el-card class="w-1/4 text-lg rounded-lg">
+                <b>庫存數量：{{ product.quantity }}</b>
+            </el-card>
         </div>
         <!-- 搜尋列 -->
-        <div class="flex justify-center mt-5">
-            <div class="w-11/12 flex justify-end">
-                <div>
-                    <el-button @click="toProductPage" icon="Back">
-                        返回商品管理
-                    </el-button>
-                    <el-button type="success" @click="toAddPage" icon="Plus">
-                        新增庫存單
-                    </el-button>
-                </div>
-            </div>
+        <div class="flex justify-end space-x-1">
+            <el-button @click="toProductPage" icon="Back">
+                返回商品管理
+            </el-button>
+            <el-button type="success" @click="toAddPage" icon="Plus">
+                新增庫存單
+            </el-button>
         </div>
         <!-- 列表 -->
-        <div class="flex justify-center mt-2.5">
-            <div class="w-11/12">
-                <el-table
-                    class="rounded-lg"
-                    :data="tableData"
-                    border
-                    empty-text="查無資料"
-                    :row-class-name="setRowClass"
-                >
-                    <el-table-column
-                        prop="productStockTypeName"
-                        label="庫存單類型"
-                    />
-                    <el-table-column prop="quantity" label="數量" />
-                    <el-table-column prop="createTime" label="新增時間" />
-                </el-table>
-            </div>
-        </div>
+        <el-table
+            class="rounded-lg"
+            :data="tableData"
+            border
+            empty-text="查無資料"
+            :row-class-name="setRowClass"
+        >
+            <el-table-column prop="productStockTypeName" label="庫存單類型" />
+            <el-table-column prop="quantity" label="數量" />
+            <el-table-column prop="createTime" label="新增時間" />
+        </el-table>
         <!-- 分頁 -->
         <page />
     </div>
@@ -61,10 +48,8 @@ import * as apiProductStock from "@/api/mgmt/product/ProductStock.js";
 const route = useRoute();
 const router = useRouter();
 const store = storeBePage();
-
 const tableData = ref([]);
 const product = ref({});
-
 const productId = route.params.productId;
 
 onMounted(() => {

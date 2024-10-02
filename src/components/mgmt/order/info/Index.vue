@@ -1,74 +1,70 @@
 <template>
-    <div class="w-full flex justify-center">
-        <div class="w-11/12 space-y-2">
-            <div class="flex justify-end">
-                <div>
-                    <el-button @click="toOrderPage" icon="Back">
-                        返回訂單管理
-                    </el-button>
-                </div>
-            </div>
-            <el-card class="!rounded-lg">
-                <template #header>
-                    <span>訂單資訊</span>
-                </template>
-                <el-descriptions column="2" border>
-                    <el-descriptions-item label="訂單編號">
-                        {{ order.code }}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="訂購時間">
-                        {{ order.createTime }}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="運送方式">
-                        {{ order.orderShipName }}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="付款方式">
-                        {{ order.orderPaymentName }}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="地址">
-                        {{ order.address }}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="運費">
-                        ${{ order.orderShipPrice }}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="商品總額">
-                        ${{ order.orderProductTotal }}
-                    </el-descriptions-item>
-                    <el-descriptions-item label="訂單總額">
-                        ${{ order.orderTotal }}
-                    </el-descriptions-item>
-                </el-descriptions>
-            </el-card>
-            <el-card class="!rounded-lg">
-                <template #header>
-                    <span>商品明細</span>
-                </template>
-                <div class="space-y-1">
+    <div class="space-y-2">
+        <div class="flex justify-end">
+            <el-button @click="toOrderPage" icon="Back">
+                返回訂單管理
+            </el-button>
+        </div>
+        <el-card class="rounded-lg">
+            <template #header>
+                <span>訂單資訊</span>
+            </template>
+            <el-descriptions column="2" border>
+                <el-descriptions-item label="訂單編號">
+                    {{ order.code }}
+                </el-descriptions-item>
+                <el-descriptions-item label="訂購時間">
+                    {{ order.createTime }}
+                </el-descriptions-item>
+                <el-descriptions-item label="運送方式">
+                    {{ order.orderShipName }}
+                </el-descriptions-item>
+                <el-descriptions-item label="付款方式">
+                    {{ order.orderPaymentName }}
+                </el-descriptions-item>
+                <el-descriptions-item label="地址">
+                    {{ order.address }}
+                </el-descriptions-item>
+                <el-descriptions-item label="運費">
+                    ${{ order.orderShipPrice }}
+                </el-descriptions-item>
+                <el-descriptions-item label="商品總額">
+                    ${{ order.orderProductTotal }}
+                </el-descriptions-item>
+                <el-descriptions-item label="訂單總額">
+                    ${{ order.orderTotal }}
+                </el-descriptions-item>
+            </el-descriptions>
+        </el-card>
+        <el-card class="rounded-lg">
+            <template #header>
+                <span>商品明細</span>
+            </template>
+            <div class="space-y-1">
+                <div
+                    v-for="orderProduct in order.orderProductList"
+                    class="h-24 border rounded-lg flex"
+                >
+                    <div class="h-full w-24 p-1">
+                        <img
+                            class="h-full w-full rounded-lg"
+                            :src="orderProduct.photoUrl"
+                        />
+                    </div>
                     <div
-                        v-for="orderProduct in order.orderProductList"
-                        class="h-24 border rounded-lg flex"
+                        class="flex-auto flex flex-wrap items-center space-x-1"
                     >
-                        <div class="h-full w-24 p-1">
-                            <img
-                                class="h-full w-full rounded-lg"
-                                :src="orderProduct.photoUrl"
-                            />
+                        <div class="text-1xl font-bold">
+                            {{ orderProduct.name }}
                         </div>
-                        <div
-                            class="flex-auto flex flex-wrap items-center space-x-1"
-                        >
-                            <div class="text-1xl font-bold">
-                                {{ orderProduct.name }}
-                            </div>
-                            <div class="text-1xl font-bold text-red-600">
-                                ${{ formatNumber(orderProduct.price) }}
-                            </div>
-                            <div>x{{ orderProduct.quantity }}</div>
+                        <div class="text-1xl font-bold text-red-600">
+                            ${{ formatNumber(orderProduct.price) }}
                         </div>
+                        <div>x{{ orderProduct.quantity }}</div>
                     </div>
                 </div>
-            </el-card>
-        </div>
+            </div>
+        </el-card>
     </div>
 </template>
 

@@ -1,12 +1,10 @@
 <template>
-    <div class="h-10 flex justify-center">
-        <div class="w-11/12 flex items-center rounded-lg bg-slate-100">
-            <el-breadcrumb class="ml-2" :separator-icon="ArrowRight">
-                <el-breadcrumb-item v-for="title in breadcrumb">
-                    {{ title }}
-                </el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
+    <div class="h-10 flex items-center rounded-lg bg-slate-100">
+        <el-breadcrumb class="ml-2" :separator-icon="ArrowRight">
+            <el-breadcrumb-item v-for="title in breadcrumb">
+                {{ title }}
+            </el-breadcrumb-item>
+        </el-breadcrumb>
     </div>
 </template>
 

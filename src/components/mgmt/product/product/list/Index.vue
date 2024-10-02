@@ -1,98 +1,82 @@
 <template>
-    <div>
+    <div class="space-y-2">
         <!-- 搜尋列 -->
-        <div class="flex justify-center mt-5">
-            <div class="w-11/12 flex justify-between">
-                <el-form :model="form" class="flex">
-                    <el-input
-                        class="mr-1.5"
-                        v-model="form.keyword"
-                        placeholder="請輸入商品名稱"
-                    />
-                    <el-button
-                        type="warning"
-                        @click="searchProduct"
-                        icon="Search"
-                    >
-                        搜尋
-                    </el-button>
-                </el-form>
-                <div>
-                    <el-button type="success" @click="toAddPage" icon="Plus">
-                        新增商品
-                    </el-button>
-                </div>
-            </div>
+        <div class="flex justify-between">
+            <el-form :model="form" class="flex space-x-1">
+                <el-input v-model="form.keyword" placeholder="請輸入商品名稱" />
+                <el-button type="warning" @click="searchProduct" icon="Search">
+                    搜尋
+                </el-button>
+            </el-form>
+            <el-button type="success" @click="toAddPage" icon="Plus">
+                新增商品
+            </el-button>
         </div>
         <!-- 列表 -->
-        <div class="flex justify-center mt-2.5">
-            <div class="w-11/12">
-                <el-table
-                    class="rounded-lg"
-                    :data="tableData"
-                    stripe
-                    border
-                    empty-text="查無資料"
-                >
-                    <el-table-column prop="name" label="商品名稱" />
-                    <el-table-column label="商品圖片">
-                        <template #default="scope">
-                            <el-image
-                                class="w-24 h-24"
-                                :src="scope.row.photoUrl"
-                                fit="fill"
-                            />
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="productTypeName" label="商品類型" />
-                    <el-table-column prop="price" label="價格" />
-                    <el-table-column prop="quantity" label="數量" />
-                    <el-table-column prop="startTime" label="上架時間" />
-                    <el-table-column prop="endTime" label="下架時間" />
-                    <el-table-column label="狀態">
-                        <template #default="scope">
-                            <el-switch
-                                v-model="scope.row.status"
-                                @change="
-                                    editProductStatus(
-                                        scope.row.productId,
-                                        $event
-                                    )
-                                "
-                            />
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="管理">
-                        <template #default="scope">
-                            <el-link
-                                class="mr-2"
-                                @click="toEditPage(scope.row.productId)"
-                                type="primary"
-                                icon="Edit"
-                            >
-                                編輯
-                            </el-link>
-                            <el-link
-                                class="mr-2"
-                                @click="toStockPage(scope.row.productId)"
-                                type="warning"
-                                icon="List"
-                            >
-                                庫存單管理
-                            </el-link>
-                            <el-link
-                                class="mr-2"
-                                @click="deleteProduct(scope.row.productId)"
-                                type="danger"
-                                icon="Delete"
-                            >
-                                刪除
-                            </el-link>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
-        </div>
+        <el-table
+            class="rounded-lg"
+            :data="tableData"
+            stripe
+            border
+            empty-text="查無資料"
+        >
+            <el-table-column prop="name" label="商品名稱" />
+            <el-table-column label="商品圖片">
+                <template #default="scope">
+                    <el-image
+                        class="w-24 h-24"
+                        :src="scope.row.photoUrl"
+                        fit="fill"
+                    />
+                </template>
+            </el-table-column>
+            <el-table-column prop="productTypeName" label="商品類型" />
+            <el-table-column prop="price" label="價格" />
+            <el-table-column prop="quantity" label="數量" />
+            <el-table-column prop="startTime" label="上架時間" />
+            <el-table-column prop="endTime" label="下架時間" />
+            <el-table-column label="狀態">
+                <template #default="scope">
+                    <el-switch
+                        v-model="scope.row.status"
+                        @change="editProductStatus(scope.row.productId, $event)"
+                    />
+                </template>
+            </el-table-column>
+            <el-table-column label="管理">
+                <template #default="scope">
+                    <div class="flex flex-col">
+                        <el-link
+                            class="justify-start"
+                            @click="toEditPage(scope.row.productId)"
+                            :underline="false"
+                            type="primary"
+                            icon="Edit"
+                        >
+                            編輯
+                        </el-link>
+                        <el-link
+                            class="justify-start"
+                            @click="toStockPage(scope.row.productId)"
+                            :underline="false"
+                            type="warning"
+                            icon="List"
+                        >
+                            庫存單管理
+                        </el-link>
+                        <el-link
+                            class="justify-start"
+                            @click="deleteProduct(scope.row.productId)"
+                            :underline="false"
+                            type="danger"
+                            icon="Delete"
+                        >
+                            刪除
+                        </el-link>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
         <!-- 分頁 -->
         <page />
     </div>
