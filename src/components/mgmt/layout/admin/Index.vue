@@ -8,7 +8,7 @@
                 <Menu />
             </div>
             <div class="flex-grow flex justify-center overflow-auto">
-                <div class="w-[90%]">
+                <div class="w-[80%]">
                     <Breadcrumb class="mt-4 mb-4" />
                     <router-view />
                 </div>
