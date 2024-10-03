@@ -1,44 +1,52 @@
 <template>
-    <el-menu class="h-full w-full">
-        <router-link :to="{ name: 'mgmtHome' }">
-            <el-menu-item index="1">
-                <el-icon>
-                    <House />
-                </el-icon>
-                <template #title>首頁</template>
-            </el-menu-item>
-        </router-link>
-        <router-link :to="{ name: 'mgmtProduct' }">
-            <el-menu-item index="2">
-                <el-icon>
-                    <Goods />
-                </el-icon>
-                <template #title>商品管理</template>
-            </el-menu-item>
-        </router-link>
-        <router-link :to="{ name: 'mgmtProductType' }">
-            <el-menu-item index="3">
-                <el-icon>
-                    <Grid />
-                </el-icon>
-                <template #title>商品類型管理</template>
-            </el-menu-item>
-        </router-link>
-        <router-link :to="{ name: 'mgmtBanner' }">
-            <el-menu-item index="4">
-                <el-icon>
-                    <Picture />
-                </el-icon>
-                <template #title>橫幅管理</template>
-            </el-menu-item>
-        </router-link>
-        <router-link :to="{ name: 'mgmtOrder' }">
-            <el-menu-item index="5">
-                <el-icon>
-                    <Tickets />
-                </el-icon>
-                <template #title>訂單管理</template>
-            </el-menu-item>
-        </router-link>
+    <el-menu class="h-full w-full" :collapse="!menuStatus">
+        <el-menu-item index="1" @click="toPage('mgmtHome')">
+            <el-icon>
+                <House />
+            </el-icon>
+            <span>首頁</span>
+        </el-menu-item>
+        <el-menu-item index="2" @click="toPage('mgmtProduct')">
+            <el-icon>
+                <Goods />
+            </el-icon>
+            <span>商品管理</span>
+        </el-menu-item>
+        <el-menu-item index="3" @click="toPage('mgmtProductType')">
+            <el-icon>
+                <Grid />
+            </el-icon>
+            <span>商品類型管理</span>
+        </el-menu-item>
+        <el-menu-item index="4" @click="toPage('mgmtBanner')">
+            <el-icon>
+                <Picture />
+            </el-icon>
+            <span>橫幅管理</span>
+        </el-menu-item>
+        <el-menu-item index="5" @click="toPage('mgmtOrder')">
+            <el-icon>
+                <Tickets />
+            </el-icon>
+            <span>訂單管理</span>
+        </el-menu-item>
     </el-menu>
 </template>
+
+<script setup>
+import { useRouter } from "vue-router";
+
+const router = useRouter();
+const menuStatus = defineModel();
+
+/**
+ * 跳轉至頁面
+ *
+ * @param {string} pageName 頁面路由名稱
+ *
+ * @returns {void}
+ */
+const toPage = (pageName) => {
+    router.push({ name: pageName });
+};
+</script>

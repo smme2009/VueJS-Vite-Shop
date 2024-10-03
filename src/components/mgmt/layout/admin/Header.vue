@@ -1,10 +1,5 @@
 <template>
-    <el-page-header
-        class="w-full"
-        icon="ArrowLeft"
-        title="返回"
-        @back="toBackPage()"
-    >
+    <el-page-header class="w-full" :icon="icon" title=" " @back="setMenuStatus">
         <template #content>
             <span>商店後台管理系統</span>
         </template>
@@ -17,17 +12,25 @@
 <script setup>
 import { useRouter } from "vue-router";
 import storeBeAdmin from "@/store/backend/admin/Index.js";
+import { computed } from "vue";
 
 const router = useRouter();
 const store = storeBeAdmin();
+const menuStatus = defineModel();
+
+const icon = computed(() => {
+    const name = menuStatus.value === true ? "ArrowLeft" : "ArrowRight";
+
+    return name;
+});
 
 /**
- * 返回上一頁
+ * 設定選單狀態
  *
  * @returns {void}
  */
-const toBackPage = () => {
-    router.back();
+const setMenuStatus = () => {
+    menuStatus.value = !menuStatus.value;
 };
 
 /**
