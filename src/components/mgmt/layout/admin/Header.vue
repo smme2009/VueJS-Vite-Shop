@@ -1,10 +1,10 @@
 <template>
     <el-page-header class="w-full" :icon="icon" title=" " @back="setMenuStatus">
         <template #content>
-            <span>商店後台管理系統</span>
+            <button link @click="toHomePage">商店後台管理系統</button>
         </template>
         <template #extra>
-            <span @click="logout()">登出</span>
+            <button link @click="logout">登出</button>
         </template>
     </el-page-header>
 </template>
@@ -20,7 +20,6 @@ const menuStatus = defineModel();
 
 const icon = computed(() => {
     const name = menuStatus.value === true ? "ArrowLeft" : "ArrowRight";
-
     return name;
 });
 
@@ -34,13 +33,21 @@ const setMenuStatus = () => {
 };
 
 /**
+ * 跳轉到首頁
+ *
+ * @returns {void}
+ */
+const toHomePage = () => {
+    router.push({ name: "mgmtHome" });
+};
+
+/**
  * 登出
  *
  * @returns {void}
  */
 const logout = () => {
     store.$reset();
-
     router.push({ name: "mgmtLogin" });
 };
 </script>
