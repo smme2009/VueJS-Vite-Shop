@@ -9,7 +9,7 @@ const apiTarget = 'shop';
  * @returns {object} 
  */
 export const getOrderStatusList = async () => {
-    const uri = '/frontend/order/status';
+    const uri = '/shop/order/status';
 
     const param = {
         method: 'get',

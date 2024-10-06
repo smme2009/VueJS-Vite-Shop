@@ -139,11 +139,6 @@ const toOrderListPage = () => {
  */
 const logout = () => {
     storeMember.$reset();
-
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: "登出成功",
-    });
+    toolNotify("success", "登出成功");
 };
 </script>

@@ -11,7 +11,7 @@
                     </router-link>
                 </div>
             </template>
-            <el-form label-width="auto">
+            <el-form @keypress.enter="login()" label-width="auto">
                 <el-form-item
                     label="帳號(E-Mail)"
                     :error="formErrMsg.account"
@@ -61,13 +61,12 @@ const route = useRoute();
 const router = useRouter();
 const storeMember = storeFeMember();
 const storeCart = storeFeCart();
+const formErrMsg = ref({});
 
 const form = reactive({
     account: "",
     password: "",
 });
-
-const formErrMsg = ref({});
 
 /**
  * 登入
@@ -75,38 +74,26 @@ const formErrMsg = ref({});
  * @returns {void}
  */
 const login = async () => {
-    formErrMsg.value = {};
-
     const response = await apiLogin(form.account, form.password);
-    if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "標題",
-            message: response.message,
-        });
 
-        response.data.forEach((error) => {
+    formErrMsg.value = {};
+    if (response.status === false) {
+        const errorList = response.data.errorList ?? [];
+
+        errorList.forEach((error) => {
             formErrMsg.value[error.name] = error.message.join("、");
         });
 
+        toolNotify("error", response.message);
         return;
     }
 
-    // 設定JWT Token
-    storeMember.setJwtToken(response.data.jwtToken);
-
-    // 將本地購物車與會員購物車合併
-    storeCart.editMemberCartProductFormLocal();
-
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
+    storeMember.setJwtToken(response.data.jwtToken); // 設定JWT Token
+    storeCart.editMemberCartProductFormLocal(); // 將本地購物車與會員購物車合併
+    toolNotify("success", response.message);
 
     const pushPageName = route.query.pushPageName;
     const name = pushPageName === undefined ? "shopHome" : pushPageName;
-
     router.push({ name: name });
 };
 

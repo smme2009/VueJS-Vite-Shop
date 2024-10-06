@@ -1,57 +1,40 @@
 <template>
-    <div class="h-10 flex justify-center">
-        <div class="w-11/12 flex items-center rounded-lg bg-slate-100">
-            <el-breadcrumb class="ml-2" :separator-icon="ArrowRight">
-                <el-breadcrumb-item v-for="title in breadcrumb">
-                    {{ title }}
-                </el-breadcrumb-item>
-            </el-breadcrumb>
-        </div>
+    <div class="h-10 flex items-center rounded-lg bg-slate-100">
+        <el-breadcrumb class="ml-2" :separator-icon="ArrowRight">
+            <el-breadcrumb-item v-for="title in breadcrumb">
+                {{ title }}
+            </el-breadcrumb-item>
+        </el-breadcrumb>
     </div>
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { ArrowRight } from "@element-plus/icons-vue";
 
 const route = useRoute();
-
-// 麵包屑資料
-const breadcrumb = ref([]);
-
-onMounted(() => {
-    // 初始化麵包屑
-    setBreadcrumb();
-
-    // 監聽路由狀況並動態調整麵包屑
-    watch(route, setBreadcrumb);
-});
+const breadcrumb = computed(() => getPageList());
 
 /**
- * 設定麵包屑
+ * 取得頁面列表
  *
- * @returns {void}
+ * @returns {array} 頁面列表
  */
-const setBreadcrumb = () => {
-    // 取得路由資料
-    const matched = route.matched;
+const getPageList = () => {
+    const page = ["首頁"];
 
-    breadcrumb.value = ["首頁"];
-
-    // 從路由取得麵包屑
-    matched.forEach((item) => {
+    // 從路由取得頁面名稱
+    route.matched.forEach((item) => {
         const title = item.meta.title;
-
-        // 是否不為首頁
-        const isNotHome = item.meta.isHome !== true;
-
-        // 是否擁有標題
-        const hasTitle = typeof title !== "undefined";
+        const isNotHome = item.meta.isHome !== true; // 是否不是首頁
+        const hasTitle = typeof title !== "undefined"; // 是否擁有標題
 
         if (isNotHome && hasTitle) {
-            breadcrumb.value.push(title);
+            page.push(title);
         }
     });
+
+    return page;
 };
 </script>

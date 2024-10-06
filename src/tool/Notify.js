@@ -3,17 +3,12 @@ import { ElNotification } from 'element-plus'
 /**
  * 顯示Notify
  * 
- * @param {object} param 參數
- * @param {string} param.type 通知類型
- * @param {string} param.title 標題
- * @param {string|array} param.message 訊息內容
- * @param {boolean} param.autoHide 是否自動隱藏
+ * @param {string} type 通知類型
+ * @param {string|array} message 訊息內容
  * 
  * @returns {void}
  */
-const showNotify = (param) => {
-    let message = param.message;
-
+const showNotify = (type, message) => {
     if (message.length === 0) {
         return;
     }
@@ -23,17 +18,13 @@ const showNotify = (param) => {
     }
 
     const setting = {
-        type: param.type,
-        title: param.title,
+        type: type,
+        title: '通知',
         message: message,
         position: 'top-right',
         dangerouslyUseHTMLString: true, // 將傳入訊息判定為HTML
         offset: 50,
     };
-
-    if ((param.autoHide ?? true) == false) {
-        setting.duration = 0;
-    }
 
     ElNotification(setting);
 };

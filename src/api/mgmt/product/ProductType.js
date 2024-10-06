@@ -12,7 +12,7 @@ const apiTarget = 'mgmt';
  * @returns {object} 
  */
 export const getProductTypePage = async (page, keyword) => {
-    const uri = '/backend/product/type';
+    const uri = '/mgmt/product/type';
 
     const data = {
         page: page,
@@ -39,7 +39,7 @@ export const getProductTypePage = async (page, keyword) => {
  * @returns {object}
  */
 export const deleteProductType = async (productTypeId) => {
-    const uri = `/backend/product/type/${productTypeId}`;
+    const uri = `/mgmt/product/type/${productTypeId}`;
 
     const param = {
         method: 'delete',
@@ -61,7 +61,7 @@ export const deleteProductType = async (productTypeId) => {
  * @returns {object}
  */
 export const editProductTypeStatus = async (productTypeId, status) => {
-    const uri = `/backend/product/type/${productTypeId}/status`;
+    const uri = `/mgmt/product/type/${productTypeId}/status`;
 
     const data = {
         status: status,
@@ -87,7 +87,7 @@ export const editProductTypeStatus = async (productTypeId, status) => {
  * @returns {object}
  */
 export const addProductType = async (productTypeData) => {
-    const uri = '/backend/product/type';
+    const uri = '/mgmt/product/type';
 
     const param = {
         method: 'post',
@@ -109,7 +109,7 @@ export const addProductType = async (productTypeData) => {
  * @returns {object}
  */
 export const getProductType = async (productTypeId) => {
-    const uri = `/backend/product/type/${productTypeId}`;
+    const uri = `/mgmt/product/type/${productTypeId}`;
 
     const param = {
         method: 'get',
@@ -131,7 +131,7 @@ export const getProductType = async (productTypeId) => {
  * @returns {object}
  */
 export const editProductType = async (productTypeId, productTypeData) => {
-    const uri = `/backend/product/type/${productTypeId}`;
+    const uri = `/mgmt/product/type/${productTypeId}`;
 
     const param = {
         method: 'put',

@@ -12,7 +12,7 @@ const apiTarget = 'shop';
  * @returns {object} 
  */
 export const getProductPage = async (page, searchData) => {
-    const uri = '/frontend/product';
+    const uri = '/shop/product';
 
     const data = {
         page: page,
@@ -40,7 +40,7 @@ export const getProductPage = async (page, searchData) => {
  * @returns {object}
  */
 export const getProduct = async (productId) => {
-    const uri = `/frontend/product/${productId}`;
+    const uri = `/shop/product/${productId}`;
 
     const param = {
         method: 'get',

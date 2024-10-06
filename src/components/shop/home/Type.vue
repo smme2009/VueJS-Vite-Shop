@@ -14,7 +14,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import toolNotify from "@/tool/Notify.js";
-import * as apiProductType from "@/api/shop/product/ProductType.js";
+import * as apiProductType from "@/api/public/product/ProductType.js";
 
 const productTypeId = defineModel();
 const productTypeData = ref([]);
@@ -34,12 +34,7 @@ const getProductTypeList = async () => {
     const response = await apiProductType.getProductTypeList();
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 

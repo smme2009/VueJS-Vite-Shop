@@ -1,46 +1,47 @@
 <template>
-    <div class="w-full flex justify-center">
-        <el-card class="w-11/12 !rounded-lg">
-            <template #header>
-                <div class="card-header">
-                    <span>新增商品庫存單</span>
-                </div>
-            </template>
-            <el-form :model="form" label-width="auto">
-                <el-form-item label="商品庫存單類型">
-                    <el-select
-                        class="!w-1/4"
-                        v-model="form.productStockTypeId"
-                        filterable
-                        remote
-                        reserve-keyword
-                        placeholder="請選擇商品庫存單類型"
-                        loading-text="讀取中..."
-                        no-data-text="無資料"
-                        :loading="productStockTypeLoading"
-                        :remote-method="getProductStockType"
-                    >
-                        <el-option
-                            v-for="item in productStockType"
-                            :label="item.name"
-                            :value="item.productStockTypeId"
-                        />
-                    </el-select>
-                </el-form-item>
-                <el-form-item label="商品數量">
-                    <el-input-number v-model="form.quantity" min="0" />
-                </el-form-item>
-            </el-form>
-            <template #footer>
-                <div class="w-full flex justify-end">
-                    <el-button @click="toListPage"> 取消 </el-button>
-                    <el-button type="primary" @click="saveProductStock">
-                        儲存
-                    </el-button>
-                </div>
-            </template>
-        </el-card>
-    </div>
+    <el-card class="rounded-lg">
+        <template #header>
+            <div class="card-header">
+                <span>新增商品庫存單</span>
+            </div>
+        </template>
+        <el-form :model="form" label-width="auto">
+            <el-form-item
+                :error="formErrMsg.productStockTypeId"
+                label="商品庫存單類型"
+            >
+                <el-select
+                    class="!w-1/4"
+                    v-model="form.productStockTypeId"
+                    filterable
+                    remote
+                    reserve-keyword
+                    placeholder="請選擇商品庫存單類型"
+                    loading-text="讀取中..."
+                    no-data-text="無資料"
+                    :loading="productStockTypeLoading"
+                    :remote-method="getProductStockType"
+                >
+                    <el-option
+                        v-for="item in productStockType"
+                        :label="item.name"
+                        :value="item.productStockTypeId"
+                    />
+                </el-select>
+            </el-form-item>
+            <el-form-item :error="formErrMsg.quantity" label="商品數量">
+                <el-input-number v-model="form.quantity" min="1" />
+            </el-form-item>
+        </el-form>
+        <template #footer>
+            <div class="w-full flex justify-end">
+                <el-button @click="toListPage">取消</el-button>
+                <el-button type="primary" @click="saveProductStock">
+                    儲存
+                </el-button>
+            </div>
+        </template>
+    </el-card>
 </template>
 
 <script setup>
@@ -52,16 +53,15 @@ import toolNotify from "@/tool/Notify.js";
 
 const route = useRoute();
 const router = useRouter();
+const productStockType = ref([]);
+const productStockTypeLoading = ref(false);
+const productId = route.params.productId;
+const formErrMsg = ref({});
 
 const form = reactive({
     productStockTypeId: null,
     quantity: 0,
 });
-
-const productStockType = ref([]);
-const productStockTypeLoading = ref(false);
-
-const productId = route.params.productId;
 
 /**
  * 儲存商品庫存單
@@ -71,23 +71,19 @@ const productId = route.params.productId;
 const saveProductStock = async () => {
     const response = await apiProductStock.addProductStock(productId, form);
 
+    formErrMsg.value = {};
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-            autoHide: false,
+        const errorList = response.data.errorList ?? [];
+
+        errorList.forEach((error) => {
+            formErrMsg.value[error.name] = error.message.join("、");
         });
 
+        toolNotify("error", response.message);
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
-
+    toolNotify("success", response.message);
     toListPage();
 };
 
@@ -118,14 +114,8 @@ const getProductStockType = async () => {
     const response = await apiProductStockType.getProductStockTypeList();
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         productStockTypeLoading.value = false;
-
         return;
     }
 

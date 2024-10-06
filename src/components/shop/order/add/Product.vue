@@ -44,12 +44,7 @@ onMounted(async () => {
     const isGet = await getProductList();
 
     if (isGet === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: "請重新選擇商品",
-        });
-
+        toolNotify("error", "請重新選擇商品");
         router.push({ name: "shopCart" });
     }
 });

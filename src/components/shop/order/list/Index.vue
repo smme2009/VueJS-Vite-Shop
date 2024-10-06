@@ -107,12 +107,7 @@ const getOrderStatusList = async () => {
     const response = await apiOrderStatus.getOrderStatusList();
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 
@@ -135,12 +130,7 @@ const getOrderPage = async (isReset = false) => {
     const response = await apiGetOrderPage(needPage, keyword);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 

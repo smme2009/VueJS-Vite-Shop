@@ -12,7 +12,7 @@ const apiTarget = 'mgmt';
  * @returns {object} 
  */
 export const getProductStockPage = async (productId, page) => {
-    const uri = `/backend/product/${productId}/stock`;
+    const uri = `/mgmt/product/${productId}/stock`;
 
     const data = {
         page: page,
@@ -39,7 +39,7 @@ export const getProductStockPage = async (productId, page) => {
  * @returns {object}
  */
 export const addProductStock = async (productId, productStockData) => {
-    const uri = `/backend/product/${productId}/stock`;
+    const uri = `/mgmt/product/${productId}/stock`;
 
     const param = {
         method: 'post',

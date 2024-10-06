@@ -45,12 +45,7 @@ const option = {
             const response = await apiCart.getCartProductList();
 
             if (response.status === false) {
-                toolNotify({
-                    type: "error",
-                    title: "通知",
-                    message: response.message,
-                });
-
+                toolNotify("error", response.message);
                 return false;
             }
 
@@ -98,11 +93,7 @@ const option = {
                 this.localData.push(param);
             }
 
-            toolNotify({
-                type: "success",
-                title: "通知",
-                message: "成功加入購物車",
-            });
+            toolNotify("success", "成功加入購物車");
         },
 
         /**
@@ -118,20 +109,11 @@ const option = {
             const response = await apiCart.editCartProduct(data);
 
             if (response.status === false) {
-                toolNotify({
-                    type: "error",
-                    title: "通知",
-                    message: response.message,
-                });
-
+                toolNotify("error", response.message);
                 return false;
             }
 
-            toolNotify({
-                type: "success",
-                title: "通知",
-                message: "成功加入購物車",
-            });
+            toolNotify("success", "成功加入購物車");
 
             const isGet = await this.getMemberCartProductList();
 
@@ -181,20 +163,11 @@ const option = {
             const response = await apiCart.deleteCartProduct(data);
 
             if (response.status === false) {
-                toolNotify({
-                    type: "error",
-                    title: "通知",
-                    message: response.message,
-                });
-
+                toolNotify("error", response.message);
                 return false;
             }
 
-            toolNotify({
-                type: "success",
-                title: "通知",
-                message: response.message,
-            });
+            toolNotify("success", response.message);
 
             const isGet = this.getMemberCartProductList();
 

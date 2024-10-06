@@ -13,7 +13,7 @@ const apiTarget = 'shop';
  * @returns {void}
  */
 export const getOrderPage = async (page, keyword = '') => {
-    const uri = '/frontend/order';
+    const uri = '/shop/order';
 
     const data = {
         page: page,
@@ -40,7 +40,7 @@ export const getOrderPage = async (page, keyword = '') => {
  * @returns {object} 
  */
 export const addOrder = async (order) => {
-    const uri = '/frontend/order';
+    const uri = '/shop/order';
 
     const param = {
         method: 'post',

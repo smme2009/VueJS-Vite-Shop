@@ -148,11 +148,7 @@ onMounted(() => {
  * @returns {void}
  */
 const getCoupon = () => {
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: "查無可用優惠券",
-    });
+    toolNotify("success", "查無可用優惠券");
 };
 
 /**
@@ -296,12 +292,7 @@ const setAllCheckStatus = () => {
  */
 const toOrderPage = () => {
     if (cartIdList.value.length === 0) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: "請選擇商品",
-        });
-
+        toolNotify("error", "請選擇商品");
         return;
     }
 

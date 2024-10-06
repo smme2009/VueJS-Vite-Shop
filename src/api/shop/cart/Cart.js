@@ -9,7 +9,7 @@ const apiTarget = 'shop';
  * @returns {object} 
  */
 export const getCartProductList = async () => {
-    const uri = '/frontend/cart';
+    const uri = '/shop/cart';
 
     const param = {
         method: 'get',
@@ -30,7 +30,7 @@ export const getCartProductList = async () => {
  * @returns {object}
  */
 export const editCartProduct = async (cartProductList) => {
-    const uri = '/frontend/cart';
+    const uri = '/shop/cart';
 
     const data = {
         cartProductList: cartProductList,
@@ -56,7 +56,7 @@ export const editCartProduct = async (cartProductList) => {
  * @returns {object} 
  */
 export const deleteCartProduct = async (cartIdList) => {
-    const uri = '/frontend/cart';
+    const uri = '/shop/cart';
 
     const data = {
         cartIdList: cartIdList,

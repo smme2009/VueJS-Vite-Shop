@@ -1,58 +1,44 @@
 <template>
-    <div>
+    <div class="space-y-2">
         <!-- 資訊列 -->
-        <div class="flex justify-center mt-5">
-            <div class="w-11/12 flex justify-start space-x-2">
-                <el-card class="w-1/4 text-lg !rounded-lg">
-                    <b>商品名稱：{{ product.name }}</b>
-                </el-card>
-                <el-card class="w-1/4 text-lg !rounded-lg">
-                    <b>庫存數量：{{ product.quantity }}</b>
-                </el-card>
-            </div>
+        <div class="flex justify-start space-x-1">
+            <el-card class="w-1/4 text-lg rounded-lg">
+                <b>商品名稱：{{ product.name }}</b>
+            </el-card>
+            <el-card class="w-1/4 text-lg rounded-lg">
+                <b>庫存數量：{{ product.quantity }}</b>
+            </el-card>
         </div>
         <!-- 搜尋列 -->
-        <div class="flex justify-center mt-5">
-            <div class="w-11/12 flex justify-end">
-                <div>
-                    <el-button @click="toProductPage" icon="Back">
-                        返回商品管理
-                    </el-button>
-                    <el-button type="success" @click="toAddPage" icon="Plus">
-                        新增庫存單
-                    </el-button>
-                </div>
-            </div>
+        <div class="flex justify-end space-x-1">
+            <el-button @click="toProductPage" icon="Back">
+                返回商品管理
+            </el-button>
+            <el-button type="success" @click="toAddPage" icon="Plus">
+                新增庫存單
+            </el-button>
         </div>
         <!-- 列表 -->
-        <div class="flex justify-center mt-2.5">
-            <div class="w-11/12">
-                <el-table
-                    class="rounded-lg"
-                    :data="tableData"
-                    border
-                    empty-text="查無資料"
-                    :row-class-name="setRowClass"
-                >
-                    <el-table-column
-                        prop="productStockTypeName"
-                        label="庫存單類型"
-                    />
-                    <el-table-column prop="quantity" label="數量" />
-                    <el-table-column prop="createTime" label="新增時間" />
-                </el-table>
-            </div>
-        </div>
+        <el-table
+            class="rounded-lg"
+            :data="tableData"
+            border
+            empty-text="查無資料"
+            :row-class-name="setRowClass"
+        >
+            <el-table-column prop="productStockTypeName" label="庫存單類型" />
+            <el-table-column prop="quantity" label="數量" />
+            <el-table-column prop="createTime" label="新增時間" />
+        </el-table>
         <!-- 分頁 -->
-        <page />
+        <compPage v-model:page="page" v-model:dataTotal="dataTotal" />
     </div>
 </template>
 
 <script setup>
-import page from "@/components/mgmt/public/page/Index.vue";
+import compPage from "@/components/mgmt/public/page/Index.vue";
 import { ref, watch, onMounted } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import storeBePage from "@/store/backend/page/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import * as toolTime from "@/tool/Time.js";
 import * as apiProduct from "@/api/mgmt/product/Product.js";
@@ -60,25 +46,21 @@ import * as apiProductStock from "@/api/mgmt/product/ProductStock.js";
 
 const route = useRoute();
 const router = useRouter();
-const store = storeBePage();
-
+const page = ref(1);
+const dataTotal = ref(0);
 const tableData = ref([]);
 const product = ref({});
-
 const productId = route.params.productId;
 
 onMounted(() => {
     // 初始化時取得商品資料
     getProduct();
 
+    // 取得分頁資料
+    getProductStockPage();
+
     // 監聽分頁頁碼變更
-    watch(() => store.nowPage, getProductStockData, { deep: true });
-
-    // 重設分頁資料
-    store.$reset();
-
-    // 取得第一頁資料
-    store.nowPage = 1;
+    watch(page, getProductStockPage);
 });
 
 /**
@@ -127,23 +109,18 @@ const setRowClass = (row) => {
 };
 
 /**
- * 取得商品庫存單資料
+ * 取得商品庫存單分頁
  *
  * @returns {void}
  */
-const getProductStockData = async () => {
+const getProductStockPage = async () => {
     const response = await apiProductStock.getProductStockPage(
         productId,
-        store.nowPage
+        page.value
     );
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 
@@ -156,7 +133,7 @@ const getProductStockData = async () => {
     });
 
     // 設定資料總數
-    store.setDataTotal = productStockPage.total;
+    dataTotal.value = productStockPage.total;
 };
 
 /**
@@ -168,12 +145,7 @@ const getProduct = async () => {
     const response = await apiProduct.getProduct(productId);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 

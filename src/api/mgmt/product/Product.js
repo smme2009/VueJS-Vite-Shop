@@ -12,7 +12,7 @@ const apiTarget = 'mgmt';
  * @returns {object} 
  */
 export const getProductPage = async (page, keyword) => {
-    const uri = '/backend/product';
+    const uri = '/mgmt/product';
 
     const data = {
         page: page,
@@ -39,7 +39,7 @@ export const getProductPage = async (page, keyword) => {
  * @returns {object}
  */
 export const deleteProduct = async (productId) => {
-    const uri = `/backend/product/${productId}`;
+    const uri = `/mgmt/product/${productId}`;
 
     const param = {
         method: 'delete',
@@ -61,7 +61,7 @@ export const deleteProduct = async (productId) => {
  * @returns {object}
  */
 export const editProductStatus = async (productId, status) => {
-    const uri = `/backend/product/${productId}/status`;
+    const uri = `/mgmt/product/${productId}/status`;
 
     const data = {
         status: status,
@@ -87,7 +87,7 @@ export const editProductStatus = async (productId, status) => {
  * @return {object}
  */
 export const uploadProductPhoto = async (file) => {
-    const uri = '/backend/product/photo';
+    const uri = '/mgmt/product/photo';
 
     // 設定Form
     const form = new FormData;
@@ -119,7 +119,7 @@ export const uploadProductPhoto = async (file) => {
  * @returns {object}
  */
 export const addProduct = async (productData) => {
-    const uri = '/backend/product';
+    const uri = '/mgmt/product';
 
     const param = {
         method: 'post',
@@ -141,7 +141,7 @@ export const addProduct = async (productData) => {
  * @returns {object}
  */
 export const getProduct = async (productId) => {
-    const uri = `/backend/product/${productId}`;
+    const uri = `/mgmt/product/${productId}`;
 
     const param = {
         method: 'get',
@@ -163,7 +163,7 @@ export const getProduct = async (productId) => {
  * @returns {object}
  */
 export const editProduct = async (productId, productData) => {
-    const uri = `/backend/product/${productId}`;
+    const uri = `/mgmt/product/${productId}`;
 
     const param = {
         method: 'put',

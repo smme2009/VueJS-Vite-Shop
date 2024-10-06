@@ -86,14 +86,8 @@ const getProductData = async () => {
     const response = await apiGetProduct(productId);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         router.push({ name: "shopHome" });
-
         return;
     }
 
@@ -116,11 +110,7 @@ const getProductData = async () => {
  * @returns {void}
  */
 const getCoupon = () => {
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: "查無可用優惠券",
-    });
+    toolNotify("success", "查無可用優惠券");
 };
 
 /**

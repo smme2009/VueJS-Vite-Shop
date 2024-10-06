@@ -9,7 +9,7 @@ const apiTarget = 'shop';
  * @returns {object} 
  */
 export const getBannerList = async () => {
-    const uri = '/frontend/banner';
+    const uri = '/shop/banner';
 
     const param = {
         method: 'get',

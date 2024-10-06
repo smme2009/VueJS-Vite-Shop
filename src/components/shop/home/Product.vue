@@ -114,12 +114,7 @@ const getProductPage = async (isReset = false) => {
     const response = await apiProduct.getProductPage(needPage, searchData);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 

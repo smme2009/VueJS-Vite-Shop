@@ -1,101 +1,87 @@
 <template>
-    <div>
+    <div class="space-y-2">
         <!-- 搜尋列 -->
-        <div class="flex justify-center mt-5">
-            <div class="w-11/12 flex justify-between">
-                <el-form :model="form" class="flex">
-                    <el-input
-                        class="mr-1.5"
-                        v-model="form.keyword"
-                        placeholder="請輸入橫幅名稱"
-                    />
-                    <el-button
-                        type="warning"
-                        @click="searchBanner"
-                        icon="Search"
-                    >
-                        搜尋
-                    </el-button>
-                </el-form>
-                <div>
-                    <el-button type="success" @click="toAddPage" icon="Plus">
-                        新增橫幅
-                    </el-button>
-                </div>
-            </div>
+        <div class="flex justify-between">
+            <el-form :model="form" class="flex space-x-1">
+                <el-input v-model="form.keyword" placeholder="請輸入橫幅名稱" />
+                <el-button type="warning" @click="searchBanner" icon="Search">
+                    搜尋
+                </el-button>
+            </el-form>
+            <el-button type="success" @click="toAddPage" icon="Plus">
+                新增橫幅
+            </el-button>
         </div>
         <!-- 列表 -->
-        <div class="flex justify-center mt-2.5">
-            <div class="w-11/12">
-                <el-table
-                    class="rounded-lg"
-                    :data="tableData"
-                    stripe
-                    border
-                    empty-text="查無資料"
-                >
-                    <el-table-column prop="name" label="橫幅名稱" />
-                    <el-table-column label="橫幅圖片">
-                        <template #default="scope">
-                            <el-image
-                                class="h-24"
-                                :src="scope.row.photoUrl"
-                                fit="fill"
-                            />
-                        </template>
-                    </el-table-column>
-                    <el-table-column prop="startTime" label="上架時間" />
-                    <el-table-column prop="endTime" label="下架時間" />
-                    <el-table-column label="狀態">
-                        <template #default="scope">
-                            <el-switch
-                                v-model="scope.row.status"
-                                @change="
-                                    editBannerStatus(scope.row.bannerId, $event)
-                                "
-                            />
-                        </template>
-                    </el-table-column>
-                    <el-table-column label="管理">
-                        <template #default="scope">
-                            <el-link
-                                class="mr-2"
-                                @click="toEditPage(scope.row.bannerId)"
-                                type="primary"
-                                icon="Edit"
-                            >
-                                編輯
-                            </el-link>
-                            <el-link
-                                class="mr-2"
-                                @click="deleteBanner(scope.row.bannerId)"
-                                type="danger"
-                                icon="Delete"
-                            >
-                                刪除
-                            </el-link>
-                        </template>
-                    </el-table-column>
-                </el-table>
-            </div>
-        </div>
+        <el-table
+            class="rounded-lg"
+            :data="tableData"
+            stripe
+            border
+            empty-text="查無資料"
+        >
+            <el-table-column prop="name" label="橫幅名稱" />
+            <el-table-column label="橫幅圖片">
+                <template #default="scope">
+                    <el-image
+                        class="h-24"
+                        :src="scope.row.photoUrl"
+                        fit="fill"
+                    />
+                </template>
+            </el-table-column>
+            <el-table-column prop="startTime" label="上架時間" />
+            <el-table-column prop="endTime" label="下架時間" />
+            <el-table-column label="狀態">
+                <template #default="scope">
+                    <el-switch
+                        v-model="scope.row.status"
+                        @change="editBannerStatus(scope.row.bannerId, $event)"
+                    />
+                </template>
+            </el-table-column>
+            <el-table-column label="管理">
+                <template #default="scope">
+                    <div class="flex flex-col">
+                        <el-link
+                            class="justify-start"
+                            @click="toEditPage(scope.row.bannerId)"
+                            :underline="false"
+                            type="primary"
+                            icon="Edit"
+                        >
+                            編輯
+                        </el-link>
+                        <el-link
+                            class="justify-start"
+                            @click="deleteBanner(scope.row.bannerId)"
+                            :underline="false"
+                            type="danger"
+                            icon="Delete"
+                        >
+                            刪除
+                        </el-link>
+                    </div>
+                </template>
+            </el-table-column>
+        </el-table>
         <!-- 分頁 -->
-        <page />
+        <compPage v-model:page="page" v-model:dataTotal="dataTotal" />
     </div>
 </template>
 
 <script setup>
-import page from "@/components/mgmt/public/page/Index.vue";
+import compPage from "@/components/mgmt/public/page/Index.vue";
 import { ref, reactive, watch, onMounted } from "vue";
 import { useRouter } from "vue-router";
-import storeBePage from "@/store/backend/page/Index.js";
 import toolNotify from "@/tool/Notify.js";
 import toolMessage from "@/tool/Message.js";
 import * as toolTime from "@/tool/Time.js";
 import * as apiBanner from "@/api/mgmt/banner/Banner.js";
 
 const router = useRouter();
-const store = storeBePage();
+const page = ref(1);
+const dataTotal = ref(0);
 const tableData = ref([]);
 
 const form = reactive({
@@ -103,25 +89,12 @@ const form = reactive({
 });
 
 onMounted(() => {
+    // 取得橫幅分頁
+    getBannerPage();
+
     // 監聽分頁頁碼變更
-    watch(() => store.nowPage, getBannerData, { deep: true });
-
-    // 觸發搜尋
-    searchBanner();
+    watch(page, getBannerPage);
 });
-
-/**
- * 搜尋橫幅
- *
- * @returns {void}
- */
-const searchBanner = () => {
-    // 重設分頁資料
-    store.$reset();
-
-    // 取得第一頁資料
-    store.nowPage = 1;
-};
 
 /**
  * 編輯橫幅狀態
@@ -135,24 +108,12 @@ const editBannerStatus = async (bannerId, status) => {
     const response = await apiBanner.editBannerStatus(bannerId, status);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-            autoHide: false,
-        });
-
-        // 編輯失敗後重新刷新列表
-        getBannerData();
-
+        toolNotify("error", response.message);
+        getBannerPage(); //失敗後重新刷新資料
         return;
     }
 
-    toolNotify({
-        type: "success",
-        title: "通知",
-        message: response.message,
-    });
+    toolNotify("success", response.message);
 };
 
 /**
@@ -170,23 +131,12 @@ const deleteBanner = async (bannerId) => {
             const response = await apiBanner.deleteBanner(bannerId);
 
             if (response.status === false) {
-                toolNotify({
-                    type: "error",
-                    title: "通知",
-                    message: response.message,
-                });
-
+                toolNotify("error", response.message);
                 return;
             }
 
-            toolNotify({
-                type: "success",
-                title: "通知",
-                message: response.message,
-            });
-
-            // 刪除成功後重新刷新列表
-            getBannerData();
+            toolNotify("success", response.message);
+            getBannerPage(); // 刪除成功後重新刷新列表
         },
     };
 
@@ -221,20 +171,15 @@ const toEditPage = (bannerId) => {
 };
 
 /**
- * 取得橫幅資料
+ * 取得橫幅分頁
  *
  * @returns {void}
  */
-const getBannerData = async () => {
-    const response = await apiBanner.getBannerPage(store.nowPage, form.keyword);
+const getBannerPage = async () => {
+    const response = await apiBanner.getBannerPage(page.value, form.keyword);
 
     if (response.status === false) {
-        toolNotify({
-            type: "error",
-            title: "通知",
-            message: response.message,
-        });
-
+        toolNotify("error", response.message);
         return;
     }
 
@@ -254,6 +199,15 @@ const getBannerData = async () => {
     });
 
     // 設定資料總數
-    store.setDataTotal = bannerPage.total;
+    dataTotal.value = bannerPage.total;
+};
+
+/**
+ * 搜尋橫幅
+ *
+ * @returns {void}
+ */
+const searchBanner = () => {
+    page.value !== 1 ? (page.value = 1) : getBannerPage();
 };
 </script>
