@@ -44,9 +44,6 @@
             <el-form-item :error="formErrMsg.price" label="商品價格">
                 <el-input-number v-model="form.price" min="0" />
             </el-form-item>
-            <el-form-item :error="formErrMsg.quantity" label="商品數量">
-                <el-input-number v-model="form.quantity" min="0" />
-            </el-form-item>
             <el-form-item :error="formErrMsg.startTime" label="商品上架時間">
                 <el-date-picker
                     v-model="form.startTime"
@@ -116,7 +113,6 @@ const form = reactive({
     name: "",
     photoFileId: null,
     price: 0,
-    quantity: 0,
     startTime: "",
     endTime: "",
     description: "",
@@ -207,7 +203,6 @@ const getProduct = async () => {
     form.name = product.name;
     form.photoFileId = product.photoFileId;
     form.price = product.price;
-    form.quantity = product.quantity;
     form.startTime = toolTime.getDateTime(product.startTime);
     form.endTime = toolTime.getDateTime(product.endTime);
     form.description = product.description;
