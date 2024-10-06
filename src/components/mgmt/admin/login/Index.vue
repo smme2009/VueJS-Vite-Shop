@@ -1,19 +1,19 @@
 <template>
-    <div id="login-form" class="h-full w-full flex justify-center items-center">
-        <el-form @keypress.enter="login()">
-            <el-card class="w-96 !rounded-lg">
-                <template #header>
-                    <div class="card-header">
-                        <div class="flex justify-center">
-                            <router-link
-                                class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-sky-500"
-                                :to="{ name: 'mgmtLogin' }"
-                            >
-                                COORD
-                            </router-link>
-                        </div>
+    <div class="h-full w-full flex justify-center items-center">
+        <el-card class="w-[90%] max-w-96 !rounded-lg">
+            <template #header>
+                <div class="card-header">
+                    <div class="flex justify-center">
+                        <router-link
+                            class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-rose-500 to-sky-500"
+                            :to="{ name: 'mgmtLogin' }"
+                        >
+                            COORD
+                        </router-link>
                     </div>
-                </template>
+                </div>
+            </template>
+            <el-form @keypress.enter="login">
                 <el-form-item label="帳號" :error="formErrMsg.account">
                     <el-input v-model="form.account" placeholder="請輸入帳號" />
                 </el-form-item>
@@ -24,15 +24,13 @@
                         placeholder="請輸入密碼"
                     />
                 </el-form-item>
-                <template #footer>
-                    <div class="w-full flex justify-end">
-                        <el-button type="primary" @click="login()">
-                            登入
-                        </el-button>
-                    </div>
-                </template>
-            </el-card>
-        </el-form>
+            </el-form>
+            <template #footer>
+                <div class="w-full flex justify-end">
+                    <el-button type="primary" @click="login">登入</el-button>
+                </div>
+            </template>
+        </el-card>
     </div>
 </template>
 
