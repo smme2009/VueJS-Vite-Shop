@@ -30,7 +30,7 @@
                 </el-select>
             </el-form-item>
             <el-form-item :error="formErrMsg.quantity" label="商品數量">
-                <el-input-number v-model="form.quantity" min="0" />
+                <el-input-number v-model="form.quantity" min="1" />
             </el-form-item>
         </el-form>
         <template #footer>
