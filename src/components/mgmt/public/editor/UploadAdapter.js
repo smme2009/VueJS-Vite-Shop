@@ -26,7 +26,7 @@ export default class UploadAdapter {
     _initRequest() {
         const store = storeBeAdmin();
         const xhr = this.xhr = new XMLHttpRequest();
-        const uploadUrl = import.meta.env.VITE_API_URL + "/backend/editor/photo";
+        const uploadUrl = import.meta.env.VITE_API_URL + "/mgmt/editor/photo";
 
         xhr.open('post', uploadUrl, true);
         xhr.setRequestHeader("Authorization", "Bearer " + store.jwtToken);
