@@ -1,0 +1,150 @@
+import type IResponse from '@/interfaces/response/Response'
+import axios, { type AxiosInstance, type AxiosResponse } from 'axios'
+import { forEach } from 'lodash'
+
+/**
+ * Ajax工具
+ */
+export default class Ajax {
+  // Axios實例
+  private instance: AxiosInstance
+
+  /**
+   * 建構子
+   */
+  constructor(jwtToken?: string) {
+    // 取得Axios實例
+    this.instance = this.getInstance()
+
+    // 設定JWT Token
+    if (jwtToken !== undefined) {
+      this.setJwtToken(jwtToken)
+    }
+  }
+
+  /**
+   * GET請求
+   *
+   * @param {string} url 網址
+   * @param {object} [data] 請求資料
+   *
+   * @returns {Promise<null | IResponse<T>>} 回傳資料
+   */
+  public async get<T>(url: string, data?: object): Promise<null | IResponse<T>> {
+    const response = await this.instance.get(url, { params: data })
+    return this.getResponseData<T>(response)
+  }
+
+  /**
+   * POST請求
+   *
+   * @param {string} url 網址
+   * @param {object} [data] 請求資料
+   *
+   * @returns {Promise<null | IResponse<T>>} 回傳資料
+   */
+  public async post<T>(url: string, data?: object): Promise<null | IResponse<T>> {
+    const response = await this.instance.post(url, data)
+    return this.getResponseData<T>(response)
+  }
+
+  /**
+   * 表單POST請求
+   *
+   * @param {string} url 網址
+   * @param {object} data 請求資料
+   *
+   * @returns {Promise<null | IResponse<T>>} 回傳資料
+   */
+  public async postForm<T>(url: string, data: object): Promise<null | IResponse<T>> {
+    // 組成表單資料
+    const formData = new FormData()
+    forEach(data, (value, key) => {
+      formData.append(key, value)
+    })
+
+    // Header
+    const headers = { 'Content-Type': 'multipart/form-data' }
+
+    const response = await this.instance.post(url, formData, { headers: headers })
+    return this.getResponseData<T>(response)
+  }
+
+  /**
+   * PUT請求
+   *
+   * @param {string} url 網址
+   * @param {object} [data] 請求資料
+   *
+   * @returns {Promise<null | IResponse<T>>} 回傳資料
+   */
+  public async put<T>(url: string, data?: object): Promise<null | IResponse<T>> {
+    const response = await this.instance.put(url, data)
+    return this.getResponseData<T>(response)
+  }
+
+  /**
+   * PATCH請求
+   *
+   * @param {string} url 網址
+   * @param {object} [data] 請求資料
+   *
+   * @returns {Promise<null | IResponse<T>>} 回傳資料
+   */
+  public async patch<T>(url: string, data?: object): Promise<null | IResponse<T>> {
+    const response = await this.instance.patch(url, data)
+    return this.getResponseData<T>(response)
+  }
+
+  /**
+   * DELETE請求
+   *
+   * @param {string} url 網址
+   *
+   * @returns {Promise<null | IResponse<T>>} 回傳資料
+   */
+  public async delete<T>(url: string): Promise<null | IResponse<T>> {
+    const response = await this.instance.delete(url)
+    return this.getResponseData<T>(response)
+  }
+
+  /**
+   * 取得Axios實例
+   *
+   * @returns {AxiosInstance} Axios實例
+   */
+  private getInstance(): AxiosInstance {
+    return axios.create({
+      baseURL: import.meta.env.VITE_APP_API_URL,
+      timeout: 20000,
+    })
+  }
+
+  /**
+   * 設定JWT Token
+   *
+   * @param {string} jwtToken JWT Token
+   */
+  private setJwtToken(jwtToken: string): void {
+    this.instance.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`
+  }
+
+  /**
+   * 處理回傳資料
+   *
+   * @param {AxiosResponse} response 回應
+   *
+   * @returns {null | IResponse<T>} 回傳資料
+   */
+  private getResponseData<T>(response: AxiosResponse): null | IResponse<T> {
+    switch (response.status) {
+      // 請求有回應，回傳資料
+      case 200:
+      case 400:
+        return response.data as IResponse<T>
+      // 其餘狀態先當作例外
+      default:
+        return null
+    }
+  }
+}
