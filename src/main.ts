@@ -5,6 +5,7 @@ import App from './App.vue'
 import router from './router'
 import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
+import './assets/tailwind.css'
 
 // 建立Vue的實例
 const app = createApp(App)
