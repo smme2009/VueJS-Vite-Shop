@@ -1,6 +1,6 @@
 import type IResponse from '@/interfaces/response/Response'
 import axios, { type AxiosInstance, type AxiosResponse } from 'axios'
-import { forEach } from 'lodash'
+import lodash from 'lodash'
 
 /**
  * Ajax工具
@@ -59,7 +59,7 @@ export default class Ajax {
   public async postForm<T>(url: string, data: object): Promise<null | IResponse<T>> {
     // 組成表單資料
     const formData = new FormData()
-    forEach(data, (value, key) => {
+    lodash.each(data, (value, key) => {
       formData.append(key, value)
     })
 
@@ -117,6 +117,12 @@ export default class Ajax {
     return axios.create({
       baseURL: import.meta.env.VITE_APP_API_URL,
       timeout: 20000,
+      // 設定可不觸發Catch的Http Code
+      validateStatus: (status) => {
+        // 這系列的Http Code可不觸發Catch
+        const httpCodes = [200, 400, 500]
+        return lodash.some(httpCodes, (code) => status >= code && status <= code + 99)
+      },
     })
   }
 
