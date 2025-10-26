@@ -146,8 +146,15 @@ export default class Ajax {
     switch (response.status) {
       // 請求有回應，回傳資料
       case 200:
+        return {
+          status: true,
+          ...response.data,
+        }
       case 400:
-        return response.data as IResponse<T>
+        return {
+          status: false,
+          ...response.data,
+        }
       // 其餘狀態先當作例外
       default:
         return null
