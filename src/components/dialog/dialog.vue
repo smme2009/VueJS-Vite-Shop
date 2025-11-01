@@ -1,6 +1,6 @@
 <template>
-  <el-dialog class="max-w-md" v-model="visible" title="訊息">
-    <span>{{ message }}</span>
+  <el-dialog class="max-w-md" v-model="storeDialog.visible" title="訊息">
+    <span>{{ storeDialog.message }}</span>
     <template #footer>
       <div class="dialog-footer">
         <el-button type="primary" @click="close">確定</el-button>
@@ -12,8 +12,9 @@
 <script lang="ts" setup>
 defineOptions({ name: 'CompDialog' })
 
-const visible = defineModel('visible', { default: false }) // 顯示狀態
-const message = defineModel('message', { default: '' }) // 訊息
+import { useDialogStore } from '@/stores/dialog'
+
+const storeDialog = useDialogStore() //狀態管理-對話框
 
 /**
  * 關閉對話框
@@ -21,6 +22,6 @@ const message = defineModel('message', { default: '' }) // 訊息
  * @returns {void}
  */
 const close = (): void => {
-  visible.value = false
+  storeDialog.hide()
 }
 </script>
