@@ -30,7 +30,10 @@ export default class Ajax {
    *
    * @returns {Promise<null | IResponse<T>>} 回傳資料
    */
-  public async get<T>(url: string, data?: object): Promise<null | IResponse<T>> {
+  public async get<T>(
+    url: string,
+    data?: object,
+  ): Promise<null | IResponse<T>> {
     const response = await this.instance.get(url, { params: data })
     return this.getResponseData<T>(response)
   }
@@ -43,7 +46,10 @@ export default class Ajax {
    *
    * @returns {Promise<null | IResponse<T>>} 回傳資料
    */
-  public async post<T>(url: string, data?: object): Promise<null | IResponse<T>> {
+  public async post<T>(
+    url: string,
+    data?: object,
+  ): Promise<null | IResponse<T>> {
     const response = await this.instance.post(url, data)
     return this.getResponseData<T>(response)
   }
@@ -56,7 +62,10 @@ export default class Ajax {
    *
    * @returns {Promise<null | IResponse<T>>} 回傳資料
    */
-  public async postForm<T>(url: string, data: object): Promise<null | IResponse<T>> {
+  public async postForm<T>(
+    url: string,
+    data: object,
+  ): Promise<null | IResponse<T>> {
     // 組成表單資料
     const formData = new FormData()
     lodash.each(data, (value, key) => {
@@ -65,8 +74,10 @@ export default class Ajax {
 
     // Header
     const headers = { 'Content-Type': 'multipart/form-data' }
+    const response = await this.instance.post(url, formData, {
+      headers: headers,
+    })
 
-    const response = await this.instance.post(url, formData, { headers: headers })
     return this.getResponseData<T>(response)
   }
 
@@ -78,7 +89,10 @@ export default class Ajax {
    *
    * @returns {Promise<null | IResponse<T>>} 回傳資料
    */
-  public async put<T>(url: string, data?: object): Promise<null | IResponse<T>> {
+  public async put<T>(
+    url: string,
+    data?: object,
+  ): Promise<null | IResponse<T>> {
     const response = await this.instance.put(url, data)
     return this.getResponseData<T>(response)
   }
@@ -91,7 +105,10 @@ export default class Ajax {
    *
    * @returns {Promise<null | IResponse<T>>} 回傳資料
    */
-  public async patch<T>(url: string, data?: object): Promise<null | IResponse<T>> {
+  public async patch<T>(
+    url: string,
+    data?: object,
+  ): Promise<null | IResponse<T>> {
     const response = await this.instance.patch(url, data)
     return this.getResponseData<T>(response)
   }
@@ -120,8 +137,10 @@ export default class Ajax {
       // 設定可不觸發Catch的Http Code
       validateStatus: (status) => {
         // 這系列的Http Code可不觸發Catch
-        const httpCodes = [200, 400, 500]
-        return lodash.some(httpCodes, (code) => status >= code && status <= code + 99)
+        return lodash.some(
+          [200, 400, 500],
+          (code) => status >= code && status <= code + 99,
+        )
       },
     })
   }
@@ -132,7 +151,8 @@ export default class Ajax {
    * @param {string} jwtToken JWT Token
    */
   private setJwtToken(jwtToken: string): void {
-    this.instance.defaults.headers.common['Authorization'] = `Bearer ${jwtToken}`
+    const authZ = `Bearer ${jwtToken}`
+    this.instance.defaults.headers.common['Authorization'] = authZ
   }
 
   /**
@@ -142,7 +162,9 @@ export default class Ajax {
    *
    * @returns {null | IResponse<T>} 回傳資料
    */
-  private getResponseData<T>(response: AxiosResponse): null | IResponse<T> {
+  private getResponseData<T>(
+    response: AxiosResponse,
+  ): null | IResponse<T> {
     switch (response.status) {
       // 請求有回應，回傳資料
       case 200:
