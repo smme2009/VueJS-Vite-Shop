@@ -169,13 +169,15 @@ export default class Ajax {
       // 請求有回應，回傳資料
       case 200:
         return {
-          status: true,
           ...response.data,
+          status: true,
         }
       case 400:
+      case 404:
+      case 422:
         return {
-          status: false,
           ...response.data,
+          status: false,
         }
       // 其餘狀態先當作例外
       default:
