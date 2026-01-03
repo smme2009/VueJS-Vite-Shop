@@ -1,0 +1,9 @@
+services:
+  builder:
+    build:
+      context: .
+      dockerfile: ./docker/vue/dockerfile
+    container_name: ${VITE_APP_NAME}_builder
+    volumes:
+      - ./dist:/app/dist
+    restart: no
