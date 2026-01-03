@@ -45,7 +45,8 @@ jobs:
       # 部署到GCE
       - name: '部署到GCE'
         run: |
-          gcloud compute rsync ./dist/ ${{ secrets.GCE_NAME }}:${{ secrets.GCE_PATH }}/dev-shop-v2.coord.tw/dist \
-            --zone=${{ secrets.GCE_ZONE }} \
-            --delete \
+          rsync -avz --delete \
+            -e "gcloud compute ssh --zone=${{ secrets.GCE_ZONE }} --quiet" \
+            ./dist/ \
+            ${{ secrets.GCE_NAME }}:${{ secrets.GCE_PATH }}/dev-shop-v2.coord.tw/dist \
             --rsync-path="sudo rsync"
