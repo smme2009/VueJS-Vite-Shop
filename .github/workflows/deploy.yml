@@ -19,8 +19,8 @@ jobs:
       - name: '下載原始碼'
         uses: 'actions/checkout@v4'
 
-      # 設定Node.js環境
-      - name: '設定Node.js環境'
+      # 加入Node.js環境
+      - name: '加入Node.js'
         uses: 'actions/setup-node@v4'
         with:
           node-version: '24'
@@ -38,20 +38,21 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_KEY }}'
 
+      # 加入Gcloud CLI
+      - name: '加入Gcloud CLI'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
       # 設定Gcloud CLI
       - name: '設定Gcloud CLI'
-        uses: 'google-github-actions/setup-gcloud@v2'
+        run: |
+          gcloud config set compute/zone ${{ secrets.GCE_ZONE }}
 
       # 部署到GCE
       - name: '部署到GCE'
-        env:
-          GCE_ZONE: ${{ secrets.GCE_ZONE }}
-          GCE_NAME: ${{ secrets.GCE_NAME }}
-          GCE_PATH: ${{ secrets.GCE_PATH }}
         run: |
-          export RSYNC_RSH="gcloud compute ssh --zone=$GCE_ZONE --quiet"
+          export RSYNC_RSH="gcloud compute ssh --quiet"
 
           rsync -avz --delete \
             ./dist/ \
-            "$GCE_NAME:$GCE_PATH/dev-shop-v2.coord.tw/dist" \
-            --rsync-path="sudo /usr/bin/rsync"
+            "${{ secrets.GCE_NAME }}:${{ secrets.GCE_PATH }}/dev-shop-v2.coord.tw/dist" \
+            --rsync-path="sudo rsync"
