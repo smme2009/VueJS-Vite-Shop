@@ -1,0 +1,17 @@
+# 導入Node.js
+FROM node:24-alpine
+
+# 建立工作目錄
+WORKDIR /app
+
+# 導入package相關檔案
+COPY package*.json ./
+
+# 安裝套件
+RUN npm install
+
+# 複製專案原始碼
+COPY . .
+
+# 執行編譯指令
+CMD ["npm", "run", "build"]
