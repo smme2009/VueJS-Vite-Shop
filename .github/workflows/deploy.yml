@@ -42,17 +42,34 @@ jobs:
       - name: '加入Gcloud CLI'
         uses: 'google-github-actions/setup-gcloud@v2'
 
-      # 設定Gcloud CLI
-      - name: '設定Gcloud CLI'
+      # 6. 壓縮專案
+      - name: '壓縮專案'
         run: |
-          gcloud config set compute/zone ${{ secrets.GCE_ZONE }}
+          tar -czf project.tar.gz -C dist .
 
-      # 部署到GCE
-      - name: '部署到GCE'
+      # 7. 將壓縮檔傳送到GCE
+      - name: '將壓縮檔傳送到GCE'
         run: |
-          export RSYNC_RSH="gcloud compute ssh --quiet"
+          gcloud compute scp project.tar.gz \
+            ${{ secrets.GCE_NAME }}:/tmp/dev-shop-v2.tar.gz \
+            --zone=${{ secrets.GCE_ZONE }}
 
-          rsync -avz --delete \
-            ./dist/ \
-            "${{ secrets.GCE_NAME }}:${{ secrets.GCE_PATH }}/dev-shop-v2.coord.tw/dist" \
-            --rsync-path="sudo rsync"
+      # 8. 部署GCE中的專案
+      - name: '部署GCE中的專案'
+        run: |
+          gcloud compute ssh ${{ secrets.GCE_NAME }} --zone=${{ secrets.GCE_ZONE }} --command="
+            # 建立臨時目錄
+            sudo mkdir -p /tmp/dev-shop-v2.coord.tw
+
+            # 解壓縮到臨時目錄
+            sudo tar -xzf /tmp/dev-shop-v2.tar.gz -C /tmp/dev-shop-v2.coord.tw
+
+            # 清理壓縮檔
+            sudo rm /tmp/dev-shop-v2.tar.gz
+            
+            # 清空專案目錄
+            sudo rm -rf /var/www/dev-shop-v2.coord.tw
+
+            # 搬移新專案
+            sudo mv /tmp/dev-shop-v2.coord.tw /var/www/dev-shop-v2.coord.tw
+          "
