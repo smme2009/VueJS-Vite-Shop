@@ -10,6 +10,9 @@ on:
 jobs:
   # 打包和部署
   build-and-deploy:
+    # 工作名稱
+    name: '打包並部署'
+
     # 作業系統
     runs-on: 'ubuntu-latest'
 
@@ -32,6 +35,11 @@ jobs:
           npm install
           npm run build
 
+      # 壓縮專案
+      - name: '壓縮專案'
+        run: |
+          tar -czf project.tar.gz -C dist .
+
       # 驗證GCP權限
       - name: '驗證GCP權限'
         uses: 'google-github-actions/auth@v2'
@@ -42,19 +50,14 @@ jobs:
       - name: '加入Gcloud CLI'
         uses: 'google-github-actions/setup-gcloud@v2'
 
-      # 6. 壓縮專案
-      - name: '壓縮專案'
-        run: |
-          tar -czf project.tar.gz -C dist .
-
-      # 7. 將壓縮檔傳送到GCE
-      - name: '將壓縮檔傳送到GCE'
+      # 將檔案傳送到GCE
+      - name: '將檔案傳送到GCE'
         run: |
           gcloud compute scp project.tar.gz \
             ${{ secrets.GCE_NAME }}:/tmp/dev-shop-v2.tar.gz \
             --zone=${{ secrets.GCE_ZONE }}
 
-      # 8. 部署GCE中的專案
+      # 部署GCE中的專案
       - name: '部署GCE中的專案'
         run: |
           gcloud compute ssh ${{ secrets.GCE_NAME }} --zone=${{ secrets.GCE_ZONE }} --command="
