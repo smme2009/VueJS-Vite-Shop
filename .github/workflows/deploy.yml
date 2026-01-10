@@ -67,12 +67,10 @@ jobs:
             # 解壓縮到臨時目錄
             sudo tar -xzf /tmp/dev-shop-v2.tar.gz -C /tmp/dev-shop-v2.coord.tw
 
-            # 清理壓縮檔
-            sudo rm /tmp/dev-shop-v2.tar.gz
-            
-            # 清空專案目錄
-            sudo rm -rf /var/www/dev-shop-v2.coord.tw
-
             # 搬移新專案
-            sudo mv /tmp/dev-shop-v2.coord.tw /var/www/dev-shop-v2.coord.tw
+            sudo rsync -a --delete /tmp/dev-shop-v2.coord.tw/ /var/www/dev-shop-v2.coord.tw/
+
+            # 清理暫存檔案
+            sudo rm /tmp/dev-shop-v2.tar.gz
+            sudo rm -rf /tmp/dev-shop-v2.coord.tw
           "
