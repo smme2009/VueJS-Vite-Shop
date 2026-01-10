@@ -75,7 +75,4 @@ jobs:
 
             # 搬移新專案
             sudo mv /tmp/dev-shop-v2.coord.tw /var/www/dev-shop-v2.coord.tw
-
-            # 調整檔案權限
-            sudo chown -R www-data:www-data /var/www/dev-shop-v2.coord.tw
           "
