@@ -54,7 +54,7 @@ jobs:
       - name: '將檔案傳送到GCE'
         run: |
           gcloud compute scp project.tar.gz \
-            ${{ secrets.GCE_NAME }}:/tmp/dev-shop-v2.tar.gz \
+            ${{ secrets.GCE_NAME }}:/tmp/${{ secrets.APP_URL }}.tar.gz \
             --zone=${{ secrets.GCE_ZONE }}
 
       # 部署GCE中的專案
@@ -62,15 +62,15 @@ jobs:
         run: |
           gcloud compute ssh ${{ secrets.GCE_NAME }} --zone=${{ secrets.GCE_ZONE }} --command="
             # 建立臨時目錄
-            sudo mkdir -p /tmp/dev-shop-v2.coord.tw
+            sudo mkdir -p /tmp/${{ secrets.APP_URL }}
 
             # 解壓縮到臨時目錄
-            sudo tar -xzf /tmp/dev-shop-v2.tar.gz -C /tmp/dev-shop-v2.coord.tw
+            sudo tar -xzf /tmp/${{ secrets.APP_URL }}.tar.gz -C /tmp/${{ secrets.APP_URL }}
 
             # 搬移新專案
-            sudo rsync -a --delete /tmp/dev-shop-v2.coord.tw/ /var/www/dev-shop-v2.coord.tw/
+            sudo rsync -a --delete /tmp/${{ secrets.APP_URL }}/ /var/www/${{ secrets.APP_URL }}/
 
             # 清理暫存檔案
-            sudo rm /tmp/dev-shop-v2.tar.gz
-            sudo rm -rf /tmp/dev-shop-v2.coord.tw
+            sudo rm /tmp/${{ secrets.APP_URL }}.tar.gz
+            sudo rm -rf /tmp/${{ secrets.APP_URL }}
           "
