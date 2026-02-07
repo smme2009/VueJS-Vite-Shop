@@ -31,6 +31,8 @@ jobs:
 
       # 打包專案
       - name: '打包專案'
+        env:
+          VITE_APP_API_URL: ${{ secrets.VITE_APP_API_URL }}
         run: |
           npm install
           npm run build
