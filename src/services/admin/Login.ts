@@ -1,6 +1,6 @@
 import type IResult from '@/interfaces/service/Result'
 import Service from '@/services/Service'
-import ApiLogin from '@/api/account/Login'
+import ApiLogin from '@/api/admin/Login'
 
 /**
  * 服務層-登入
