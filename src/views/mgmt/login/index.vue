@@ -109,7 +109,7 @@ defineOptions({
 import { useForm } from 'vee-validate'
 import { useDialogStore } from '@/stores/dialog'
 import ruleLogin from '@/validation/rules/account/Login'
-import SvcLogin from '@/services/account/Login'
+import SvcLogin from '@/services/admin/Login'
 
 const storeDialog = useDialogStore() // 狀態管理-對話框
 const svcLogin = new SvcLogin() // 服務層-帳號-登入
