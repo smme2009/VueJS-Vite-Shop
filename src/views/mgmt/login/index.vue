@@ -146,11 +146,11 @@ const login = async (): Promise<void> => {
 
   // 登入失敗，顯示錯誤訊息
   if (result.status === false) {
-    storeDialog.show(result.message)
+    storeDialog.show(result.message, 'error')
     return
   }
 
   // 登入成功
-  storeDialog.show(result.message)
+  storeDialog.show(result.message, 'success')
 }
 </script>
