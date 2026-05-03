@@ -16,6 +16,6 @@ export default class Login extends Api {
   public async login(
     data: object,
   ): Promise<null | IResponse<ILogin>> {
-    return await this.toolAjax().post<ILogin>('/login', data)
+    return await this.toolAjax().post<ILogin>('/mgmt/login', data)
   }
 }

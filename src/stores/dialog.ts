@@ -5,19 +5,22 @@ import { ref } from 'vue'
  * 狀態管理-對話框
  */
 export const useDialogStore = defineStore('dialog', () => {
-  const visible = ref(false) // 顯示狀態
-  const message = ref('') // 訊息
+  const storeVisible = ref(false) // 顯示狀態
+  const storeMessage = ref('') // 訊息
+  const storeType = ref('info') // 類型
 
   /**
    * 顯示對話框
    *
-   * @param {string} text 訊息文字
+   * @param {string} message 訊息文字
+   * @param {string} type 對話框類型
    *
    * @returns {void}
    */
-  function show(text: string): void {
-    visible.value = true
-    message.value = text
+  function show(message: string, type: string = 'info'): void {
+    storeVisible.value = true
+    storeMessage.value = message
+    storeType.value = type
   }
 
   /**
@@ -26,13 +29,15 @@ export const useDialogStore = defineStore('dialog', () => {
    * @returns {void}
    */
   function hide(): void {
-    visible.value = false
-    message.value = ''
+    storeVisible.value = false
+    storeMessage.value = ''
+    storeType.value = 'info'
   }
 
   return {
-    visible,
-    message,
+    storeVisible,
+    storeMessage,
+    storeType,
     show,
     hide,
   }
