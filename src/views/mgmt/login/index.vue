@@ -106,11 +106,13 @@ defineOptions({
   name: 'MgmtLogin',
 })
 
+import { useRouter } from 'vue-router'
 import { useForm } from 'vee-validate'
 import { useDialogStore } from '@/stores/dialog'
 import ruleLogin from '@/validation/rules/account/Login'
 import SvcLogin from '@/services/admin/Login'
 
+const router = useRouter() // 路由
 const storeDialog = useDialogStore() // 狀態管理-對話框
 const svcLogin = new SvcLogin() // 服務層-帳號-登入
 
@@ -151,6 +153,6 @@ const login = async (): Promise<void> => {
   }
 
   // 登入成功
-  storeDialog.show(result.message, 'success')
+  router.push({ name: 'mgmtHome' })
 }
 </script>
