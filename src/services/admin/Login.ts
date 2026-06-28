@@ -1,4 +1,5 @@
 import type IResult from '@/interfaces/service/Result'
+import { useAdminStore } from '@/stores/admin'
 import Service from '@/services/Service'
 import ApiLogin from '@/api/admin/Login'
 
@@ -54,6 +55,10 @@ export default class LoginService extends Service {
         .setMessage(message)
         .build()
     }
+
+    // 設定管理員資訊
+    const storeAdmin = useAdminStore()
+    storeAdmin.setInfo(response.data.jwtToken)
 
     // 登入成功，回傳結果
     return this.toolResult()

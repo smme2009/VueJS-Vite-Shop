@@ -1,3 +1,4 @@
+import { useAdminStore } from '@/stores/admin'
 import ToolAjax from './tool/Ajax'
 
 /**
@@ -10,6 +11,7 @@ export default class Api {
    * @returns {ToolAjax} Ajax工具實例
    */
   protected toolAjax(): ToolAjax {
-    return new ToolAjax()
+    const storeAdmin = useAdminStore()
+    return new ToolAjax(storeAdmin.storeJwtToken)
   }
 }
