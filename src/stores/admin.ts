@@ -6,6 +6,7 @@ import { ref } from 'vue'
  */
 export const useAdminStore = defineStore('admin', () => {
   const storeJwtToken = ref('') // JWT Token
+  const storeName = ref('') // 名稱
 
   /**
    * 設定資訊
@@ -14,12 +15,25 @@ export const useAdminStore = defineStore('admin', () => {
    *
    * @returns {void}
    */
-  function setInfo(JwtToken: string): void {
+  function setJwtToken(JwtToken: string): void {
     storeJwtToken.value = JwtToken
+  }
+
+  /**
+   * 設定名稱
+   *
+   * @param name 名稱
+   *
+   * @returns {void}
+   */
+  function setName(name: string): void {
+    storeName.value = name
   }
 
   return {
     storeJwtToken,
-    setInfo,
+    storeName,
+    setJwtToken,
+    setName,
   }
 })

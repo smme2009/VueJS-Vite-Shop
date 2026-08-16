@@ -58,7 +58,8 @@ export default class LoginService extends Service {
 
     // 設定管理員資訊
     const storeAdmin = useAdminStore()
-    storeAdmin.setInfo(response.data.jwtToken)
+    storeAdmin.setJwtToken(response.data.jwtToken)
+    storeAdmin.setName(response.data.name)
 
     // 登入成功，回傳結果
     return this.toolResult()
