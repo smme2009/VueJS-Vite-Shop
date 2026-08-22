@@ -60,25 +60,9 @@
               class="absolute right-0 mt-2 w-64 bg-surface-container-lowest rounded-xl shadow-[0_20px_50px_rgba(25,28,29,0.1)] border border-outline-variant/10 overflow-hidden z-50 focus:outline-none"
             >
               <div
-                class="p-4 flex items-center gap-3 bg-surface-container-low/30"
+                class="p-4 bg-surface-container-low/30"
               >
-                <div
-                  class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container text-xs font-bold overflow-hidden"
-                >
-                  管
-                </div>
-                <div class="flex flex-col min-w-0">
-                  <span
-                    class="text-sm font-bold font-manrope truncate text-on-surface"
-                  >
-                    管理員用戶
-                  </span>
-                  <span
-                    class="text-[10px] text-on-surface-variant uppercase tracking-wider"
-                  >
-                    管理套件
-                  </span>
-                </div>
+                <AdminProfile />
               </div>
               <div class="h-px bg-outline-variant/10"></div>
               <div class="p-2">
@@ -143,6 +127,7 @@ import {
   MenuItems,
 } from '@headlessui/vue'
 
+import AdminProfile from '@/components/mgmt/adminProfile.vue'
 import { useRouter } from 'vue-router'
 import { useDialogStore } from '@/stores/dialog'
 import SvcLogout from '@/services/admin/Logout'

@@ -55,21 +55,7 @@
     </nav>
     <div class="mt-auto pt-6 border-t border-outline-variant/20">
       <div class="flex items-center gap-3 px-2">
-        <div
-          class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container text-xs font-bold overflow-hidden"
-        >
-          <img
-            alt="管理員頭像"
-            class="w-full h-full object-cover"
-            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZMZBBCxeiTWcytwWiZ71ZGNbQ1bt6hMCD6BQbQ1eIFajLxg8h_fEQdP3UN7I0Fi2CdteQ8yQVdvDlT_fFYejESGRyrIKVMZW3sGeFeawCgF4mjgmeI_XTtMFpoNyq46bVzT-ZMlnpHfwuIV3A73q7RB5DC24NtQOvgptE8XsXwWXaLmOYtQeoDrOOTxvHkExiEQoSoZ3k1-FnDQEUnF8foVaj5uAyRaQM_a2-mWVOkEjJo02CIWf0YAmAiEGM1PbeJacE4St3Oe0"
-          />
-        </div>
-        <div class="flex flex-col min-w-0">
-          <span class="text-xs font-bold truncate">管理員用戶</span>
-          <span class="text-[10px] text-on-surface-variant truncate"
-            >管理套件</span
-          >
-        </div>
+        <AdminProfile />
         <button
           class="ml-auto text-on-surface-variant hover:text-primary transition-colors"
         >
@@ -83,6 +69,8 @@
 </template>
 
 <script setup lang="ts">
+import AdminProfile from '@/components/mgmt/adminProfile.vue'
+
 defineOptions({
   name: 'MgmtLayoutDefaultSidebar',
 })
