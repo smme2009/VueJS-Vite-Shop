@@ -3,4 +3,5 @@
  */
 export default interface Login {
   jwtToken: string
+  name: string
 }
